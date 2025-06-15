@@ -20,6 +20,8 @@ test.describe('Navigation', () => {
       await page.goto('/issues');
     } else {
       await page.locator('[data-testid="nav-issues"]').click();
+      // Wait for navigation to complete
+      await page.waitForURL('**/issues');
     }
     
     // Check that we're on the issues page
@@ -34,6 +36,8 @@ test.describe('Navigation', () => {
       await page.goto('/');
     } else {
       await page.locator('[data-testid="header-logo"]').click();
+      // Wait for navigation to complete
+      await page.waitForURL('**/');
     }
     
     // Check that we're on the home page
