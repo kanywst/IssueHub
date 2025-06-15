@@ -6,28 +6,30 @@ export const issuesRouter = router({
     .input(
       z.object({
         language: z.string().optional(),
+        keyword: z.string().optional(),
         page: z.number().default(1),
         perPage: z.number().default(30),
       })
     )
     .query(async ({ ctx, input }) => {
-      const { language, page, perPage } = input;
+      const { language, keyword, page, perPage } = input;
       const data = await ctx.githubClient.getGoodFirstIssues({
         language,
+        keyword,
         page,
         perPage,
       });
       
-      // リポジトリ所有者の情報をキャッシュするためのマップ
+      // Map to cache repository owner information
       const ownerInfoCache = new Map();
       
-      // 各issueにリポジトリ所有者の情報を追加
+      // Add repository owner information to each issue
       const enhancedItems = await Promise.all(
         data.items.map(async (issue: any) => {
           const repoUrl = issue.repository_url;
           const [owner, repo] = repoUrl.replace("https://api.github.com/repos/", "").split("/");
           
-          // キャッシュからオーナー情報を取得するか、APIで取得してキャッシュする
+          // Get owner info from cache or fetch from API and cache it
           if (!ownerInfoCache.has(owner)) {
             try {
               const ownerInfo = await ctx.githubClient.getOrganizationDetails(owner);
@@ -59,7 +61,7 @@ export const issuesRouter = router({
   getSavedIssues: procedure.query(async ({ ctx }) => {
     const userId = ctx.session?.user.id;
     if (!userId) {
-      throw new Error("認証が必要です");
+      throw new Error("Authentication required");
     }
 
     const savedIssues = await ctx.prisma.savedIssue.findMany({
@@ -71,7 +73,37 @@ export const issuesRouter = router({
       },
     });
 
-    return savedIssues;
+    // Add owner info for each saved issue
+    const ownerInfoCache = new Map();
+    
+    const enhancedIssues = await Promise.all(
+      savedIssues.map(async (issue) => {
+        const [owner] = issue.repoName.split('/');
+        
+        // Get owner info from cache or fetch and cache it
+        if (!ownerInfoCache.has(owner)) {
+          try {
+            const ownerInfo = await ctx.githubClient.getOrganizationDetails(owner);
+            ownerInfoCache.set(owner, {
+              avatar_url: ownerInfo.avatar_url,
+              html_url: ownerInfo.html_url,
+            });
+          } catch (error) {
+            ownerInfoCache.set(owner, {
+              avatar_url: null,
+              html_url: `https://github.com/${owner}`,
+            });
+          }
+        }
+        
+        return {
+          ...issue,
+          owner_info: ownerInfoCache.get(owner),
+        };
+      })
+    );
+
+    return enhancedIssues;
   }),
 
   saveIssue: procedure
@@ -87,17 +119,34 @@ export const issuesRouter = router({
     .mutation(async ({ ctx, input }) => {
       const userId = ctx.session?.user.id;
       if (!userId) {
-        throw new Error("認証が必要です");
+        throw new Error("Authentication required");
       }
 
-      const savedIssue = await ctx.prisma.savedIssue.create({
-        data: {
-          ...input,
+      const existingIssue = await ctx.prisma.savedIssue.findFirst({
+        where: {
           userId,
+          issueId: input.issueId,
         },
       });
 
-      return savedIssue;
+      if (existingIssue) {
+        return { success: false, message: "This issue is already saved", savedIssue: null };
+      }
+
+      try {
+        const savedIssue = await ctx.prisma.savedIssue.create({
+          data: {
+            ...input,
+            userId,
+          },
+        });
+        return { success: true, savedIssue, message: "Issue saved successfully" };
+      } catch (error) {
+        if (error.code === 'P2002') {
+          return { success: false, message: "This issue is already saved", savedIssue: null };
+        }
+        throw error;
+      }
     }),
 
   removeSavedIssue: procedure
@@ -105,7 +154,7 @@ export const issuesRouter = router({
     .mutation(async ({ ctx, input }) => {
       const userId = ctx.session?.user.id;
       if (!userId) {
-        throw new Error("認証が必要です");
+        throw new Error("Authentication required");
       }
 
       await ctx.prisma.savedIssue.delete({

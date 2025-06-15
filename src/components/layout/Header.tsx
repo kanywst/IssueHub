@@ -81,7 +81,7 @@ export default function Header() {
             IssueHub
           </Typography>
 
-          {/* デスクトップナビゲーション */}
+          {/* Desktop Navigation */}
           {!isMobile && (
             <Box sx={{ display: "flex", gap: 2 }}>
               {navItems.map((item) => {
@@ -128,21 +128,22 @@ export default function Header() {
                   onClick={() => signIn("github", { callbackUrl: window.location.href })}
                   startIcon={<GitHubIcon />}
                 >
-                  GitHubでログイン
+                  Login with GitHub
                 </Button>
               )}
             </Box>
           )}
 
-          {/* モバイルナビゲーション */}
+          {/* Mobile Navigation */}
           {isMobile && (
             <Box>
               <IconButton
                 color="inherit"
                 onClick={handleMobileMenu}
                 edge="end"
+                data-testid="mobile-menu-button"
               >
-                <MenuIcon />
+                <MenuIcon data-testid="MenuIcon" />
               </IconButton>
               <Menu
                 anchorEl={mobileMenuAnchorEl}
@@ -180,7 +181,7 @@ export default function Header() {
                     signIn("github", { callbackUrl: window.location.href });
                     handleMobileMenuClose();
                   }}>
-                    GitHubでログイン
+                    Login with GitHub
                   </MenuItem>
                 )}
               </Menu>

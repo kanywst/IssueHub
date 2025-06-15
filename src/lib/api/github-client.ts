@@ -9,16 +9,22 @@ export class GitHubClient {
 
   async getGoodFirstIssues({
     language,
+    keyword,
     page = 1,
     perPage = 30,
   }: {
     language?: string;
+    keyword?: string;
     page?: number;
     perPage?: number;
   }) {
-    const query = `is:issue is:open label:"good first issue"${
+    let query = `is:issue is:open label:"good first issue"${
       language ? ` language:${language}` : ""
     }`;
+    
+    if (keyword && keyword.trim() !== '') {
+      query += ` ${keyword.trim()}`;
+    }
 
     const response = await this.octokit.request("GET /search/issues", {
       q: query,
@@ -47,7 +53,7 @@ export class GitHubClient {
       });
       return response.data;
     } catch (error) {
-      // 組織が見つからない場合はユーザー情報を取得
+      // If organization is not found, fetch user information instead
       const userResponse = await this.octokit.request("GET /users/{username}", {
         username: org,
       });
@@ -56,5 +62,5 @@ export class GitHubClient {
   }
 }
 
-// シングルトンインスタンスをエクスポート
+// Export singleton instance
 export const githubClient = new GitHubClient();

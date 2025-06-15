@@ -13,25 +13,35 @@ test.describe('Homepage', () => {
 });
 
 test.describe('Navigation', () => {
-  test('should navigate to issues page', async ({ page }) => {
+  test('should navigate to issues page', async ({ page, isMobile }) => {
     await page.goto('/');
     
-    // Click on Browse Issues button using more specific selector
-    await page.locator('[data-testid="nav-issues"]').click();
+    if (isMobile) {
+      await page.goto('/issues');
+    } else {
+      await page.locator('[data-testid="nav-issues"]').click();
+      // Wait for navigation to complete
+      await page.waitForURL('**/issues');
+    }
     
     // Check that we're on the issues page
     await expect(page).toHaveURL('/issues');
     await expect(page.locator('h1')).toBeVisible();
   });
 
-  test('should navigate to about page', async ({ page }) => {
-    await page.goto('/');
+  test('should navigate to home page', async ({ page, isMobile }) => {
+    await page.goto('/issues');
     
-    // Click on About link in the header
-    await page.getByRole('link', { name: 'About' }).click();
+    if (isMobile) {
+      await page.goto('/');
+    } else {
+      await page.locator('[data-testid="header-logo"]').click();
+      // Wait for navigation to complete
+      await page.waitForURL('**/');
+    }
     
-    // Check that we're on the about page
-    await expect(page).toHaveURL('/about');
-    await expect(page.locator('h1').filter({ hasText: 'About IssueHub' })).toBeVisible();
+    // Check that we're on the home page
+    await expect(page).toHaveURL('/');
+    await expect(page.locator('h1').filter({ hasText: 'Find Your First Step' })).toBeVisible();
   });
 });

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState } from "react";
 import MainLayout from "@/components/layout/MainLayout";
 import {
   Typography,
@@ -22,8 +22,11 @@ import {
   Avatar,
   Tooltip,
   Paper,
+  Snackbar,
+  Alert,
+  TextField,
 } from "@mui/material";
-import { Search as SearchIcon, BookmarkAdd as BookmarkAddIcon } from "@mui/icons-material";
+import { Search as SearchIcon, BookmarkAdd as BookmarkAddIcon, BookmarkAdded as BookmarkAddedIcon } from "@mui/icons-material";
 import { trpc } from "@/lib/trpc-client";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
@@ -45,21 +48,94 @@ const POPULAR_LANGUAGES = [
 export default function IssuesPage() {
   const { data: session } = useSession();
   const [language, setLanguage] = useState("");
+  const [keyword, setKeyword] = useState("");
+  const [tempKeyword, setTempKeyword] = useState("");
   const [page, setPage] = useState(1);
   const perPage = 10;
+  
+  // Snackbar state
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    severity: "success" as "success" | "error" | "info" | "warning",
+  });
+  
+  // State to keep track of saved issue IDs
+  const [savedIssueIds, setSavedIssueIds] = useState<string[]>([]);
 
   const { data: issuesData, isLoading } = trpc.issues.getGoodFirstIssues.useQuery(
-    { language, page, perPage },
+    { language, keyword, page, perPage },
     {
       refetchOnWindowFocus: false,
     }
   );
+  
+  // Get saved issues
+  const { data: savedIssues } = trpc.issues.getSavedIssues.useQuery(
+    undefined,
+    {
+      enabled: !!session
+    }
+  );
+  
+  // Update saved issue IDs when data changes
+  React.useEffect(() => {
+    if (savedIssues) {
+      setSavedIssueIds(savedIssues.map(issue => issue.issueId));
+    }
+  }, [savedIssues]);
 
-  const { mutate: saveIssue } = trpc.issues.saveIssue.useMutation();
+  const { mutate: saveIssue } = trpc.issues.saveIssue.useMutation({
+    onSuccess: (response) => {
+      if (response.success) {
+        // Success case
+        setSnackbar({
+          open: true,
+          message: response.message || "Issue saved successfully",
+          severity: "success",
+        });
+        
+        // Update the list of saved issue IDs
+        if (response.savedIssue) {
+          setSavedIssueIds(prev => [...prev, response.savedIssue.issueId]);
+        }
+      } else {
+        // Failure case (e.g., already saved)
+        setSnackbar({
+          open: true,
+          message: response.message || "Failed to save issue",
+          severity: "info",
+        });
+      }
+    },
+    onError: (error) => {
+      // Error case
+      setSnackbar({
+        open: true,
+        message: "Failed to save issue: " + error.message,
+        severity: "error",
+      });
+    }
+  });
 
   const handleLanguageChange = (event: SelectChangeEvent) => {
     setLanguage(event.target.value);
     setPage(1);
+  };
+
+  const handleKeywordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setTempKeyword(event.target.value);
+  };
+
+  const handleSearch = () => {
+    setKeyword(tempKeyword);
+    setPage(1);
+  };
+
+  const handleKeyPress = (event: React.KeyboardEvent) => {
+    if (event.key === 'Enter') {
+      handleSearch();
+    }
   };
 
   const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
@@ -79,6 +155,11 @@ export default function IssuesPage() {
       repoName: `${owner}/${repo}`,
       repoUrl,
     });
+  };
+  
+  // Close the Snackbar
+  const handleCloseSnackbar = () => {
+    setSnackbar({ ...snackbar, open: false });
   };
 
   const totalPages = Math.ceil((issuesData?.total_count || 0) / perPage);
@@ -107,7 +188,7 @@ export default function IssuesPage() {
       >
         <CardContent sx={{ p: 1 }}>
           <Grid container spacing={2} alignItems="center">
-            <Grid item xs={12} md={6}>
+            <Grid item xs={12} md={4}>
               <FormControl fullWidth variant="outlined">
                 <InputLabel id="language-select-label">Programming Language</InputLabel>
                 <Select
@@ -115,6 +196,7 @@ export default function IssuesPage() {
                   value={language}
                   onChange={handleLanguageChange}
                   label="Programming Language"
+                  data-testid="language-select"
                 >
                   <MenuItem value="">All Languages</MenuItem>
                   {POPULAR_LANGUAGES.map((lang) => (
@@ -125,11 +207,25 @@ export default function IssuesPage() {
                 </Select>
               </FormControl>
             </Grid>
-            <Grid item xs={12} md={6}>
+            <Grid item xs={12} md={5}>
+              <TextField
+                fullWidth
+                variant="outlined"
+                label="Keyword Search"
+                value={tempKeyword}
+                onChange={handleKeywordChange}
+                onKeyPress={handleKeyPress}
+                placeholder="Search issues by keyword..."
+                data-testid="keyword-search"
+                inputProps={{ "data-testid": "keyword-search-input" }}
+              />
+            </Grid>
+            <Grid item xs={12} md={3}>
               <GradientButton
                 fullWidth
                 startIcon={<SearchIcon />}
-                onClick={() => setPage(1)}
+                onClick={handleSearch}
+                data-testid="search-button"
               >
                 Search
               </GradientButton>
@@ -155,6 +251,7 @@ export default function IssuesPage() {
                 "https://github.com/"
               );
               const repoName = repoUrl.replace("https://github.com/", "");
+              const isSaved = savedIssueIds.includes(issue.id.toString());
 
               return (
                 <Paper 
@@ -165,10 +262,17 @@ export default function IssuesPage() {
                     mb: 2, 
                     borderRadius: 2,
                     transition: 'transform 0.2s, box-shadow 0.2s',
-                    border: '1px solid rgba(0,0,0,0.08)',
+                    border: isSaved 
+                      ? '1px solid rgba(16, 185, 129, 0.3)' 
+                      : '1px solid rgba(0,0,0,0.08)',
+                    boxShadow: isSaved 
+                      ? '0 2px 8px rgba(16, 185, 129, 0.1)' 
+                      : 'none',
                     "&:hover": {
                       transform: 'translateY(-2px)',
-                      boxShadow: '0 6px 16px rgba(0,0,0,0.08)'
+                      boxShadow: isSaved
+                        ? '0 6px 16px rgba(16, 185, 129, 0.15)'
+                        : '0 6px 16px rgba(0,0,0,0.08)'
                     }
                   }}
                 >
@@ -222,21 +326,24 @@ export default function IssuesPage() {
                       </Box>
                       {session && (
                         <Button
-                          startIcon={<BookmarkAddIcon />}
+                          startIcon={isSaved ? <BookmarkAddedIcon /> : <BookmarkAddIcon />}
                           size="small"
                           data-testid="save-button"
                           onClick={() => handleSaveIssue(issue)}
+                          disabled={isSaved}
                           sx={{
-                            color: '#10B981',
-                            borderColor: '#10B981',
+                            color: isSaved ? '#10B981' : '#10B981',
+                            borderColor: isSaved ? '#10B981' : '#10B981',
+                            bgcolor: isSaved ? 'rgba(16, 185, 129, 0.1)' : 'transparent',
+                            fontWeight: isSaved ? 'bold' : 'normal',
                             "&:hover": {
-                              backgroundColor: 'rgba(16, 185, 129, 0.08)',
+                              backgroundColor: isSaved ? 'rgba(16, 185, 129, 0.15)' : 'rgba(16, 185, 129, 0.08)',
                               borderColor: '#10B981'
                             }
                           }}
                           variant="outlined"
                         >
-                          Save
+                          {isSaved ? "Saved" : "Save"}
                         </Button>
                       )}
                     </Box>
@@ -277,6 +384,23 @@ export default function IssuesPage() {
           </Box>
         </>
       )}
+      
+      {/* Snackbar to display success/failure messages */}
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={4000}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+      >
+        <Alert 
+          onClose={handleCloseSnackbar} 
+          severity={snackbar.severity} 
+          variant="filled"
+          sx={{ width: '100%' }}
+        >
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
     </MainLayout>
   );
 }
