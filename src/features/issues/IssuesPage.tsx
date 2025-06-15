@@ -22,8 +22,10 @@ import {
   Avatar,
   Tooltip,
   Paper,
+  Snackbar,
+  Alert,
 } from "@mui/material";
-import { Search as SearchIcon, BookmarkAdd as BookmarkAddIcon } from "@mui/icons-material";
+import { Search as SearchIcon, BookmarkAdd as BookmarkAddIcon, BookmarkAdded as BookmarkAddedIcon } from "@mui/icons-material";
 import { trpc } from "@/lib/trpc-client";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
@@ -47,6 +49,16 @@ export default function IssuesPage() {
   const [language, setLanguage] = useState("");
   const [page, setPage] = useState(1);
   const perPage = 10;
+  
+  // Snackbar状態
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    severity: "success" as "success" | "error" | "info" | "warning",
+  });
+  
+  // 保存済みイシューのIDを保持する状態
+  const [savedIssueIds, setSavedIssueIds] = useState<string[]>([]);
 
   const { data: issuesData, isLoading } = trpc.issues.getGoodFirstIssues.useQuery(
     { language, page, perPage },
@@ -54,8 +66,53 @@ export default function IssuesPage() {
       refetchOnWindowFocus: false,
     }
   );
+  
+  // 保存済みのイシューを取得
+  const { data: savedIssues } = trpc.issues.getSavedIssues.useQuery(
+    undefined,
+    {
+      enabled: !!session,
+      onSuccess: (data) => {
+        // 保存済みイシューのIDを設定
+        if (data) {
+          setSavedIssueIds(data.map(issue => issue.issueId));
+        }
+      }
+    }
+  );
 
-  const { mutate: saveIssue } = trpc.issues.saveIssue.useMutation();
+  const { mutate: saveIssue } = trpc.issues.saveIssue.useMutation({
+    onSuccess: (response) => {
+      if (response.success) {
+        // 成功の場合
+        setSnackbar({
+          open: true,
+          message: response.message || "イシューを保存しました",
+          severity: "success",
+        });
+        
+        // 保存済みイシューのIDリストを更新
+        if (response.savedIssue) {
+          setSavedIssueIds(prev => [...prev, response.savedIssue.issueId]);
+        }
+      } else {
+        // 失敗の場合（すでに保存済みなど）
+        setSnackbar({
+          open: true,
+          message: response.message || "保存に失敗しました",
+          severity: "info",
+        });
+      }
+    },
+    onError: (error) => {
+      // エラーの場合
+      setSnackbar({
+        open: true,
+        message: "保存に失敗しました: " + error.message,
+        severity: "error",
+      });
+    }
+  });
 
   const handleLanguageChange = (event: SelectChangeEvent) => {
     setLanguage(event.target.value);
@@ -79,6 +136,11 @@ export default function IssuesPage() {
       repoName: `${owner}/${repo}`,
       repoUrl,
     });
+  };
+  
+  // Snackbarを閉じる処理
+  const handleCloseSnackbar = () => {
+    setSnackbar({ ...snackbar, open: false });
   };
 
   const totalPages = Math.ceil((issuesData?.total_count || 0) / perPage);
@@ -222,21 +284,22 @@ export default function IssuesPage() {
                       </Box>
                       {session && (
                         <Button
-                          startIcon={<BookmarkAddIcon />}
+                          startIcon={savedIssueIds.includes(issue.id.toString()) ? <BookmarkAddedIcon /> : <BookmarkAddIcon />}
                           size="small"
                           data-testid="save-button"
                           onClick={() => handleSaveIssue(issue)}
+                          disabled={savedIssueIds.includes(issue.id.toString())}
                           sx={{
-                            color: '#10B981',
-                            borderColor: '#10B981',
+                            color: savedIssueIds.includes(issue.id.toString()) ? '#64748B' : '#10B981',
+                            borderColor: savedIssueIds.includes(issue.id.toString()) ? '#64748B' : '#10B981',
                             "&:hover": {
-                              backgroundColor: 'rgba(16, 185, 129, 0.08)',
-                              borderColor: '#10B981'
+                              backgroundColor: savedIssueIds.includes(issue.id.toString()) ? 'rgba(100, 116, 139, 0.08)' : 'rgba(16, 185, 129, 0.08)',
+                              borderColor: savedIssueIds.includes(issue.id.toString()) ? '#64748B' : '#10B981'
                             }
                           }}
                           variant="outlined"
                         >
-                          Save
+                          {savedIssueIds.includes(issue.id.toString()) ? "Saved" : "Save"}
                         </Button>
                       )}
                     </Box>
@@ -277,6 +340,23 @@ export default function IssuesPage() {
           </Box>
         </>
       )}
+      
+      {/* 保存成功/失敗を表示するSnackbar */}
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={4000}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+      >
+        <Alert 
+          onClose={handleCloseSnackbar} 
+          severity={snackbar.severity} 
+          variant="filled"
+          sx={{ width: '100%' }}
+        >
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
     </MainLayout>
   );
 }

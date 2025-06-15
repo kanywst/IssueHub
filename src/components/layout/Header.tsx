@@ -141,8 +141,9 @@ export default function Header() {
                 color="inherit"
                 onClick={handleMobileMenu}
                 edge="end"
+                data-testid="mobile-menu-button"
               >
-                <MenuIcon />
+                <MenuIcon data-testid="MenuIcon" />
               </IconButton>
               <Menu
                 anchorEl={mobileMenuAnchorEl}

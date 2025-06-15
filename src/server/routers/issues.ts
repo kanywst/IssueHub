@@ -90,14 +90,31 @@ export const issuesRouter = router({
         throw new Error("認証が必要です");
       }
 
-      const savedIssue = await ctx.prisma.savedIssue.create({
-        data: {
-          ...input,
+      const existingIssue = await ctx.prisma.savedIssue.findFirst({
+        where: {
           userId,
+          issueId: input.issueId,
         },
       });
 
-      return savedIssue;
+      if (existingIssue) {
+        return { success: false, message: "このイシューはすでに保存されています" };
+      }
+
+      try {
+        const savedIssue = await ctx.prisma.savedIssue.create({
+          data: {
+            ...input,
+            userId,
+          },
+        });
+        return { success: true, savedIssue, message: "イシューを保存しました" };
+      } catch (error) {
+        if (error.code === 'P2002') {
+          return { success: false, message: "このイシューはすでに保存されています" };
+        }
+        throw error;
+      }
     }),
 
   removeSavedIssue: procedure
