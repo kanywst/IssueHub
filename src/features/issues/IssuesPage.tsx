@@ -160,6 +160,7 @@ export default function IssuesPage() {
                 <Paper 
                   key={issue.id} 
                   elevation={0}
+                  data-testid="issue-card"
                   sx={{ 
                     mb: 2, 
                     borderRadius: 2,
@@ -223,6 +224,7 @@ export default function IssuesPage() {
                         <Button
                           startIcon={<BookmarkAddIcon />}
                           size="small"
+                          data-testid="save-button"
                           onClick={() => handleSaveIssue(issue)}
                           sx={{
                             color: '#10B981',

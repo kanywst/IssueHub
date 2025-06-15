@@ -34,6 +34,47 @@ IssueHub is a modern platform designed to help beginners find their first contri
 - **GitHub Integration** - One-click authentication with your GitHub account
 - **Responsive Design** - Optimized experience across desktop and mobile devices
 
+## 🧪 Testing
+
+### E2E Tests
+
+IssueHub uses Playwright for end-to-end testing to ensure the application works correctly across different browsers and devices.
+
+```bash
+# Install Playwright browsers (first time only)
+npx playwright install
+
+# Run all E2E tests
+npm run test:e2e
+
+# Run tests in a specific browser (for CI)
+npm run test:e2e:ci
+
+# Run tests in debug mode
+npm run test:e2e:debug
+
+# View test report
+npm run test:e2e:report
+```
+
+#### Test Structure
+
+- `e2e/basic.spec.ts`: Basic navigation and homepage tests
+- `e2e/auth.spec.ts`: Authentication-related tests
+- `e2e/issues.spec.ts`: Issue listing and filtering tests
+- `e2e/authenticated.spec.ts`: Tests requiring authentication
+
+#### Debugging Tests
+
+If tests fail, you can:
+1. Run with `--debug` flag: `npx playwright test --debug`
+2. Check the HTML report: `npm run test:e2e:report`
+3. Look at test artifacts in the `test-results/` directory
+
+### Continuous Integration
+
+E2E tests are automatically run on GitHub Actions for all pull requests and pushes to the main branch. The workflow configuration is located in `.github/workflows/e2e.yml`.
+
 ## 🚀 Getting Started
 
 ### Prerequisites
