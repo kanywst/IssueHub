@@ -73,14 +73,14 @@ export default function DebugPage() {
 
         <Paper sx={{ p: 3 }}>
           <Typography variant="h6" gutterBottom>
-            認証アクション
+            Authentication Actions
           </Typography>
           <Stack direction="row" spacing={2}>
             <Button 
               variant="contained" 
               onClick={() => signIn("github", { callbackUrl: "/debug" })}
             >
-              GitHubでログイン
+              Login with GitHub
             </Button>
             <Button 
               variant="outlined" 

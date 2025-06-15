@@ -7,7 +7,7 @@ test.describe('Issues Page', () => {
     // Check if the main heading is visible
     await expect(page.locator('h1').first()).toBeVisible();
     
-    // より具体的なセレクタを使用
+    // Using more specific selector
     await expect(page.getByRole('heading', { name: /Find Good First Issues/i })).toBeVisible();
   });
 
@@ -57,9 +57,9 @@ test.describe('Saved Issues', () => {
   test('should require authentication to access saved issues or show auth UI', async ({ page }) => {
     await page.goto('/saved-issues');
     
-    // 認証が必要なページへの未認証アクセスを試みる
-    // 開発環境ではリダイレクトが発生しない場合もあり、その場合はページ内に認証関連のUIが表示される
-    // どちらのケースも正常なので、両方をチェックする
+    // Attempting to access a protected page without authentication
+    // In development environment, redirection might not occur, and auth UI could be displayed instead
+    // Both cases are valid, so we check for both
     
     try {
       // ページ内に認証関連のUIが表示されるか確認

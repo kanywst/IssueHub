@@ -119,7 +119,7 @@ export const issuesRouter = router({
     .mutation(async ({ ctx, input }) => {
       const userId = ctx.session?.user.id;
       if (!userId) {
-        throw new Error("認証が必要です");
+        throw new Error("Authentication required");
       }
 
       const existingIssue = await ctx.prisma.savedIssue.findFirst({
@@ -154,7 +154,7 @@ export const issuesRouter = router({
     .mutation(async ({ ctx, input }) => {
       const userId = ctx.session?.user.id;
       if (!userId) {
-        throw new Error("認証が必要です");
+        throw new Error("Authentication required");
       }
 
       await ctx.prisma.savedIssue.delete({
