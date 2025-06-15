@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState } from "react";
 import MainLayout from "@/components/layout/MainLayout";
 import {
   Typography,
@@ -53,14 +53,14 @@ export default function IssuesPage() {
   const [page, setPage] = useState(1);
   const perPage = 10;
   
-  // Snackbar状態
+  // Snackbar state
   const [snackbar, setSnackbar] = useState({
     open: false,
     message: "",
     severity: "success" as "success" | "error" | "info" | "warning",
   });
   
-  // 保存済みイシューのIDを保持する状態
+  // State to keep track of saved issue IDs
   const [savedIssueIds, setSavedIssueIds] = useState<string[]>([]);
 
   const { data: issuesData, isLoading } = trpc.issues.getGoodFirstIssues.useQuery(
@@ -70,48 +70,49 @@ export default function IssuesPage() {
     }
   );
   
-  // 保存済みのイシューを取得
+  // Get saved issues
   const { data: savedIssues } = trpc.issues.getSavedIssues.useQuery(
     undefined,
     {
-      enabled: !!session,
-      onSuccess: (data) => {
-        // 保存済みイシューのIDを設定
-        if (data) {
-          setSavedIssueIds(data.map(issue => issue.issueId));
-        }
-      }
+      enabled: !!session
     }
   );
+  
+  // Update saved issue IDs when data changes
+  React.useEffect(() => {
+    if (savedIssues) {
+      setSavedIssueIds(savedIssues.map(issue => issue.issueId));
+    }
+  }, [savedIssues]);
 
   const { mutate: saveIssue } = trpc.issues.saveIssue.useMutation({
     onSuccess: (response) => {
       if (response.success) {
-        // 成功の場合
+        // Success case
         setSnackbar({
           open: true,
-          message: response.message || "イシューを保存しました",
+          message: response.message || "Issue saved successfully",
           severity: "success",
         });
         
-        // 保存済みイシューのIDリストを更新
+        // Update the list of saved issue IDs
         if (response.savedIssue) {
           setSavedIssueIds(prev => [...prev, response.savedIssue.issueId]);
         }
       } else {
-        // 失敗の場合（すでに保存済みなど）
+        // Failure case (e.g., already saved)
         setSnackbar({
           open: true,
-          message: response.message || "保存に失敗しました",
+          message: response.message || "Failed to save issue",
           severity: "info",
         });
       }
     },
     onError: (error) => {
-      // エラーの場合
+      // Error case
       setSnackbar({
         open: true,
-        message: "保存に失敗しました: " + error.message,
+        message: "Failed to save issue: " + error.message,
         severity: "error",
       });
     }
@@ -156,7 +157,7 @@ export default function IssuesPage() {
     });
   };
   
-  // Snackbarを閉じる処理
+  // Close the Snackbar
   const handleCloseSnackbar = () => {
     setSnackbar({ ...snackbar, open: false });
   };
@@ -250,6 +251,7 @@ export default function IssuesPage() {
                 "https://github.com/"
               );
               const repoName = repoUrl.replace("https://github.com/", "");
+              const isSaved = savedIssueIds.includes(issue.id.toString());
 
               return (
                 <Paper 
@@ -260,10 +262,17 @@ export default function IssuesPage() {
                     mb: 2, 
                     borderRadius: 2,
                     transition: 'transform 0.2s, box-shadow 0.2s',
-                    border: '1px solid rgba(0,0,0,0.08)',
+                    border: isSaved 
+                      ? '1px solid rgba(16, 185, 129, 0.3)' 
+                      : '1px solid rgba(0,0,0,0.08)',
+                    boxShadow: isSaved 
+                      ? '0 2px 8px rgba(16, 185, 129, 0.1)' 
+                      : 'none',
                     "&:hover": {
                       transform: 'translateY(-2px)',
-                      boxShadow: '0 6px 16px rgba(0,0,0,0.08)'
+                      boxShadow: isSaved
+                        ? '0 6px 16px rgba(16, 185, 129, 0.15)'
+                        : '0 6px 16px rgba(0,0,0,0.08)'
                     }
                   }}
                 >
@@ -317,22 +326,24 @@ export default function IssuesPage() {
                       </Box>
                       {session && (
                         <Button
-                          startIcon={savedIssueIds.includes(issue.id.toString()) ? <BookmarkAddedIcon /> : <BookmarkAddIcon />}
+                          startIcon={isSaved ? <BookmarkAddedIcon /> : <BookmarkAddIcon />}
                           size="small"
                           data-testid="save-button"
                           onClick={() => handleSaveIssue(issue)}
-                          disabled={savedIssueIds.includes(issue.id.toString())}
+                          disabled={isSaved}
                           sx={{
-                            color: savedIssueIds.includes(issue.id.toString()) ? '#64748B' : '#10B981',
-                            borderColor: savedIssueIds.includes(issue.id.toString()) ? '#64748B' : '#10B981',
+                            color: isSaved ? '#10B981' : '#10B981',
+                            borderColor: isSaved ? '#10B981' : '#10B981',
+                            bgcolor: isSaved ? 'rgba(16, 185, 129, 0.1)' : 'transparent',
+                            fontWeight: isSaved ? 'bold' : 'normal',
                             "&:hover": {
-                              backgroundColor: savedIssueIds.includes(issue.id.toString()) ? 'rgba(100, 116, 139, 0.08)' : 'rgba(16, 185, 129, 0.08)',
-                              borderColor: savedIssueIds.includes(issue.id.toString()) ? '#64748B' : '#10B981'
+                              backgroundColor: isSaved ? 'rgba(16, 185, 129, 0.15)' : 'rgba(16, 185, 129, 0.08)',
+                              borderColor: '#10B981'
                             }
                           }}
                           variant="outlined"
                         >
-                          {savedIssueIds.includes(issue.id.toString()) ? "Saved" : "Save"}
+                          {isSaved ? "Saved" : "Save"}
                         </Button>
                       )}
                     </Box>
@@ -374,7 +385,7 @@ export default function IssuesPage() {
         </>
       )}
       
-      {/* 保存成功/失敗を表示するSnackbar */}
+      {/* Snackbar to display success/failure messages */}
       <Snackbar
         open={snackbar.open}
         autoHideDuration={4000}

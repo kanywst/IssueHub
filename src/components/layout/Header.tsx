@@ -128,7 +128,7 @@ export default function Header() {
                   onClick={() => signIn("github", { callbackUrl: window.location.href })}
                   startIcon={<GitHubIcon />}
                 >
-                  GitHubでログイン
+                  Login with GitHub
                 </Button>
               )}
             </Box>
@@ -181,7 +181,7 @@ export default function Header() {
                     signIn("github", { callbackUrl: window.location.href });
                     handleMobileMenuClose();
                   }}>
-                    GitHubでログイン
+                    Login with GitHub
                   </MenuItem>
                 )}
               </Menu>

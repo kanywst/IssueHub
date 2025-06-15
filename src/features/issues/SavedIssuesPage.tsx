@@ -13,6 +13,8 @@ import {
   CircularProgress,
   Alert,
   Paper,
+  Avatar,
+  Tooltip,
 } from "@mui/material";
 import { Delete as DeleteIcon } from "@mui/icons-material";
 import { trpc } from "@/lib/trpc-client";
@@ -90,37 +92,51 @@ export default function SavedIssuesPage() {
             >
               <CardContent>
                 <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-                  <Box>
-                    <Typography
-                      variant="h6"
-                      component="h2"
-                      sx={{ mb: 1, fontWeight: "bold" }}
-                    >
-                      <Link 
-                        href={issue.issueUrl} 
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                        style={{ 
-                          textDecoration: 'none',
-                          color: '#4F46E5'
-                        }}
+                  <Box sx={{ display: "flex", gap: 2 }}>
+                    {issue.owner_info && issue.owner_info.avatar_url && (
+                      <Tooltip title={issue.repoName.split('/')[0]}>
+                        <Avatar
+                          src={issue.owner_info.avatar_url}
+                          alt={issue.repoName.split('/')[0]}
+                          sx={{ width: 40, height: 40 }}
+                          component={Link}
+                          href={issue.owner_info.html_url}
+                          target="_blank"
+                        />
+                      </Tooltip>
+                    )}
+                    <Box>
+                      <Typography
+                        variant="h6"
+                        component="h2"
+                        sx={{ mb: 1, fontWeight: "bold" }}
                       >
-                        {issue.title}
-                      </Link>
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-                      <Link 
-                        href={issue.repoUrl} 
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                        style={{ 
-                          textDecoration: 'none',
-                          color: '#64748B'
-                        }}
-                      >
-                        {issue.repoName}
-                      </Link>
-                    </Typography>
+                        <Link 
+                          href={issue.issueUrl} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          style={{ 
+                            textDecoration: 'none',
+                            color: '#4F46E5'
+                          }}
+                        >
+                          {issue.title}
+                        </Link>
+                      </Typography>
+                      <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                        <Link 
+                          href={issue.repoUrl} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          style={{ 
+                            textDecoration: 'none',
+                            color: '#64748B'
+                          }}
+                        >
+                          {issue.repoName}
+                        </Link>
+                      </Typography>
+                    </Box>
                   </Box>
                   <Button
                     startIcon={<DeleteIcon />}

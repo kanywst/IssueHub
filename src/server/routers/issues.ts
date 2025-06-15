@@ -61,7 +61,7 @@ export const issuesRouter = router({
   getSavedIssues: procedure.query(async ({ ctx }) => {
     const userId = ctx.session?.user.id;
     if (!userId) {
-      throw new Error("認証が必要です");
+      throw new Error("Authentication required");
     }
 
     const savedIssues = await ctx.prisma.savedIssue.findMany({
@@ -73,7 +73,37 @@ export const issuesRouter = router({
       },
     });
 
-    return savedIssues;
+    // Add owner info for each saved issue
+    const ownerInfoCache = new Map();
+    
+    const enhancedIssues = await Promise.all(
+      savedIssues.map(async (issue) => {
+        const [owner] = issue.repoName.split('/');
+        
+        // Get owner info from cache or fetch and cache it
+        if (!ownerInfoCache.has(owner)) {
+          try {
+            const ownerInfo = await ctx.githubClient.getOrganizationDetails(owner);
+            ownerInfoCache.set(owner, {
+              avatar_url: ownerInfo.avatar_url,
+              html_url: ownerInfo.html_url,
+            });
+          } catch (error) {
+            ownerInfoCache.set(owner, {
+              avatar_url: null,
+              html_url: `https://github.com/${owner}`,
+            });
+          }
+        }
+        
+        return {
+          ...issue,
+          owner_info: ownerInfoCache.get(owner),
+        };
+      })
+    );
+
+    return enhancedIssues;
   }),
 
   saveIssue: procedure
@@ -100,7 +130,7 @@ export const issuesRouter = router({
       });
 
       if (existingIssue) {
-        return { success: false, message: "このイシューはすでに保存されています", savedIssue: null };
+        return { success: false, message: "This issue is already saved", savedIssue: null };
       }
 
       try {
@@ -110,10 +140,10 @@ export const issuesRouter = router({
             userId,
           },
         });
-        return { success: true, savedIssue, message: "イシューを保存しました" };
+        return { success: true, savedIssue, message: "Issue saved successfully" };
       } catch (error) {
         if (error.code === 'P2002') {
-          return { success: false, message: "このイシューはすでに保存されています", savedIssue: null };
+          return { success: false, message: "This issue is already saved", savedIssue: null };
         }
         throw error;
       }
