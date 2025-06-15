@@ -67,6 +67,7 @@ export default function Header() {
           <Typography
             variant="h6"
             component="div"
+            data-testid="header-logo"
             sx={{ 
               flexGrow: 1, 
               display: "flex", 
@@ -91,6 +92,7 @@ export default function Header() {
                     color="inherit"
                     component={Link}
                     href={item.path}
+                    data-testid={`nav-${item.label.toLowerCase()}`}
                   >
                     {item.label}
                   </Button>
@@ -122,6 +124,7 @@ export default function Header() {
                 <Button
                   color="inherit"
                   variant="outlined"
+                  data-testid="github-login-button"
                   onClick={() => signIn("github", { callbackUrl: window.location.href })}
                   startIcon={<GitHubIcon />}
                 >

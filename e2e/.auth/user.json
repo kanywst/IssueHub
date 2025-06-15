@@ -1,0 +1,33 @@
+{
+  "cookies": [
+    {
+      "name": "next-auth.session-token",
+      "value": "{\"user\":{\"name\":\"Test User\",\"email\":\"test@example.com\",\"image\":\"https://github.com/github.png\",\"id\":\"test-user-id\"},\"expires\":\"2025-06-16T15:58:32.903Z\"}",
+      "domain": "localhost",
+      "path": "/",
+      "expires": 1750089512.904392,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    }
+  ],
+  "origins": [
+    {
+      "origin": "http://localhost:3000",
+      "localStorage": [
+        {
+          "name": "nextauth.message",
+          "value": "{\"event\":\"session\",\"data\":{\"trigger\":\"getSession\"},\"timestamp\":1750003112}"
+        },
+        {
+          "name": "next-auth.session-token",
+          "value": "{\"user\":{\"name\":\"Test User\",\"email\":\"test@example.com\",\"image\":\"https://github.com/github.png\",\"id\":\"test-user-id\"},\"expires\":\"2025-06-16T15:58:32.903Z\"}"
+        },
+        {
+          "name": "next-auth.callback-url",
+          "value": "http://localhost:3000"
+        }
+      ]
+    }
+  ]
+}

@@ -43,7 +43,7 @@ export default function ProfilePage() {
 
   return (
     <MainLayout>
-      <Typography variant="h4" component="h1" sx={{ 
+      <Typography variant="h4" component="h1" data-testid="profile-heading" sx={{ 
         mb: 4,
         background: 'linear-gradient(90deg, #4F46E5 0%, #10B981 100%)',
         WebkitBackgroundClip: 'text',

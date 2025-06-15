@@ -37,6 +37,7 @@ export default function SignInPage() {
           <Button
             variant="contained"
             size="large"
+            data-testid="github-signin-button"
             startIcon={<GitHubIcon />}
             onClick={() => signIn("github", { callbackUrl: "/" })}
             fullWidth
@@ -58,6 +59,7 @@ export default function SignInPage() {
             variant="outlined"
             component={Link}
             href="/issues"
+            data-testid="continue-without-signin"
             fullWidth
             sx={{
               borderColor: '#4F46E5',

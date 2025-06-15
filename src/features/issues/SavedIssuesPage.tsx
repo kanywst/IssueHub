@@ -75,6 +75,7 @@ export default function SavedIssuesPage() {
             <Paper 
               key={issue.id} 
               elevation={0}
+              data-testid="issue-card"
               sx={{ 
                 mb: 2, 
                 borderRadius: 2,
@@ -125,6 +126,7 @@ export default function SavedIssuesPage() {
                     startIcon={<DeleteIcon />}
                     color="error"
                     size="small"
+                    data-testid="remove-button"
                     onClick={() => handleRemoveIssue(issue.id)}
                     sx={{
                       "&:hover": {
