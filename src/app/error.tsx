@@ -1,0 +1,75 @@
+"use client";
+
+import MainLayout from "@/components/layout/MainLayout";
+import { Box, Typography, Button, Container, Paper } from "@mui/material";
+import { Refresh as RefreshIcon, Home as HomeIcon } from "@mui/icons-material";
+import Link from "next/link";
+
+export default function ErrorPage({
+  error,
+  reset,
+}: {
+  error: Error & { digest?: string };
+  reset: () => void;
+}) {
+  return (
+    <MainLayout>
+      <Container maxWidth="sm">
+        <Paper sx={{ p: 6, textAlign: "center", mt: 8, borderRadius: 2, boxShadow: '0 4px 20px rgba(0, 0, 0, 0.05)' }}>
+          <Typography variant="h1" component="h1" sx={{ 
+            fontSize: "5rem", 
+            fontWeight: "bold", 
+            mb: 2,
+            background: 'linear-gradient(90deg, #4F46E5 0%, #10B981 100%)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+          }}>
+            500
+          </Typography>
+          
+          <Typography variant="h5" component="h2" sx={{ mb: 4, fontWeight: 600 }}>
+            Something Went Wrong
+          </Typography>
+          
+          <Typography variant="body1" color="text.secondary" sx={{ mb: 4 }}>
+            We're sorry, but there was a problem with our server. Please try again in a moment.
+          </Typography>
+          
+          <Box sx={{ display: "flex", gap: 2, justifyContent: "center" }}>
+            <Button
+              variant="contained"
+              onClick={reset}
+              startIcon={<RefreshIcon />}
+              sx={{ 
+                background: 'linear-gradient(90deg, #4F46E5 0%, #10B981 100%)',
+                color: 'white',
+                '&:hover': {
+                  boxShadow: '0 4px 12px rgba(79, 70, 229, 0.3)',
+                }
+              }}
+            >
+              Try Again
+            </Button>
+            
+            <Button
+              variant="outlined"
+              component={Link}
+              href="/"
+              startIcon={<HomeIcon />}
+              sx={{
+                borderColor: '#4F46E5',
+                color: '#4F46E5',
+                '&:hover': {
+                  borderColor: '#10B981',
+                  color: '#10B981',
+                }
+              }}
+            >
+              Return Home
+            </Button>
+          </Box>
+        </Paper>
+      </Container>
+    </MainLayout>
+  );
+}
