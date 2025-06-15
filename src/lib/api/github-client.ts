@@ -9,16 +9,22 @@ export class GitHubClient {
 
   async getGoodFirstIssues({
     language,
+    keyword,
     page = 1,
     perPage = 30,
   }: {
     language?: string;
+    keyword?: string;
     page?: number;
     perPage?: number;
   }) {
-    const query = `is:issue is:open label:"good first issue"${
+    let query = `is:issue is:open label:"good first issue"${
       language ? ` language:${language}` : ""
     }`;
+    
+    if (keyword && keyword.trim() !== '') {
+      query += ` ${keyword.trim()}`;
+    }
 
     const response = await this.octokit.request("GET /search/issues", {
       q: query,

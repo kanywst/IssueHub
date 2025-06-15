@@ -11,22 +11,45 @@ test.describe('Issues Page', () => {
     await expect(page.getByRole('heading', { name: /Find Good First Issues/i })).toBeVisible();
   });
 
-  test.skip('should filter issues by language', async ({ page }) => {
+  test('should filter issues by language', async ({ page }) => {
     // Skipping this test in CI as it requires API connection
     test.info().annotations.push({ type: 'skip-ci', description: 'Requires API connection' });
     
     await page.goto('/issues');
     
     // Basic interaction with the form
-    const languageSelect = page.locator('select').first();
-    await languageSelect.click();
+    await page.locator('[data-testid="language-select"]').click();
     await page.getByRole('option').nth(1).click();
     
-    // Click the filter button - using a more generic selector
-    await page.getByRole('button').first().click();
+    // Click the search button
+    await page.locator('[data-testid="search-button"]').click();
     
-    // Just verify the page doesn't crash
-    await expect(page.locator('main')).toBeVisible();
+    // Wait for the search results to load
+    await page.waitForSelector('[data-testid="issue-card"]', { timeout: 10000 });
+    
+    // Just verify the page doesn't crash and shows results
+    const issueCount = await page.locator('[data-testid="issue-card"]').count();
+    expect(issueCount).toBeGreaterThan(0);
+  });
+
+  test('should search issues by keyword', async ({ page }) => {
+    // Skipping this test in CI as it requires API connection
+    test.info().annotations.push({ type: 'skip-ci', description: 'Requires API connection' });
+    
+    await page.goto('/issues');
+    
+    // Input a search keyword
+    await page.locator('[data-testid="keyword-search-input"]').fill('documentation');
+    
+    // Click the search button
+    await page.locator('[data-testid="search-button"]').click();
+    
+    // Wait for the search results to load
+    await page.waitForSelector('[data-testid="issue-card"]', { timeout: 10000 });
+    
+    // Verify at least one issue is displayed
+    const issueCount = await page.locator('[data-testid="issue-card"]').count();
+    expect(issueCount).toBeGreaterThan(0);
   });
 });
 

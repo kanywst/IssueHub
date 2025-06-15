@@ -24,6 +24,7 @@ import {
   Paper,
   Snackbar,
   Alert,
+  TextField,
 } from "@mui/material";
 import { Search as SearchIcon, BookmarkAdd as BookmarkAddIcon, BookmarkAdded as BookmarkAddedIcon } from "@mui/icons-material";
 import { trpc } from "@/lib/trpc-client";
@@ -47,6 +48,8 @@ const POPULAR_LANGUAGES = [
 export default function IssuesPage() {
   const { data: session } = useSession();
   const [language, setLanguage] = useState("");
+  const [keyword, setKeyword] = useState("");
+  const [tempKeyword, setTempKeyword] = useState("");
   const [page, setPage] = useState(1);
   const perPage = 10;
   
@@ -61,7 +64,7 @@ export default function IssuesPage() {
   const [savedIssueIds, setSavedIssueIds] = useState<string[]>([]);
 
   const { data: issuesData, isLoading } = trpc.issues.getGoodFirstIssues.useQuery(
-    { language, page, perPage },
+    { language, keyword, page, perPage },
     {
       refetchOnWindowFocus: false,
     }
@@ -119,6 +122,21 @@ export default function IssuesPage() {
     setPage(1);
   };
 
+  const handleKeywordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setTempKeyword(event.target.value);
+  };
+
+  const handleSearch = () => {
+    setKeyword(tempKeyword);
+    setPage(1);
+  };
+
+  const handleKeyPress = (event: React.KeyboardEvent) => {
+    if (event.key === 'Enter') {
+      handleSearch();
+    }
+  };
+
   const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
     setPage(value);
   };
@@ -169,7 +187,7 @@ export default function IssuesPage() {
       >
         <CardContent sx={{ p: 1 }}>
           <Grid container spacing={2} alignItems="center">
-            <Grid item xs={12} md={6}>
+            <Grid item xs={12} md={4}>
               <FormControl fullWidth variant="outlined">
                 <InputLabel id="language-select-label">Programming Language</InputLabel>
                 <Select
@@ -177,6 +195,7 @@ export default function IssuesPage() {
                   value={language}
                   onChange={handleLanguageChange}
                   label="Programming Language"
+                  data-testid="language-select"
                 >
                   <MenuItem value="">All Languages</MenuItem>
                   {POPULAR_LANGUAGES.map((lang) => (
@@ -187,11 +206,25 @@ export default function IssuesPage() {
                 </Select>
               </FormControl>
             </Grid>
-            <Grid item xs={12} md={6}>
+            <Grid item xs={12} md={5}>
+              <TextField
+                fullWidth
+                variant="outlined"
+                label="Keyword Search"
+                value={tempKeyword}
+                onChange={handleKeywordChange}
+                onKeyPress={handleKeyPress}
+                placeholder="Search issues by keyword..."
+                data-testid="keyword-search"
+                inputProps={{ "data-testid": "keyword-search-input" }}
+              />
+            </Grid>
+            <Grid item xs={12} md={3}>
               <GradientButton
                 fullWidth
                 startIcon={<SearchIcon />}
-                onClick={() => setPage(1)}
+                onClick={handleSearch}
+                data-testid="search-button"
               >
                 Search
               </GradientButton>

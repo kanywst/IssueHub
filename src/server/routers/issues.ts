@@ -6,14 +6,16 @@ export const issuesRouter = router({
     .input(
       z.object({
         language: z.string().optional(),
+        keyword: z.string().optional(),
         page: z.number().default(1),
         perPage: z.number().default(30),
       })
     )
     .query(async ({ ctx, input }) => {
-      const { language, page, perPage } = input;
+      const { language, keyword, page, perPage } = input;
       const data = await ctx.githubClient.getGoodFirstIssues({
         language,
+        keyword,
         page,
         perPage,
       });
@@ -98,7 +100,7 @@ export const issuesRouter = router({
       });
 
       if (existingIssue) {
-        return { success: false, message: "このイシューはすでに保存されています" };
+        return { success: false, message: "このイシューはすでに保存されています", savedIssue: null };
       }
 
       try {
@@ -111,7 +113,7 @@ export const issuesRouter = router({
         return { success: true, savedIssue, message: "イシューを保存しました" };
       } catch (error) {
         if (error.code === 'P2002') {
-          return { success: false, message: "このイシューはすでに保存されています" };
+          return { success: false, message: "このイシューはすでに保存されています", savedIssue: null };
         }
         throw error;
       }
