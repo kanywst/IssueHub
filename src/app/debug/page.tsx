@@ -92,7 +92,7 @@ export default function DebugPage() {
               variant="outlined" 
               onClick={() => update()}
             >
-              セッション更新
+              Update Session
             </Button>
           </Stack>
         </Paper>

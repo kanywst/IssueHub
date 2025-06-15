@@ -81,7 +81,7 @@ export default function Header() {
             IssueHub
           </Typography>
 
-          {/* デスクトップナビゲーション */}
+          {/* Desktop Navigation */}
           {!isMobile && (
             <Box sx={{ display: "flex", gap: 2 }}>
               {navItems.map((item) => {
@@ -134,7 +134,7 @@ export default function Header() {
             </Box>
           )}
 
-          {/* モバイルナビゲーション */}
+          {/* Mobile Navigation */}
           {isMobile && (
             <Box>
               <IconButton

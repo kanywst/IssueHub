@@ -53,7 +53,7 @@ export class GitHubClient {
       });
       return response.data;
     } catch (error) {
-      // 組織が見つからない場合はユーザー情報を取得
+      // If organization is not found, fetch user information instead
       const userResponse = await this.octokit.request("GET /users/{username}", {
         username: org,
       });
@@ -62,5 +62,5 @@ export class GitHubClient {
   }
 }
 
-// シングルトンインスタンスをエクスポート
+// Export singleton instance
 export const githubClient = new GitHubClient();

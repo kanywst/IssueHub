@@ -17,7 +17,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "IssueHub - OSS Good First Issues",
-  description: "OSS初心者向けにgood first issueラベルが付いた課題をすぐに見つけられるプラットフォーム",
+  description: "A platform for OSS beginners to easily find issues with the 'good first issue' label",
 };
 
 export default function RootLayout({
@@ -26,7 +26,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ja">
+    <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >

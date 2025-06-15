@@ -8,7 +8,7 @@ export async function createContext({
 }: {
   req: Request;
 }) {
-  // アプリ固有のコンテキストをここで取得
+  // Get app-specific context here
   const session = await getServerSession(authOptions);
 
   return {

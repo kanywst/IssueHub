@@ -20,16 +20,16 @@ export const issuesRouter = router({
         perPage,
       });
       
-      // リポジトリ所有者の情報をキャッシュするためのマップ
+      // Map to cache repository owner information
       const ownerInfoCache = new Map();
       
-      // 各issueにリポジトリ所有者の情報を追加
+      // Add repository owner information to each issue
       const enhancedItems = await Promise.all(
         data.items.map(async (issue: any) => {
           const repoUrl = issue.repository_url;
           const [owner, repo] = repoUrl.replace("https://api.github.com/repos/", "").split("/");
           
-          // キャッシュからオーナー情報を取得するか、APIで取得してキャッシュする
+          // Get owner info from cache or fetch from API and cache it
           if (!ownerInfoCache.has(owner)) {
             try {
               const ownerInfo = await ctx.githubClient.getOrganizationDetails(owner);

@@ -7,7 +7,7 @@ function getBaseUrl() {
     return "";
   }
   
-  // SSR時はサーバーの絶対URLを参照
+  // For SSR, use the server's absolute URL
   if (process.env.VERCEL_URL) {
     return `https://${process.env.VERCEL_URL}`;
   }

@@ -62,23 +62,23 @@ test.describe('Saved Issues', () => {
     // Both cases are valid, so we check for both
     
     try {
-      // ページ内に認証関連のUIが表示されるか確認
+      // Check if authentication-related UI is displayed on the page
       const githubButton = await page.waitForSelector('text="GitHub"', { timeout: 5000 }).catch(() => null);
       const signInText = await page.waitForSelector('text="Sign in"', { timeout: 5000 }).catch(() => null);
       
       if (githubButton || signInText) {
-        // 認証UIが表示されたらテスト成功
+        // Test passes if auth UI is displayed
         expect(true).toBeTruthy();
       } else if (!page.url().includes('/saved-issues')) {
-        // URLが変わっていたらテスト成功
+        // Test passes if URL has changed (redirection occurred)
         expect(true).toBeTruthy();
       } else {
-        // それ以外の場合は認証要求UIを探す
+        // Otherwise, look for authentication requirement UI
         const loginPrompt = await page.getByText(/sign|log|auth|please/i).count() > 0;
         expect(loginPrompt).toBeTruthy();
       }
     } catch (e) {
-      // すべての待機が失敗した場合、ページ内に認証を促す何らかのテキストがあるか確認
+      // If all waits fail, check if there's any authentication-related text on the page
       const loginRequired = await page.getByText(/sign|log|auth|please/i).count() > 0;
       expect(loginRequired).toBeTruthy();
     }
