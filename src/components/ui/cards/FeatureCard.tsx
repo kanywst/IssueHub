@@ -1,13 +1,5 @@
 import React, { ReactNode } from 'react';
-import { 
-  Card, 
-  CardContent, 
-  Typography, 
-  Box,
-  CardProps,
-  SxProps,
-  Theme
-} from '@mui/material';
+import { Card, CardContent, Typography, Box, CardProps, SxProps, Theme } from '@mui/material';
 
 interface FeatureCardProps extends Omit<CardProps, 'children'> {
   title: string;
@@ -32,7 +24,7 @@ const FeatureCard: React.FC<FeatureCardProps> = ({
         height: '100%',
         width: '100%',
         maxWidth: 350,
-        ...sx
+        ...sx,
       }}
       {...cardProps}
     >
@@ -47,15 +39,15 @@ const FeatureCard: React.FC<FeatureCardProps> = ({
           ...contentSx,
         }}
       >
-        <Box 
-          sx={{ 
-            display: 'flex', 
-            justifyContent: 'center', 
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'center',
             mb: 2,
             color: iconColor,
             '& > *': {
               fontSize: 48,
-            }
+            },
           }}
         >
           {icon}

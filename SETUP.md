@@ -46,7 +46,7 @@ GITHUB_API_TOKEN="your-github-personal-access-token"
 
 #### Database Configuration
 
-- If using PlanetScale: 
+- If using PlanetScale:
   - Create a new database from the PlanetScale dashboard
   - Get the connection string and set it as `DATABASE_URL`
 

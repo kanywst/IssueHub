@@ -50,7 +50,7 @@ const Logo: React.FC<LogoProps> = ({
   };
 
   const { iconSize, fontSize, spacing } = sizeMap[size];
-  const { icon: iconColor, text: textColor } = colorMap[color];
+  const { text: textColor } = colorMap[color];
 
   return (
     <Box

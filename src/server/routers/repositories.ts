@@ -1,5 +1,5 @@
-import { z } from "zod";
-import { router, procedure } from "../trpc";
+import { z } from 'zod';
+import { router, procedure } from '../trpc';
 
 export const repositoriesRouter = router({
   getRepositoryDetails: procedure

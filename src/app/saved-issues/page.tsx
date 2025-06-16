@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import SavedIssuesPage from '@/features/issues/SavedIssuesPage';
 

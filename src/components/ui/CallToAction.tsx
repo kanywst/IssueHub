@@ -9,16 +9,12 @@ interface CallToActionProps {
   buttonLink: string;
 }
 
-const CallToAction: React.FC<CallToActionProps> = ({
-  title,
-  subtitle,
-  buttonText,
-  buttonLink,
-}) => {
+const CallToAction: React.FC<CallToActionProps> = ({ title, subtitle, buttonText, buttonLink }) => {
   return (
     <Box
       sx={{
-        background: 'linear-gradient(90deg, rgba(79, 70, 229, 0.9) 0%, rgba(16, 185, 129, 0.9) 100%)',
+        background:
+          'linear-gradient(90deg, rgba(79, 70, 229, 0.9) 0%, rgba(16, 185, 129, 0.9) 100%)',
         color: 'white',
         py: { xs: 8, md: 10 },
         px: 3,
@@ -39,15 +35,15 @@ const CallToAction: React.FC<CallToActionProps> = ({
           size="large"
           component={Link}
           href={buttonLink}
-          sx={{ 
-            bgcolor: 'white', 
+          sx={{
+            bgcolor: 'white',
             color: 'primary.main',
             px: 5,
             py: 1.5,
             fontSize: '1.125rem',
             '&:hover': {
               bgcolor: 'rgba(255, 255, 255, 0.9)',
-            }
+            },
           }}
         >
           {buttonText}

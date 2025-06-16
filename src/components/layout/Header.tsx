@@ -1,34 +1,34 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { 
-  AppBar, 
-  Toolbar, 
-  Typography, 
-  Button, 
-  Box, 
-  IconButton, 
-  Menu, 
-  MenuItem, 
-  Avatar, 
+import { useState } from 'react';
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  Button,
+  Box,
+  IconButton,
+  Menu,
+  MenuItem,
+  Avatar,
   Container,
   useMediaQuery,
-  useTheme
-} from "@mui/material";
-import { GitHub as GitHubIcon, Menu as MenuIcon } from "@mui/icons-material";
-import Link from "next/link";
-import { useSession, signIn, signOut } from "next-auth/react";
-import { useRouter } from "next/navigation";
+  useTheme,
+} from '@mui/material';
+import { GitHub as GitHubIcon, Menu as MenuIcon } from '@mui/icons-material';
+import Link from 'next/link';
+import { useSession, signIn, signOut } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 
 export default function Header() {
   const { data: session } = useSession();
   const router = useRouter();
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
-  
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [mobileMenuAnchorEl, setMobileMenuAnchorEl] = useState<null | HTMLElement>(null);
-  
+
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -50,14 +50,10 @@ export default function Header() {
     handleClose();
   };
 
-  const handleSignIn = () => {
-    signIn("github", { callbackUrl: window.location.href });
-  };
-
   const navItems = [
-    { label: "Home", path: "/" },
-    { label: "Issues", path: "/issues" },
-    { label: "Saved Issues", path: "/saved-issues", authRequired: true },
+    { label: 'Home', path: '/' },
+    { label: 'Issues', path: '/issues' },
+    { label: 'Saved Issues', path: '/saved-issues', authRequired: true },
   ];
 
   return (
@@ -68,14 +64,14 @@ export default function Header() {
             variant="h6"
             component="div"
             data-testid="header-logo"
-            sx={{ 
-              flexGrow: 1, 
-              display: "flex", 
-              alignItems: "center", 
-              fontWeight: "bold",
-              cursor: "pointer"
+            sx={{
+              flexGrow: 1,
+              display: 'flex',
+              alignItems: 'center',
+              fontWeight: 'bold',
+              cursor: 'pointer',
             }}
-            onClick={() => router.push("/")}
+            onClick={() => router.push('/')}
           >
             <GitHubIcon sx={{ mr: 1 }} />
             IssueHub
@@ -83,8 +79,8 @@ export default function Header() {
 
           {/* Desktop Navigation */}
           {!isMobile && (
-            <Box sx={{ display: "flex", gap: 2 }}>
-              {navItems.map((item) => {
+            <Box sx={{ display: 'flex', gap: 2 }}>
+              {navItems.map(item => {
                 if (item.authRequired && !session) return null;
                 return (
                   <Button
@@ -98,25 +94,25 @@ export default function Header() {
                   </Button>
                 );
               })}
-              
+
               {session ? (
                 <Box>
                   <IconButton onClick={handleMenu} color="inherit">
                     <Avatar
-                      alt={session.user.name || ""}
-                      src={session.user.image || ""}
+                      alt={session.user.name || ''}
+                      src={session.user.image || ''}
                       sx={{ width: 32, height: 32 }}
                     />
                   </IconButton>
-                  <Menu
-                    anchorEl={anchorEl}
-                    open={Boolean(anchorEl)}
-                    onClose={handleClose}
-                  >
-                    <MenuItem onClick={() => {
-                      router.push("/profile");
-                      handleClose();
-                    }}>Profile</MenuItem>
+                  <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
+                    <MenuItem
+                      onClick={() => {
+                        router.push('/profile');
+                        handleClose();
+                      }}
+                    >
+                      Profile
+                    </MenuItem>
                     <MenuItem onClick={handleSignOut}>Logout</MenuItem>
                   </Menu>
                 </Box>
@@ -125,7 +121,7 @@ export default function Header() {
                   color="inherit"
                   variant="outlined"
                   data-testid="github-login-button"
-                  onClick={() => signIn("github", { callbackUrl: window.location.href })}
+                  onClick={() => signIn('github', { callbackUrl: window.location.href })}
                   startIcon={<GitHubIcon />}
                 >
                   Login with GitHub
@@ -150,7 +146,7 @@ export default function Header() {
                 open={Boolean(mobileMenuAnchorEl)}
                 onClose={handleMobileMenuClose}
               >
-                {navItems.map((item) => {
+                {navItems.map(item => {
                   if (item.authRequired && !session) return null;
                   return (
                     <MenuItem
@@ -164,23 +160,33 @@ export default function Header() {
                     </MenuItem>
                   );
                 })}
-                
+
                 {session ? (
                   <>
-                    <MenuItem onClick={() => {
-                      router.push("/profile");
-                      handleMobileMenuClose();
-                    }}>Profile</MenuItem>
-                    <MenuItem onClick={() => {
-                      signOut();
-                      handleMobileMenuClose();
-                    }}>Logout</MenuItem>
+                    <MenuItem
+                      onClick={() => {
+                        router.push('/profile');
+                        handleMobileMenuClose();
+                      }}
+                    >
+                      Profile
+                    </MenuItem>
+                    <MenuItem
+                      onClick={() => {
+                        signOut();
+                        handleMobileMenuClose();
+                      }}
+                    >
+                      Logout
+                    </MenuItem>
                   </>
                 ) : (
-                  <MenuItem onClick={() => {
-                    signIn("github", { callbackUrl: window.location.href });
-                    handleMobileMenuClose();
-                  }}>
+                  <MenuItem
+                    onClick={() => {
+                      signIn('github', { callbackUrl: window.location.href });
+                      handleMobileMenuClose();
+                    }}
+                  >
                     Login with GitHub
                   </MenuItem>
                 )}

@@ -1,4 +1,4 @@
-import { createTheme } from "@mui/material/styles";
+import { createTheme } from '@mui/material/styles';
 
 export const theme = createTheme({
   palette: {
@@ -120,7 +120,7 @@ export const theme = createTheme({
     MuiButton: {
       styleOverrides: {
         root: {
-          textTransform: "none",
+          textTransform: 'none',
           borderRadius: 8,
           padding: '10px 20px',
           fontWeight: 600,
@@ -135,9 +135,9 @@ export const theme = createTheme({
           },
         },
         containedPrimary: {
-          backgroundColor: "#4F46E5",
-          "&:hover": {
-            backgroundColor: "#3730A3",
+          backgroundColor: '#4F46E5',
+          '&:hover': {
+            backgroundColor: '#3730A3',
           },
         },
       },

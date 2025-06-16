@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { Box, Container, Typography, Link as MuiLink } from "@mui/material";
-import Link from "next/link";
+import { Box, Container, Typography, Link as MuiLink } from '@mui/material';
+import Link from 'next/link';
 
 export default function Footer() {
   return (
@@ -10,26 +10,26 @@ export default function Footer() {
       sx={{
         py: 3,
         px: 2,
-        mt: "auto",
-        backgroundColor: (theme) => theme.palette.grey[100],
+        mt: 'auto',
+        backgroundColor: theme => theme.palette.grey[100],
       }}
     >
       <Container maxWidth="lg">
         <Box
           sx={{
-            display: "flex",
-            flexDirection: { xs: "column", sm: "row" },
-            justifyContent: "space-between",
-            alignItems: "center",
+            display: 'flex',
+            flexDirection: { xs: 'column', sm: 'row' },
+            justifyContent: 'space-between',
+            alignItems: 'center',
           }}
         >
           <Typography variant="body2" color="text.secondary">
             © {new Date().getFullYear()} IssueHub
           </Typography>
-          
+
           <Box
             sx={{
-              display: "flex",
+              display: 'flex',
               gap: 3,
               mt: { xs: 2, sm: 0 },
             }}
@@ -50,7 +50,7 @@ export default function Footer() {
               color="text.secondary"
               underline="hover"
             >
-                Privacy Policy
+              Privacy Policy
             </MuiLink>
             <MuiLink
               href="https://github.com/kanywst/issuehub"
