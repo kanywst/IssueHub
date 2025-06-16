@@ -2,10 +2,10 @@
   "cookies": [
     {
       "name": "next-auth.session-token",
-      "value": "{\"user\":{\"name\":\"Test User\",\"email\":\"test@example.com\",\"image\":\"https://github.com/github.png\",\"id\":\"test-user-id\"},\"expires\":\"2025-06-17T12:33:06.884Z\"}",
+      "value": "{\"user\":{\"name\":\"Test User\",\"email\":\"test@example.com\",\"image\":\"https://github.com/github.png\",\"id\":\"test-user-id\"},\"expires\":\"2025-06-17T12:35:49.271Z\"}",
       "domain": "localhost",
       "path": "/",
-      "expires": 1750163586.887095,
+      "expires": 1750163749.272579,
       "httpOnly": false,
       "secure": false,
       "sameSite": "Lax"
@@ -17,11 +17,11 @@
       "localStorage": [
         {
           "name": "nextauth.message",
-          "value": "{\"event\":\"session\",\"data\":{\"trigger\":\"getSession\"},\"timestamp\":1750077186}"
+          "value": "{\"event\":\"session\",\"data\":{\"trigger\":\"getSession\"},\"timestamp\":1750077349}"
         },
         {
           "name": "next-auth.session-token",
-          "value": "{\"user\":{\"name\":\"Test User\",\"email\":\"test@example.com\",\"image\":\"https://github.com/github.png\",\"id\":\"test-user-id\"},\"expires\":\"2025-06-17T12:33:06.884Z\"}"
+          "value": "{\"user\":{\"name\":\"Test User\",\"email\":\"test@example.com\",\"image\":\"https://github.com/github.png\",\"id\":\"test-user-id\"},\"expires\":\"2025-06-17T12:35:49.271Z\"}"
         },
         {
           "name": "next-auth.callback-url",
