@@ -13,7 +13,21 @@
     "test:e2e": "playwright test",
     "test:e2e:ci": "playwright test --project=chromium --grep-invert '@skip-ci'",
     "test:e2e:debug": "playwright test --debug",
-    "test:e2e:report": "playwright show-report"
+    "test:e2e:report": "playwright show-report",
+    "inspect": "node --inspect-brk node_modules/.bin/next dev",
+    "inspect:test": "node --inspect-brk node_modules/.bin/playwright test",
+    "inspect:test:issues": "node --inspect-brk node_modules/.bin/playwright test e2e/issues.spec.ts",
+    "inspect:code": "yarn format && yarn lint && yarn deps:check && yarn security:scan",
+    "inspect:all": "yarn inspect:code && yarn test:e2e:ci",
+    "inspect:full": "./inspect.sh",
+    "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md}\"",
+    "format:check": "prettier --check \"**/*.{js,jsx,ts,tsx,json,md}\"",
+    "audit": "yarn audit",
+    "audit:fix": "yarn audit fix",
+    "deps:check": "npx depcheck",
+    "security:scan": "yarn audit && npx snyk test",
+    "inspect:security": "yarn audit && npx snyk test --json | npx snyk-to-html -o security-report.html && open security-report.html",
+    "inspect:deps": "npx depcheck --json | jq > deps-report.json && cat deps-report.json"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.9.1",
@@ -49,9 +63,12 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "depcheck": "^1.4.7",
     "eslint": "^9",
     "eslint-config-next": "15.3.3",
     "prettier": "^3.5.3",
+    "snyk": "^1.1297.1",
+    "snyk-to-html": "^3.1.0",
     "tailwindcss": "^4",
     "typescript": "^5"
   }

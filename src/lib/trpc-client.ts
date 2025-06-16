@@ -6,7 +6,7 @@ function getBaseUrl() {
   if (typeof window !== "undefined") {
     return "";
   }
-  
+
   // For SSR, use the server's absolute URL
   if (process.env.VERCEL_URL) {
     return `https://${process.env.VERCEL_URL}`;

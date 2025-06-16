@@ -67,6 +67,7 @@ npm run test:e2e:report
 #### Debugging Tests
 
 If tests fail, you can:
+
 1. Run with `--debug` flag: `npx playwright test --debug`
 2. Check the HTML report: `npm run test:e2e:report`
 3. Look at test artifacts in the `test-results/` directory
@@ -136,16 +137,19 @@ NEXT_PUBLIC_DEBUG_MODE="false"
 Two development modes are available:
 
 **Standard Mode**
+
 ```bash
 ./start-dev.sh
 ```
 
 **Debug Mode** (includes additional logging and debug features)
+
 ```bash
 ./start-debug.sh
 ```
 
 Debug mode enables:
+
 - User session information on homepage
 - Authentication debugging logs
 - Debug page access (`/debug`)
@@ -155,6 +159,7 @@ Debug mode enables:
 ## 🧰 Tech Stack
 
 ### Frontend
+
 - **Next.js 14** with App Router and RSC
 - **TypeScript** for type safety
 - **Material UI v5** with Emotion
@@ -163,6 +168,7 @@ Debug mode enables:
 - **Tailwind CSS** for styling
 
 ### Backend
+
 - **NestJS 10** with TypeScript
 - **tRPC** for type-safe API calls
 - **Octokit** for GitHub API integration

@@ -23,7 +23,7 @@ export const mockIssuesResponse = {
           name: "good first issue",
           description: "Good for newcomers",
           color: "f29513",
-        }
+        },
       ],
       state: "open",
       locked: false,
@@ -47,14 +47,14 @@ export const mockIssuesResponse = {
           name: "good first issue",
           description: "Good for newcomers",
           color: "f29513",
-        }
+        },
       ],
       state: "open",
       locked: false,
       created_at: "2011-04-22T13:33:48Z",
       updated_at: "2011-04-22T13:33:48Z",
-    }
-  ]
+    },
+  ],
 };
 
 export const mockOwnerInfo = {
@@ -65,5 +65,5 @@ export const mockOwnerInfo = {
   mojombo: {
     avatar_url: "https://github.com/images/error/mojombo_happy.gif",
     html_url: "https://github.com/mojombo",
-  }
+  },
 };

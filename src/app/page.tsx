@@ -14,24 +14,28 @@ export default function Home() {
     <MainLayout>
       {/* Debug info - only displayed when DEBUG_MODE=true */}
       {session && process.env.NEXT_PUBLIC_DEBUG_MODE === "true" && (
-        <Box sx={{ p: 2, mb: 4, border: '1px solid #ccc', borderRadius: 1 }}>
+        <Box sx={{ p: 2, mb: 4, border: "1px solid #ccc", borderRadius: 1 }}>
           <Typography variant="h6">Login Info (Debug)</Typography>
-          <pre style={{ overflow: 'auto', maxHeight: '200px' }}>
-            {JSON.stringify({
-              name: session.user?.name,
-              email: session.user?.email,
-              image: session.user?.image,
-              id: session.user?.id,
-            }, null, 2)}
+          <pre style={{ overflow: "auto", maxHeight: "200px" }}>
+            {JSON.stringify(
+              {
+                name: session.user?.name,
+                email: session.user?.email,
+                image: session.user?.image,
+                id: session.user?.id,
+              },
+              null,
+              2,
+            )}
           </pre>
         </Box>
       )}
-      
+
       <HeroSection />
-      
+
       <FeatureSection />
-      
-      <CallToAction 
+
+      <CallToAction
         title="Ready to Start Contributing?"
         subtitle="Join thousands of developers who have taken their first step into open source with IssueHub"
         buttonText="Start Exploring"

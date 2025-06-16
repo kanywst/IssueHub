@@ -1,19 +1,19 @@
 "use client";
 
 import { useState } from "react";
-import { 
-  AppBar, 
-  Toolbar, 
-  Typography, 
-  Button, 
-  Box, 
-  IconButton, 
-  Menu, 
-  MenuItem, 
-  Avatar, 
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  Button,
+  Box,
+  IconButton,
+  Menu,
+  MenuItem,
+  Avatar,
   Container,
   useMediaQuery,
-  useTheme
+  useTheme,
 } from "@mui/material";
 import { GitHub as GitHubIcon, Menu as MenuIcon } from "@mui/icons-material";
 import Link from "next/link";
@@ -25,10 +25,11 @@ export default function Header() {
   const router = useRouter();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
-  
+
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [mobileMenuAnchorEl, setMobileMenuAnchorEl] = useState<null | HTMLElement>(null);
-  
+  const [mobileMenuAnchorEl, setMobileMenuAnchorEl] =
+    useState<null | HTMLElement>(null);
+
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -68,12 +69,12 @@ export default function Header() {
             variant="h6"
             component="div"
             data-testid="header-logo"
-            sx={{ 
-              flexGrow: 1, 
-              display: "flex", 
-              alignItems: "center", 
+            sx={{
+              flexGrow: 1,
+              display: "flex",
+              alignItems: "center",
               fontWeight: "bold",
-              cursor: "pointer"
+              cursor: "pointer",
             }}
             onClick={() => router.push("/")}
           >
@@ -98,7 +99,7 @@ export default function Header() {
                   </Button>
                 );
               })}
-              
+
               {session ? (
                 <Box>
                   <IconButton onClick={handleMenu} color="inherit">
@@ -113,10 +114,14 @@ export default function Header() {
                     open={Boolean(anchorEl)}
                     onClose={handleClose}
                   >
-                    <MenuItem onClick={() => {
-                      router.push("/profile");
-                      handleClose();
-                    }}>Profile</MenuItem>
+                    <MenuItem
+                      onClick={() => {
+                        router.push("/profile");
+                        handleClose();
+                      }}
+                    >
+                      Profile
+                    </MenuItem>
                     <MenuItem onClick={handleSignOut}>Logout</MenuItem>
                   </Menu>
                 </Box>
@@ -125,7 +130,9 @@ export default function Header() {
                   color="inherit"
                   variant="outlined"
                   data-testid="github-login-button"
-                  onClick={() => signIn("github", { callbackUrl: window.location.href })}
+                  onClick={() =>
+                    signIn("github", { callbackUrl: window.location.href })
+                  }
                   startIcon={<GitHubIcon />}
                 >
                   Login with GitHub
@@ -164,23 +171,33 @@ export default function Header() {
                     </MenuItem>
                   );
                 })}
-                
+
                 {session ? (
                   <>
-                    <MenuItem onClick={() => {
-                      router.push("/profile");
-                      handleMobileMenuClose();
-                    }}>Profile</MenuItem>
-                    <MenuItem onClick={() => {
-                      signOut();
-                      handleMobileMenuClose();
-                    }}>Logout</MenuItem>
+                    <MenuItem
+                      onClick={() => {
+                        router.push("/profile");
+                        handleMobileMenuClose();
+                      }}
+                    >
+                      Profile
+                    </MenuItem>
+                    <MenuItem
+                      onClick={() => {
+                        signOut();
+                        handleMobileMenuClose();
+                      }}
+                    >
+                      Logout
+                    </MenuItem>
                   </>
                 ) : (
-                  <MenuItem onClick={() => {
-                    signIn("github", { callbackUrl: window.location.href });
-                    handleMobileMenuClose();
-                  }}>
+                  <MenuItem
+                    onClick={() => {
+                      signIn("github", { callbackUrl: window.location.href });
+                      handleMobileMenuClose();
+                    }}
+                  >
                     Login with GitHub
                   </MenuItem>
                 )}

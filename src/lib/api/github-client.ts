@@ -21,8 +21,8 @@ export class GitHubClient {
     let query = `is:issue is:open label:"good first issue"${
       language ? ` language:${language}` : ""
     }`;
-    
-    if (keyword && keyword.trim() !== '') {
+
+    if (keyword && keyword.trim() !== "") {
       query += ` ${keyword.trim()}`;
     }
 
@@ -45,7 +45,7 @@ export class GitHubClient {
 
     return response.data;
   }
-  
+
   async getOrganizationDetails(org: string) {
     try {
       const response = await this.octokit.request("GET /orgs/{org}", {

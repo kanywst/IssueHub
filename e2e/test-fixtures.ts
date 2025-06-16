@@ -1,5 +1,5 @@
-import { test as base } from '@playwright/test';
-import { login } from './helpers/auth';
+import { test as base } from "@playwright/test";
+import { login } from "./helpers/auth";
 
 // Extend the basic test type to include custom fixtures
 export const test = base.extend({
@@ -11,4 +11,4 @@ export const test = base.extend({
   },
 });
 
-export { expect } from '@playwright/test';
+export { expect } from "@playwright/test";

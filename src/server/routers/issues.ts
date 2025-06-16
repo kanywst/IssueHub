@@ -9,7 +9,7 @@ export const issuesRouter = router({
         keyword: z.string().optional(),
         page: z.number().default(1),
         perPage: z.number().default(30),
-      })
+      }),
     )
     .query(async ({ ctx, input }) => {
       const { language, keyword, page, perPage } = input;
@@ -19,20 +19,23 @@ export const issuesRouter = router({
         page,
         perPage,
       });
-      
+
       // Map to cache repository owner information
       const ownerInfoCache = new Map();
-      
+
       // Add repository owner information to each issue
       const enhancedItems = await Promise.all(
         data.items.map(async (issue: any) => {
           const repoUrl = issue.repository_url;
-          const [owner, repo] = repoUrl.replace("https://api.github.com/repos/", "").split("/");
-          
+          const [owner, repo] = repoUrl
+            .replace("https://api.github.com/repos/", "")
+            .split("/");
+
           // Get owner info from cache or fetch from API and cache it
           if (!ownerInfoCache.has(owner)) {
             try {
-              const ownerInfo = await ctx.githubClient.getOrganizationDetails(owner);
+              const ownerInfo =
+                await ctx.githubClient.getOrganizationDetails(owner);
               ownerInfoCache.set(owner, {
                 avatar_url: ownerInfo.avatar_url,
                 html_url: ownerInfo.html_url,
@@ -44,14 +47,14 @@ export const issuesRouter = router({
               });
             }
           }
-          
+
           return {
             ...issue,
             owner_info: ownerInfoCache.get(owner),
           };
-        })
+        }),
       );
-      
+
       return {
         ...data,
         items: enhancedItems,
@@ -75,15 +78,16 @@ export const issuesRouter = router({
 
     // Add owner info for each saved issue
     const ownerInfoCache = new Map();
-    
+
     const enhancedIssues = await Promise.all(
       savedIssues.map(async (issue) => {
-        const [owner] = issue.repoName.split('/');
-        
+        const [owner] = issue.repoName.split("/");
+
         // Get owner info from cache or fetch and cache it
         if (!ownerInfoCache.has(owner)) {
           try {
-            const ownerInfo = await ctx.githubClient.getOrganizationDetails(owner);
+            const ownerInfo =
+              await ctx.githubClient.getOrganizationDetails(owner);
             ownerInfoCache.set(owner, {
               avatar_url: ownerInfo.avatar_url,
               html_url: ownerInfo.html_url,
@@ -95,12 +99,12 @@ export const issuesRouter = router({
             });
           }
         }
-        
+
         return {
           ...issue,
           owner_info: ownerInfoCache.get(owner),
         };
-      })
+      }),
     );
 
     return enhancedIssues;
@@ -114,7 +118,7 @@ export const issuesRouter = router({
         title: z.string(),
         repoName: z.string(),
         repoUrl: z.string(),
-      })
+      }),
     )
     .mutation(async ({ ctx, input }) => {
       const userId = ctx.session?.user.id;
@@ -130,7 +134,11 @@ export const issuesRouter = router({
       });
 
       if (existingIssue) {
-        return { success: false, message: "This issue is already saved", savedIssue: null };
+        return {
+          success: false,
+          message: "This issue is already saved",
+          savedIssue: null,
+        };
       }
 
       try {
@@ -140,10 +148,18 @@ export const issuesRouter = router({
             userId,
           },
         });
-        return { success: true, savedIssue, message: "Issue saved successfully" };
+        return {
+          success: true,
+          savedIssue,
+          message: "Issue saved successfully",
+        };
       } catch (error) {
-        if (error.code === 'P2002') {
-          return { success: false, message: "This issue is already saved", savedIssue: null };
+        if (error.code === "P2002") {
+          return {
+            success: false,
+            message: "This issue is already saved",
+            savedIssue: null,
+          };
         }
         throw error;
       }

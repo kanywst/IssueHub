@@ -43,36 +43,41 @@ export default function ProfilePage() {
 
   return (
     <MainLayout>
-      <Typography variant="h4" component="h1" data-testid="profile-heading" sx={{ 
-        mb: 4,
-        background: 'linear-gradient(90deg, #4F46E5 0%, #10B981 100%)',
-        WebkitBackgroundClip: 'text',
-        WebkitTextFillColor: 'transparent',
-        fontWeight: 'bold'
-      }}>
+      <Typography
+        variant="h4"
+        component="h1"
+        data-testid="profile-heading"
+        sx={{
+          mb: 4,
+          background: "linear-gradient(90deg, #4F46E5 0%, #10B981 100%)",
+          WebkitBackgroundClip: "text",
+          WebkitTextFillColor: "transparent",
+          fontWeight: "bold",
+        }}
+      >
         Profile
       </Typography>
 
       <Grid container spacing={4}>
         <Grid item xs={12} md={4}>
-          <Paper 
-            sx={{ 
-              p: 3, 
-              textAlign: "center", 
+          <Paper
+            sx={{
+              p: 3,
+              textAlign: "center",
               borderRadius: 2,
-              boxShadow: '0 4px 12px rgba(0, 0, 0, 0.05)',
-              border: '1px solid rgba(0,0,0,0.05)',
+              boxShadow: "0 4px 12px rgba(0, 0, 0, 0.05)",
+              border: "1px solid rgba(0,0,0,0.05)",
             }}
           >
             <Avatar
               src={session?.user?.image || ""}
               alt={session?.user?.name || ""}
-              sx={{ 
-                width: 120, 
-                height: 120, 
-                mx: "auto", 
+              sx={{
+                width: 120,
+                height: 120,
+                mx: "auto",
                 mb: 2,
-                border: '4px solid rgba(79, 70, 229, 0.1)'
+                border: "4px solid rgba(79, 70, 229, 0.1)",
               }}
             />
             <Typography variant="h5" component="h2" sx={{ mb: 1 }}>
@@ -89,14 +94,14 @@ export default function ProfilePage() {
               target="_blank"
               rel="noopener noreferrer"
               fullWidth
-              sx={{ 
+              sx={{
                 mb: 2,
-                borderColor: '#4F46E5',
-                color: '#4F46E5',
+                borderColor: "#4F46E5",
+                color: "#4F46E5",
                 "&:hover": {
-                  backgroundColor: 'rgba(79, 70, 229, 0.05)',
-                  borderColor: '#4F46E5'
-                }
+                  backgroundColor: "rgba(79, 70, 229, 0.05)",
+                  borderColor: "#4F46E5",
+                },
               }}
             >
               Edit GitHub Profile
@@ -108,64 +113,62 @@ export default function ProfilePage() {
               fullWidth
               sx={{
                 "&:hover": {
-                  backgroundColor: 'rgba(239, 68, 68, 0.05)'
-                }
+                  backgroundColor: "rgba(239, 68, 68, 0.05)",
+                },
               }}
             >
               Logout
             </Button>
           </Paper>
         </Grid>
-        
+
         <Grid item xs={12} md={8}>
-          <Paper 
-            sx={{ 
+          <Paper
+            sx={{
               p: 3,
               borderRadius: 2,
-              boxShadow: '0 4px 12px rgba(0, 0, 0, 0.05)',
-              border: '1px solid rgba(0,0,0,0.05)',
+              boxShadow: "0 4px 12px rgba(0, 0, 0, 0.05)",
+              border: "1px solid rgba(0,0,0,0.05)",
             }}
           >
-            <Typography 
-              variant="h5" 
-              component="h2" 
-              sx={{ 
+            <Typography
+              variant="h5"
+              component="h2"
+              sx={{
                 mb: 3,
-                color: '#4F46E5',
-                fontWeight: 'bold' 
+                color: "#4F46E5",
+                fontWeight: "bold",
               }}
             >
               Activity
             </Typography>
-            
+
             <Box sx={{ mb: 4 }}>
               <Typography variant="h6" component="h3" sx={{ mb: 2 }}>
                 Saved Issues
               </Typography>
-              <GradientButton
-                component={Link}
-                href="/saved-issues"
-              >
+              <GradientButton component={Link} href="/saved-issues">
                 View Saved Issues
               </GradientButton>
             </Box>
-            
+
             <Divider sx={{ my: 3 }} />
-            
+
             <Box>
               <Typography variant="h6" component="h3" sx={{ mb: 2 }}>
                 Settings
               </Typography>
-              <Alert 
-                severity="info" 
-                sx={{ 
+              <Alert
+                severity="info"
+                sx={{
                   mb: 2,
-                  '& .MuiAlert-icon': {
-                    color: '#4F46E5'
-                  }
+                  "& .MuiAlert-icon": {
+                    color: "#4F46E5",
+                  },
                 }}
               >
-                Custom settings are not available yet. Please check back for future updates.
+                Custom settings are not available yet. Please check back for
+                future updates.
               </Alert>
             </Box>
           </Paper>

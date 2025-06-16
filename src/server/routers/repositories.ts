@@ -7,7 +7,7 @@ export const repositoriesRouter = router({
       z.object({
         owner: z.string(),
         repo: z.string(),
-      })
+      }),
     )
     .query(async ({ ctx, input }) => {
       const { owner, repo } = input;

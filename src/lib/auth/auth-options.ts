@@ -46,7 +46,7 @@ export const authOptions: NextAuthOptions = {
         token.id = user.id;
       }
       return token;
-    }
+    },
   },
   pages: {
     signIn: "/auth/signin",

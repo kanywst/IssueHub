@@ -17,7 +17,8 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "IssueHub - OSS Good First Issues",
-  description: "A platform for OSS beginners to easily find issues with the 'good first issue' label",
+  description:
+    "A platform for OSS beginners to easily find issues with the 'good first issue' label",
 };
 
 export default function RootLayout({
@@ -32,9 +33,7 @@ export default function RootLayout({
       >
         <AuthProvider>
           <MuiProvider>
-            <TrpcProvider>
-              {children}
-            </TrpcProvider>
+            <TrpcProvider>{children}</TrpcProvider>
           </MuiProvider>
         </AuthProvider>
       </body>

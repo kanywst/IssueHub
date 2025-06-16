@@ -26,7 +26,7 @@ export default function Footer() {
           <Typography variant="body2" color="text.secondary">
             © {new Date().getFullYear()} IssueHub
           </Typography>
-          
+
           <Box
             sx={{
               display: "flex",
@@ -50,7 +50,7 @@ export default function Footer() {
               color="text.secondary"
               underline="hover"
             >
-                Privacy Policy
+              Privacy Policy
             </MuiLink>
             <MuiLink
               href="https://github.com/kanywst/issuehub"
