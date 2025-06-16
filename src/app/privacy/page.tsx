@@ -96,8 +96,8 @@ export default function PrivacyPage() {
             3. Information Sharing
           </Typography>
           <Typography variant="body1" paragraph>
-            Our service does not share users&apos; personal information with third parties, except when
-            required by law.
+            Our service does not share users&apos; personal information with third parties, except
+            when required by law.
           </Typography>
 
           <Divider sx={{ my: 4 }} />

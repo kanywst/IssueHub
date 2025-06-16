@@ -52,7 +52,7 @@ export class GitHubClient {
         org,
       });
       return response.data;
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (_error) {
       // If organization is not found, fetch user information instead
       const userResponse = await this.octokit.request('GET /users/{username}', {

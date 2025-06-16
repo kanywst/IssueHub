@@ -1,0 +1,7 @@
+{
+  "ignoreMatches": [
+    "@tailwindcss/postcss",
+    "tailwindcss",
+    "@types/react-dom"
+  ]
+}

@@ -58,7 +58,7 @@ test.describe('Protected Routes', () => {
         // Otherwise, there's an issue with authentication
         expect(false).toBeTruthy('Unauthenticated user was able to access profile page');
       }
-    } catch (e) {
+    } catch (_e) {
       // If all waits fail, check if the profile page is still displayed
       // This test verifies that unauthenticated users cannot see the profile page
       // Some projects might display only a "Please login" message to unauthenticated users

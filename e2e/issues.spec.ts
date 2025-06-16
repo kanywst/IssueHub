@@ -37,7 +37,7 @@ test.describe('Issues Page', () => {
       // If we get here, we found results, so verify count
       const issueCount = await page.locator('[data-testid="issue-card"]').count();
       expect(issueCount).toBeGreaterThan(0);
-    } catch (e) {
+    } catch (_e) {
       // If no results found (which can happen in tests without real API access),
       // just verify the page loads without crashing
       // Wait for the spinner to disappear
@@ -73,7 +73,7 @@ test.describe('Issues Page', () => {
       // If we get here, we found results, so verify count
       const issueCount = await page.locator('[data-testid="issue-card"]').count();
       expect(issueCount).toBeGreaterThan(0);
-    } catch (e) {
+    } catch (_e) {
       // If no results found (which can happen in tests without real API access),
       // just verify the page loads without crashing
       // Wait for the spinner to disappear
@@ -113,7 +113,7 @@ test.describe('Saved Issues', () => {
         const loginPrompt = (await page.getByText(/sign|log|auth|please/i).count()) > 0;
         expect(loginPrompt).toBeTruthy();
       }
-    } catch (e) {
+    } catch (_e) {
       // If all waits fail, check if there's any authentication-related text on the page
       const loginRequired = (await page.getByText(/sign|log|auth|please/i).count()) > 0;
       expect(loginRequired).toBeTruthy();

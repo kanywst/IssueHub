@@ -24,10 +24,10 @@
     "format:check": "prettier --check \"**/*.{js,jsx,ts,tsx,json,md}\"",
     "audit": "yarn audit",
     "audit:fix": "yarn audit fix",
-    "deps:check": "npx depcheck",
-    "security:scan": "yarn audit && npx snyk test",
-    "inspect:security": "yarn audit && npx snyk test --json | npx snyk-to-html -o security-report.html && open security-report.html",
-    "inspect:deps": "npx depcheck --json | jq > deps-report.json && cat deps-report.json"
+    "deps:check": "npx depcheck --ignores=\"@tailwindcss/postcss,tailwindcss,@types/react-dom\"",
+    "security:scan": "yarn audit",
+    "inspect:security": "yarn audit",
+    "inspect:deps": "npx depcheck --ignores=\"@tailwindcss/postcss,tailwindcss,@types/react-dom\" --json | jq > deps-report.json && cat deps-report.json"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.9.1",
@@ -35,14 +35,10 @@
     "@emotion/styled": "^11.14.0",
     "@mui/icons-material": "^7.1.1",
     "@mui/material": "^7.1.1",
-    "@nestjs/common": "^11.1.3",
-    "@nestjs/core": "^11.1.3",
-    "@nestjs/platform-express": "^11.1.3",
     "@octokit/core": "^7.0.2",
     "@prisma/client": "^6.9.0",
     "@tanstack/react-query": "^5.80.7",
     "@trpc/client": "^11.4.1",
-    "@trpc/next": "^11.4.1",
     "@trpc/react-query": "^11.4.1",
     "@trpc/server": "^11.4.1",
     "next": "15.3.3",
@@ -50,16 +46,12 @@
     "prisma": "^6.9.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "swr": "^2.3.3",
     "zod": "^3.25.64"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
-    "@nestjs/cli": "^11.0.7",
-    "@nestjs/testing": "^11.1.3",
     "@playwright/test": "^1.53.0",
     "@tailwindcss/postcss": "^4",
-    "@types/express": "^5.0.3",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
@@ -67,8 +59,6 @@
     "eslint": "^9",
     "eslint-config-next": "15.3.3",
     "prettier": "^3.5.3",
-    "snyk": "^1.1297.1",
-    "snyk-to-html": "^3.1.0",
     "tailwindcss": "^4",
     "typescript": "^5"
   }

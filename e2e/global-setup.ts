@@ -7,7 +7,7 @@ import * as path from 'path';
  * Global setup function that runs before all tests
  * This helps prepare authenticated states for tests that need them
  */
-async function globalSetup(config: FullConfig): Promise<void> {
+async function globalSetup(_config: FullConfig): Promise<void> {
   console.log('Setting up test environment...');
 
   // Ensure auth directory exists

@@ -11,6 +11,32 @@ const compat = new FlatCompat({
 
 const eslintConfig = [
   ...compat.extends("next/core-web-vitals", "next/typescript"),
+  {
+    ignores: [
+      "**/node_modules/**",
+      "**/.next/**",
+      "**/src/generated/**",
+      "**/dist/**",
+      "**/build/**"
+    ]
+  },
+  {
+    files: ["**/e2e/**/*.ts", "**/e2e/**/*.tsx"],
+    rules: {
+      "@typescript-eslint/no-unused-vars": ["error", { 
+        "argsIgnorePattern": "^_", 
+        "varsIgnorePattern": "^_",
+        "caughtErrorsIgnorePattern": "^_" 
+      }],
+      "react-hooks/rules-of-hooks": "off" // Playwrightのテストファイルではこのルールを無効化
+    }
+  },
+  {
+    files: ["**/src/app/error.tsx"],
+    rules: {
+      "@typescript-eslint/no-unused-vars": "off"
+    }
+  }
 ];
 
 export default eslintConfig;

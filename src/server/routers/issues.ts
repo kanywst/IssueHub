@@ -37,7 +37,7 @@ export const issuesRouter = router({
                 avatar_url: ownerInfo.avatar_url,
                 html_url: ownerInfo.html_url,
               });
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+              // eslint-disable-next-line @typescript-eslint/no-unused-vars
             } catch (_error) {
               ownerInfoCache.set(owner, {
                 avatar_url: null,
@@ -89,7 +89,7 @@ export const issuesRouter = router({
               avatar_url: ownerInfo.avatar_url,
               html_url: ownerInfo.html_url,
             });
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
           } catch (_error) {
             ownerInfoCache.set(owner, {
               avatar_url: null,
