@@ -1,16 +1,16 @@
-import React from "react";
-import { Box, Typography, BoxProps } from "@mui/material";
+import React from 'react';
+import { Box, Typography, BoxProps } from '@mui/material';
 
 interface LogoProps extends BoxProps {
-  size?: "small" | "medium" | "large";
-  variant?: "full" | "icon";
-  color?: "primary" | "white" | "dark";
+  size?: 'small' | 'medium' | 'large';
+  variant?: 'full' | 'icon';
+  color?: 'primary' | 'white' | 'dark';
 }
 
 const Logo: React.FC<LogoProps> = ({
-  size = "medium",
-  variant = "full",
-  color = "primary",
+  size = 'medium',
+  variant = 'full',
+  color = 'primary',
   sx = {},
   ...props
 }) => {
@@ -18,17 +18,17 @@ const Logo: React.FC<LogoProps> = ({
   const sizeMap = {
     small: {
       iconSize: 24,
-      fontSize: "1.2rem",
+      fontSize: '1.2rem',
       spacing: 1,
     },
     medium: {
       iconSize: 32,
-      fontSize: "1.5rem",
+      fontSize: '1.5rem',
       spacing: 1.5,
     },
     large: {
       iconSize: 48,
-      fontSize: "2rem",
+      fontSize: '2rem',
       spacing: 2,
     },
   };
@@ -36,27 +36,27 @@ const Logo: React.FC<LogoProps> = ({
   // Color mapping
   const colorMap = {
     primary: {
-      icon: "primary.main",
-      text: "text.primary",
+      icon: 'primary.main',
+      text: 'text.primary',
     },
     white: {
-      icon: "#fff",
-      text: "#fff",
+      icon: '#fff',
+      text: '#fff',
     },
     dark: {
-      icon: "#111827",
-      text: "#111827",
+      icon: '#111827',
+      text: '#111827',
     },
   };
 
   const { iconSize, fontSize, spacing } = sizeMap[size];
-  const { icon: iconColor, text: textColor } = colorMap[color];
+  const { text: textColor } = colorMap[color];
 
   return (
     <Box
       sx={{
-        display: "flex",
-        alignItems: "center",
+        display: 'flex',
+        alignItems: 'center',
         ...sx,
       }}
       {...props}
@@ -66,20 +66,20 @@ const Logo: React.FC<LogoProps> = ({
         sx={{
           width: iconSize,
           height: iconSize,
-          borderRadius: "8px",
+          borderRadius: '8px',
           background: `linear-gradient(135deg, #4F46E5 0%, #10B981 100%)`,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          boxShadow: "0 2px 8px rgba(0, 0, 0, 0.15)",
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)',
         }}
       >
         <Typography
           variant="h6"
           component="span"
           sx={{
-            color: "#fff",
-            fontWeight: "bold",
+            color: '#fff',
+            fontWeight: 'bold',
             fontSize: iconSize * 0.5,
             lineHeight: 1,
           }}
@@ -89,13 +89,13 @@ const Logo: React.FC<LogoProps> = ({
       </Box>
 
       {/* Logo text (only shown in full variant) */}
-      {variant === "full" && (
+      {variant === 'full' && (
         <Typography
           variant="h6"
           component="span"
           sx={{
             ml: spacing,
-            fontWeight: "bold",
+            fontWeight: 'bold',
             fontSize: fontSize,
             color: textColor,
           }}

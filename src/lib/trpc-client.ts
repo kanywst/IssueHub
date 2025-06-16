@@ -1,10 +1,10 @@
-import { httpBatchLink } from "@trpc/client";
-import { createTRPCReact } from "@trpc/react-query";
-import type { AppRouter } from "@/server/router";
+import { httpBatchLink } from '@trpc/client';
+import { createTRPCReact } from '@trpc/react-query';
+import type { AppRouter } from '@/server/router';
 
 function getBaseUrl() {
-  if (typeof window !== "undefined") {
-    return "";
+  if (typeof window !== 'undefined') {
+    return '';
   }
 
   // For SSR, use the server's absolute URL

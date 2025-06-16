@@ -1,4 +1,4 @@
-import { Octokit } from "@octokit/core";
+import { Octokit } from '@octokit/core';
 
 export class GitHubClient {
   private octokit: Octokit;
@@ -19,17 +19,17 @@ export class GitHubClient {
     perPage?: number;
   }) {
     let query = `is:issue is:open label:"good first issue"${
-      language ? ` language:${language}` : ""
+      language ? ` language:${language}` : ''
     }`;
 
-    if (keyword && keyword.trim() !== "") {
+    if (keyword && keyword.trim() !== '') {
       query += ` ${keyword.trim()}`;
     }
 
-    const response = await this.octokit.request("GET /search/issues", {
+    const response = await this.octokit.request('GET /search/issues', {
       q: query,
-      sort: "updated",
-      order: "desc",
+      sort: 'updated',
+      order: 'desc',
       per_page: perPage,
       page,
     });
@@ -38,7 +38,7 @@ export class GitHubClient {
   }
 
   async getRepositoryDetails(owner: string, repo: string) {
-    const response = await this.octokit.request("GET /repos/{owner}/{repo}", {
+    const response = await this.octokit.request('GET /repos/{owner}/{repo}', {
       owner,
       repo,
     });
@@ -48,13 +48,14 @@ export class GitHubClient {
 
   async getOrganizationDetails(org: string) {
     try {
-      const response = await this.octokit.request("GET /orgs/{org}", {
+      const response = await this.octokit.request('GET /orgs/{org}', {
         org,
       });
       return response.data;
-    } catch (error) {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (_error) {
       // If organization is not found, fetch user information instead
-      const userResponse = await this.octokit.request("GET /users/{username}", {
+      const userResponse = await this.octokit.request('GET /users/{username}', {
         username: org,
       });
       return userResponse.data;

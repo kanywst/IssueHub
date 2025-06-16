@@ -1,40 +1,36 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import MainLayout from "@/components/layout/MainLayout";
+import MainLayout from '@/components/layout/MainLayout';
 import {
   Typography,
   Box,
-  Card,
-  CardContent,
   Button,
   Avatar,
   Divider,
-  Stack,
   CircularProgress,
   Alert,
   Paper,
   Grid,
-} from "@mui/material";
-import { GitHub as GitHubIcon } from "@mui/icons-material";
-import { useSession, signOut } from "next-auth/react";
-import { useRouter } from "next/navigation";
-import Link from "next/link";
-import GradientButton from "@/components/ui/buttons/GradientButton";
+} from '@mui/material';
+import { GitHub as GitHubIcon } from '@mui/icons-material';
+import { useSession, signOut } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import GradientButton from '@/components/ui/buttons/GradientButton';
 
 export default function ProfilePage() {
   const router = useRouter();
   const { data: session, status } = useSession({
     required: true,
     onUnauthenticated() {
-      router.push("/api/auth/signin");
+      router.push('/api/auth/signin');
     },
   });
 
-  if (status === "loading") {
+  if (status === 'loading') {
     return (
       <MainLayout>
-        <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
+        <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
           <CircularProgress />
         </Box>
       </MainLayout>
@@ -49,10 +45,10 @@ export default function ProfilePage() {
         data-testid="profile-heading"
         sx={{
           mb: 4,
-          background: "linear-gradient(90deg, #4F46E5 0%, #10B981 100%)",
-          WebkitBackgroundClip: "text",
-          WebkitTextFillColor: "transparent",
-          fontWeight: "bold",
+          background: 'linear-gradient(90deg, #4F46E5 0%, #10B981 100%)',
+          WebkitBackgroundClip: 'text',
+          WebkitTextFillColor: 'transparent',
+          fontWeight: 'bold',
         }}
       >
         Profile
@@ -63,21 +59,21 @@ export default function ProfilePage() {
           <Paper
             sx={{
               p: 3,
-              textAlign: "center",
+              textAlign: 'center',
               borderRadius: 2,
-              boxShadow: "0 4px 12px rgba(0, 0, 0, 0.05)",
-              border: "1px solid rgba(0,0,0,0.05)",
+              boxShadow: '0 4px 12px rgba(0, 0, 0, 0.05)',
+              border: '1px solid rgba(0,0,0,0.05)',
             }}
           >
             <Avatar
-              src={session?.user?.image || ""}
-              alt={session?.user?.name || ""}
+              src={session?.user?.image || ''}
+              alt={session?.user?.name || ''}
               sx={{
                 width: 120,
                 height: 120,
-                mx: "auto",
+                mx: 'auto',
                 mb: 2,
-                border: "4px solid rgba(79, 70, 229, 0.1)",
+                border: '4px solid rgba(79, 70, 229, 0.1)',
               }}
             />
             <Typography variant="h5" component="h2" sx={{ mb: 1 }}>
@@ -96,11 +92,11 @@ export default function ProfilePage() {
               fullWidth
               sx={{
                 mb: 2,
-                borderColor: "#4F46E5",
-                color: "#4F46E5",
-                "&:hover": {
-                  backgroundColor: "rgba(79, 70, 229, 0.05)",
-                  borderColor: "#4F46E5",
+                borderColor: '#4F46E5',
+                color: '#4F46E5',
+                '&:hover': {
+                  backgroundColor: 'rgba(79, 70, 229, 0.05)',
+                  borderColor: '#4F46E5',
                 },
               }}
             >
@@ -112,8 +108,8 @@ export default function ProfilePage() {
               onClick={() => signOut()}
               fullWidth
               sx={{
-                "&:hover": {
-                  backgroundColor: "rgba(239, 68, 68, 0.05)",
+                '&:hover': {
+                  backgroundColor: 'rgba(239, 68, 68, 0.05)',
                 },
               }}
             >
@@ -127,8 +123,8 @@ export default function ProfilePage() {
             sx={{
               p: 3,
               borderRadius: 2,
-              boxShadow: "0 4px 12px rgba(0, 0, 0, 0.05)",
-              border: "1px solid rgba(0,0,0,0.05)",
+              boxShadow: '0 4px 12px rgba(0, 0, 0, 0.05)',
+              border: '1px solid rgba(0,0,0,0.05)',
             }}
           >
             <Typography
@@ -136,8 +132,8 @@ export default function ProfilePage() {
               component="h2"
               sx={{
                 mb: 3,
-                color: "#4F46E5",
-                fontWeight: "bold",
+                color: '#4F46E5',
+                fontWeight: 'bold',
               }}
             >
               Activity
@@ -162,13 +158,12 @@ export default function ProfilePage() {
                 severity="info"
                 sx={{
                   mb: 2,
-                  "& .MuiAlert-icon": {
-                    color: "#4F46E5",
+                  '& .MuiAlert-icon': {
+                    color: '#4F46E5',
                   },
                 }}
               >
-                Custom settings are not available yet. Please check back for
-                future updates.
+                Custom settings are not available yet. Please check back for future updates.
               </Alert>
             </Box>
           </Paper>

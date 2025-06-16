@@ -1,5 +1,5 @@
-import { z } from "zod";
-import { router, procedure } from "../trpc";
+import { z } from 'zod';
+import { router, procedure } from '../trpc';
 
 export const repositoriesRouter = router({
   getRepositoryDetails: procedure
@@ -7,7 +7,7 @@ export const repositoriesRouter = router({
       z.object({
         owner: z.string(),
         repo: z.string(),
-      }),
+      })
     )
     .query(async ({ ctx, input }) => {
       const { owner, repo } = input;

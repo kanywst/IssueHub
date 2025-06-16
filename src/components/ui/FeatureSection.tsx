@@ -1,23 +1,23 @@
-import React from "react";
-import { Box, Container, Grid, Typography } from "@mui/material";
+import React from 'react';
+import { Box, Container, Typography } from '@mui/material';
 import {
   Search as SearchIcon,
   GitHub as GitHubIcon,
   BookmarkAdd as BookmarkAddIcon,
-} from "@mui/icons-material";
-import FeatureCard from "./cards/FeatureCard";
+} from '@mui/icons-material';
+import FeatureCard from './cards/FeatureCard';
 
 const FeatureSection: React.FC = () => {
   return (
     <Container maxWidth="lg" sx={{ mb: 12 }}>
-      <Box sx={{ textAlign: "center", mb: 8 }}>
+      <Box sx={{ textAlign: 'center', mb: 8 }}>
         <Typography
           variant="h2"
           component="h2"
           sx={{
             fontWeight: 700,
             mb: 2,
-            fontSize: { xs: "1.875rem", sm: "2.25rem" },
+            fontSize: { xs: '1.875rem', sm: '2.25rem' },
           }}
         >
           Built for Open Source Beginners
@@ -25,31 +25,30 @@ const FeatureSection: React.FC = () => {
         <Typography
           variant="subtitle1"
           sx={{
-            color: "text.secondary",
+            color: 'text.secondary',
             maxWidth: 700,
-            mx: "auto",
-            fontSize: { xs: "1rem", sm: "1.125rem" },
+            mx: 'auto',
+            fontSize: { xs: '1rem', sm: '1.125rem' },
           }}
         >
-          Everything you need to find and track your first open source
-          contributions
+          Everything you need to find and track your first open source contributions
         </Typography>
       </Box>
 
       <Box
         sx={{
-          display: "flex",
-          flexWrap: "wrap",
-          justifyContent: "center",
+          display: 'flex',
+          flexWrap: 'wrap',
+          justifyContent: 'center',
           gap: 4,
         }}
       >
         <Box
           sx={{
             width: {
-              xs: "100%",
-              sm: "calc(50% - 16px)",
-              md: "calc(33.333% - 16px)",
+              xs: '100%',
+              sm: 'calc(50% - 16px)',
+              md: 'calc(33.333% - 16px)',
             },
             maxWidth: 350,
           }}
@@ -64,9 +63,9 @@ const FeatureSection: React.FC = () => {
         <Box
           sx={{
             width: {
-              xs: "100%",
-              sm: "calc(50% - 16px)",
-              md: "calc(33.333% - 16px)",
+              xs: '100%',
+              sm: 'calc(50% - 16px)',
+              md: 'calc(33.333% - 16px)',
             },
             maxWidth: 350,
           }}
@@ -81,9 +80,9 @@ const FeatureSection: React.FC = () => {
         <Box
           sx={{
             width: {
-              xs: "100%",
-              sm: "calc(50% - 16px)",
-              md: "calc(33.333% - 16px)",
+              xs: '100%',
+              sm: 'calc(50% - 16px)',
+              md: 'calc(33.333% - 16px)',
             },
             maxWidth: 350,
           }}
