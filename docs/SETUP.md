@@ -1,5 +1,21 @@
 # Issue Hub Setup Guide
 
+- [Issue Hub Setup Guide](#issue-hub-setup-guide)
+  - [Technology Stack](#technology-stack)
+  - [Setup Instructions](#setup-instructions)
+    - [1. Clone the Repository](#1-clone-the-repository)
+    - [2. Install Dependencies](#2-install-dependencies)
+    - [3. Set Up Environment Variables](#3-set-up-environment-variables)
+      - [Database Configuration](#database-configuration)
+      - [GitHub OAuth Configuration](#github-oauth-configuration)
+      - [GitHub API Token Configuration](#github-api-token-configuration)
+    - [4. Initialize the Database](#4-initialize-the-database)
+    - [5. Start the Application](#5-start-the-application)
+  - [Deployment](#deployment)
+    - [Frontend (Vercel)](#frontend-vercel)
+    - [Backend (Fly.io/Cloud Run)](#backend-flyiocloud-run)
+  - [Features](#features)
+
 Issue Hub is a web application designed to help open source beginners easily find GitHub issues labeled with "good first issue".
 
 ## Technology Stack
@@ -28,7 +44,7 @@ npm install
 
 Create a `.env.local` file and set the following environment variables:
 
-```
+```bash
 # Database
 DATABASE_URL="mysql://username:password@localhost:3306/issuehub"
 

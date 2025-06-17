@@ -1,4 +1,4 @@
-// GitHub Issue の型定義
+// Type definition for GitHub Issue
 export interface GitHubIssue {
   id: number;
   title: string;
@@ -14,14 +14,14 @@ export interface GitHubIssue {
     avatar_url: string;
     html_url: string;
   };
-  // 拡張プロパティ - サーバーサイドで追加される情報
+  // Extended property - Information added on the server side
   owner_info?: {
     avatar_url: string | null;
     html_url: string;
   };
 }
 
-// API から返される GitHub Issue の型
+// GitHub Issue type returned from the API
 export interface GitHubIssueFromApi {
   id: number;
   title: string;

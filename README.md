@@ -177,20 +177,69 @@ Debug mode enables:
 ## 📁 Project Structure
 
 ```
-src/
-  app/            # Next.js App Router pages
-  components/     # Shared components
-    layout/       # Layout components (Header, Footer)
-    ui/           # UI components (buttons, cards, etc.)
-  features/       # Feature-specific components and logic
-    issues/       # Issues-related features
-    auth/         # Authentication-related features
-    profile/      # User profile features
-  hooks/          # Custom React hooks
-  lib/            # Library configurations
-  server/         # Server-side code
-  utils/          # Utility functions
+.
+├── docs/                   # Project documentation
+├── e2e/                    # E2E tests
+│   └── helpers/            # Test helper functions
+├── prisma/                 # Prisma database configuration
+│   └── migrations/         # Database migrations
+├── public/                 # Static files
+├── scripts/                # Shell scripts
+├── src/                    # Source code
+│   ├── app/                # Next.js App Router
+│   ├── components/         # Components
+│   │   ├── common/         # Common components
+│   │   ├── forms/          # Form components
+│   │   ├── layout/         # Layout components
+│   │   └── ui/             # UI components
+│   ├── config/             # Configuration files
+│   ├── features/           # Feature-specific code
+│   ├── generated/          # Generated code
+│   ├── lib/                # Utilities and API
+│   │   ├── api/            # API clients
+│   │   │   └── interfaces/ # API interfaces
+│   │   └── utils/          # Utility functions
+│   ├── server/             # Server-side code
+│   │   └── routers/        # tRPC routers
+│   ├── services/           # Service layer
+│   └── types/              # Type definitions
+└── tests/                  # Tests
+    ├── integration/        # Integration tests
+    └── unit/               # Unit tests
 ```
+
+For detailed project structure explanation, please refer to [docs/project-structure.md](docs/project-structure.md).
+
+### 📋 Important File Locations
+
+- **Setup Guide**: [docs/SETUP.md](docs/SETUP.md)
+- **Development Instructions**: [docs/INSTRUCTIONS.md](docs/INSTRUCTIONS.md)
+- **Directory Structure**: [docs/project-structure.md](docs/project-structure.md)
+- **Repository Organization Information**: [docs/repository-migration.md](docs/repository-migration.md)
+
+### 🚀 Development Scripts
+
+The following scripts are located in the `/scripts` directory:
+
+```bash
+# Start development server
+npm run dev
+# or
+./scripts/start-dev.sh
+
+# Start in debug mode
+npm run debug
+# or
+./scripts/start-debug.sh
+
+# Database setup
+./scripts/setup-database.sh
+
+# Display debug information
+./scripts/inspect.sh
+```
+
+For detailed repository reorganization work history, please refer to [docs/directory-reorganization-summary.md](docs/directory-reorganization-summary.md).
 
 ## 🤝 Contributing
 

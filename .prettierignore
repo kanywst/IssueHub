@@ -1,0 +1,21 @@
+# Automatically generated files
+e2e/.auth/user.json
+test-results/
+.auth/
+
+# Dependencies
+node_modules/
+.pnpm/
+
+# Build files
+.next/
+dist/
+build/
+out/
+
+# Generated files
+generated/
+src/generated/
+coverage/
+playwright-report/
+test-results/

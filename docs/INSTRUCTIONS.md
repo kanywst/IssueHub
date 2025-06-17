@@ -1,5 +1,15 @@
 # IssueHub Application Setup Instructions
 
+- [IssueHub Application Setup Instructions](#issuehub-application-setup-instructions)
+  - [1. Database Configuration](#1-database-configuration)
+    - [Using PlanetScale](#using-planetscale)
+    - [Using Local MySQL](#using-local-mysql)
+  - [2. GitHub OAuth Configuration](#2-github-oauth-configuration)
+  - [3. Creating a GitHub Personal Access Token (PAT)](#3-creating-a-github-personal-access-token-pat)
+  - [4. NextAuth Secret Configuration](#4-nextauth-secret-configuration)
+  - [5. Prisma Database Initialization](#5-prisma-database-initialization)
+  - [6. Restart the Application](#6-restart-the-application)
+
 ## 1. Database Configuration
 
 ### Using PlanetScale
@@ -7,28 +17,36 @@
 1. Access [PlanetScale](https://planetscale.com/) and create an account
 2. Create a new database (e.g., `issuehub`)
 3. Get the connection string and set it in your `.env.local` file:
-   ```
+
+   ```bash
    DATABASE_URL="mysql://username:password@aws.connect.psdb.cloud/issuehub?sslaccept=strict"
    ```
 
 ### Using Local MySQL
 
 1. Install MySQL (if not already installed)
+
    ```bash
    brew install mysql
    ```
+
 2. Start MySQL
+
    ```bash
    brew services start mysql
    ```
+
 3. Create a database
+
    ```bash
    mysql -u root -p
    CREATE DATABASE issuehub;
    set password for root@localhost='password';
    ```
+
 4. Set the connection string in your `.env.local` file:
-   ```
+
+   ```bash
    DATABASE_URL="mysql://root:password@localhost:3306/issuehub"
    ```
 
@@ -42,7 +60,8 @@
    - Authorization callback URL: http://localhost:3002/api/auth/callback/github
 4. Click "Register application"
 5. Set the generated Client ID and Client Secret in your `.env.local` file:
-   ```
+
+   ```bash
    GITHUB_CLIENT_ID="your-client-id"
    GITHUB_CLIENT_SECRET="your-client-secret"
    ```
@@ -55,18 +74,23 @@
    - `repo` (public repos only)
    - `read:user`
 4. Generate the token and set it in your `.env.local` file:
-   ```
+
+   ```bash
    GITHUB_API_TOKEN="your-github-pat"
    ```
 
 ## 4. NextAuth Secret Configuration
 
 1. Run the following command in your terminal to generate a random string:
+
    ```bash
    openssl rand -base64 32
+
    ```
+
 2. Set the generated string in your `.env.local` file:
-   ```
+
+   ```bash
    NEXTAUTH_SECRET="generated-string"
    NEXTAUTH_URL="http://localhost:3002"
    ```
