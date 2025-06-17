@@ -178,68 +178,68 @@ Debug mode enables:
 
 ```
 .
-├── docs/                   # プロジェクトのドキュメント
-├── e2e/                    # E2Eテスト
-│   └── helpers/            # テスト用ヘルパー関数
-├── prisma/                 # Prismaデータベース設定
-│   └── migrations/         # データベースマイグレーション
-├── public/                 # 静的ファイル
-├── scripts/                # シェルスクリプト
-├── src/                    # ソースコード
+├── docs/                   # Project documentation
+├── e2e/                    # E2E tests
+│   └── helpers/            # Test helper functions
+├── prisma/                 # Prisma database configuration
+│   └── migrations/         # Database migrations
+├── public/                 # Static files
+├── scripts/                # Shell scripts
+├── src/                    # Source code
 │   ├── app/                # Next.js App Router
-│   ├── components/         # コンポーネント
-│   │   ├── common/         # 共通コンポーネント
-│   │   ├── forms/          # フォームコンポーネント
-│   │   ├── layout/         # レイアウトコンポーネント
-│   │   └── ui/             # UIコンポーネント
-│   ├── config/             # 設定ファイル
-│   ├── features/           # 機能別コード
-│   ├── generated/          # 生成されたコード
-│   ├── lib/                # ユーティリティとAPI
-│   │   ├── api/            # APIクライアント
-│   │   │   └── interfaces/ # APIインターフェース
-│   │   └── utils/          # ユーティリティ関数
-│   ├── server/             # サーバーサイドコード
-│   │   └── routers/        # tRPCルーター
-│   ├── services/           # サービスレイヤー
-│   └── types/              # 型定義
-└── tests/                  # テスト
-    ├── integration/        # インテグレーションテスト
-    └── unit/               # ユニットテスト
+│   ├── components/         # Components
+│   │   ├── common/         # Common components
+│   │   ├── forms/          # Form components
+│   │   ├── layout/         # Layout components
+│   │   └── ui/             # UI components
+│   ├── config/             # Configuration files
+│   ├── features/           # Feature-specific code
+│   ├── generated/          # Generated code
+│   ├── lib/                # Utilities and API
+│   │   ├── api/            # API clients
+│   │   │   └── interfaces/ # API interfaces
+│   │   └── utils/          # Utility functions
+│   ├── server/             # Server-side code
+│   │   └── routers/        # tRPC routers
+│   ├── services/           # Service layer
+│   └── types/              # Type definitions
+└── tests/                  # Tests
+    ├── integration/        # Integration tests
+    └── unit/               # Unit tests
 ```
 
-詳細なプロジェクト構造の説明は [docs/project-structure.md](docs/project-structure.md) を参照してください。
+For detailed project structure explanation, please refer to [docs/project-structure.md](docs/project-structure.md).
 
-### 📋 重要なファイルの場所
+### 📋 Important File Locations
 
-- **セットアップガイド**: [docs/SETUP.md](docs/SETUP.md)
-- **開発手順**: [docs/INSTRUCTIONS.md](docs/INSTRUCTIONS.md)
-- **ディレクトリ構造**: [docs/project-structure.md](docs/project-structure.md)
-- **リポジトリ整理情報**: [docs/repository-migration.md](docs/repository-migration.md)
+- **Setup Guide**: [docs/SETUP.md](docs/SETUP.md)
+- **Development Instructions**: [docs/INSTRUCTIONS.md](docs/INSTRUCTIONS.md)
+- **Directory Structure**: [docs/project-structure.md](docs/project-structure.md)
+- **Repository Organization Information**: [docs/repository-migration.md](docs/repository-migration.md)
 
-### 🚀 開発スクリプト
+### 🚀 Development Scripts
 
-以下のスクリプトは `/scripts` ディレクトリに配置されています：
+The following scripts are located in the `/scripts` directory:
 
 ```bash
-# 開発サーバーを起動
+# Start development server
 npm run dev
-# または
+# or
 ./scripts/start-dev.sh
 
-# デバッグモードで起動
+# Start in debug mode
 npm run debug
-# または
+# or
 ./scripts/start-debug.sh
 
-# データベースセットアップ
+# Database setup
 ./scripts/setup-database.sh
 
-# デバッグ情報の表示
+# Display debug information
 ./scripts/inspect.sh
 ```
 
-詳細なリポジトリ再編成の作業履歴は [docs/directory-reorganization-summary.md](docs/directory-reorganization-summary.md) を参照してください。
+For detailed repository reorganization work history, please refer to [docs/directory-reorganization-summary.md](docs/directory-reorganization-summary.md).
 
 ## 🤝 Contributing
 
