@@ -1,13 +1,13 @@
 /**
- * 日付関連のユーティリティ関数
+ * Date utility functions
  */
 
 /**
- * 日付をフォーマットする
- * @param date - フォーマットする日付
- * @param locale - ロケール (デフォルト: 'ja-JP')
- * @param options - Intl.DateTimeFormatのオプション
- * @returns フォーマットされた日付文字列
+ * Format a date
+ * @param date - Date to format
+ * @param locale - Locale (default: 'ja-JP')
+ * @param options - Intl.DateTimeFormat options
+ * @returns Formatted date string
  */
 export const formatDate = (
   date: Date | string,
@@ -23,54 +23,54 @@ export const formatDate = (
 };
 
 /**
- * 現在から指定された日付までの経過時間を計算して表示する
- * @param date - 比較する日付
- * @returns 経過時間の文字列表現
+ * Calculate and display elapsed time from the specified date to now
+ * @param date - Date to compare
+ * @returns String representation of elapsed time
  */
 export const timeAgo = (date: Date | string): string => {
   const dateObj = typeof date === 'string' ? new Date(date) : date;
   const now = new Date();
   const seconds = Math.floor((now.getTime() - dateObj.getTime()) / 1000);
 
-  // 1分未満
+  // Less than 1 minute
   if (seconds < 60) {
-    return `${seconds}秒前`;
+    return `${seconds} seconds ago`;
   }
 
-  // 1時間未満
+  // Less than 1 hour
   const minutes = Math.floor(seconds / 60);
   if (minutes < 60) {
-    return `${minutes}分前`;
+    return `${minutes} minutes ago`;
   }
 
-  // 1日未満
+  // Less than 1 day
   const hours = Math.floor(minutes / 60);
   if (hours < 24) {
-    return `${hours}時間前`;
+    return `${hours} hours ago`;
   }
 
-  // 1ヶ月未満
+  // Less than 1 month
   const days = Math.floor(hours / 24);
   if (days < 30) {
-    return `${days}日前`;
+    return `${days} days ago`;
   }
 
-  // 1年未満
+  // Less than 1 year
   const months = Math.floor(days / 30);
   if (months < 12) {
-    return `${months}ヶ月前`;
+    return `${months} months ago`;
   }
 
-  // 1年以上
+  // 1 year or more
   const years = Math.floor(months / 12);
-  return `${years}年前`;
+  return `${years} years ago`;
 };
 
 /**
- * 2つの日付の間の日数を計算する
- * @param startDate - 開始日
- * @param endDate - 終了日 (デフォルト: 現在の日付)
- * @returns 日数
+ * Calculate the number of days between two dates
+ * @param startDate - Start date
+ * @param endDate - End date (default: current date)
+ * @returns Number of days
  */
 export const daysBetween = (
   startDate: Date | string,
@@ -79,7 +79,7 @@ export const daysBetween = (
   const start = typeof startDate === 'string' ? new Date(startDate) : startDate;
   const end = typeof endDate === 'string' ? new Date(endDate) : endDate;
 
-  // 時間、分、秒、ミリ秒をリセットして日付だけを比較
+  // Reset hours, minutes, seconds, milliseconds to compare dates only
   const startDay = new Date(start.getFullYear(), start.getMonth(), start.getDate());
   const endDay = new Date(end.getFullYear(), end.getMonth(), end.getDate());
 

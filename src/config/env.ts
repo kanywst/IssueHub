@@ -1,4 +1,4 @@
-// 環境変数の型定義
+// Type definition for environment variables
 export interface Env {
   GITHUB_API_TOKEN: string;
   DATABASE_URL: string;
@@ -7,7 +7,7 @@ export interface Env {
   NODE_ENV: 'development' | 'production' | 'test';
 }
 
-// 環境変数をチェックして取得する関数
+// Function to check and retrieve environment variables
 export function getEnv(key: keyof Env): string {
   const value = process.env[key];
   if (!value && process.env.NODE_ENV === 'production') {
@@ -16,7 +16,7 @@ export function getEnv(key: keyof Env): string {
   return value || '';
 }
 
-// すべての環境変数を取得
+// Get all environment variables
 export function getAllEnv(): Partial<Env> {
   return {
     GITHUB_API_TOKEN: getEnv('GITHUB_API_TOKEN'),

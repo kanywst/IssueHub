@@ -1,6 +1,6 @@
 /**
- * ユーティリティ関数のエクスポートファイル
- * 一括インポートを可能にする
+ * Export file for utility functions
+ * Enables bulk imports
  */
 
 export * from './string';

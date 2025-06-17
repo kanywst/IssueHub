@@ -1,6 +1,6 @@
 /**
- * フォームコンポーネントのエクスポートファイル
- * 一括インポートを可能にする
+ * Form components export file
+ * Enables bulk imports
  */
 
 export { default as TextField } from './TextField';

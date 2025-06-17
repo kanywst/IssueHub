@@ -1,6 +1,6 @@
 /**
- * Issues機能のエクスポートファイル
- * 一括インポートを可能にする
+ * Export file for Issues feature
+ * Enables bulk imports
  */
 
 export { default as IssuesPage } from './IssuesPage';

@@ -1,5 +1,5 @@
 /**
- * GitHub APIのレスポンス型定義
+ * Type definitions for GitHub API responses
  */
 
 export interface GitHubIssue {

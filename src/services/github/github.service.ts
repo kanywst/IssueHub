@@ -1,6 +1,6 @@
 /**
- * GitHubサービスの実装
- * GitHub APIとの通信を担当する
+ * GitHub Service Implementation
+ * Responsible for communication with GitHub API
  */
 
 import {
@@ -14,8 +14,8 @@ import {
 } from '@/lib/api/interfaces/github-types';
 
 /**
- * GitHubサービスクラス
- * GitHubAPIとの通信を行うサービス
+ * GitHub Service Class
+ * Service for communicating with GitHub API
  */
 export class GitHubService implements GitHubClientInterface {
   private apiUrl = 'https://api.github.com';
@@ -26,7 +26,7 @@ export class GitHubService implements GitHubClientInterface {
   }
 
   /**
-   * API呼び出しのヘッダーを生成
+   * Generate headers for API calls
    */
   private getHeaders(): HeadersInit {
     const headers: HeadersInit = {
@@ -41,7 +41,7 @@ export class GitHubService implements GitHubClientInterface {
   }
 
   /**
-   * APIリクエストを送信
+   * Send API request
    */
   private async fetchFromGitHub<T>(endpoint: string, params?: Record<string, string>): Promise<T> {
     const url = new URL(`${this.apiUrl}${endpoint}`);
@@ -65,14 +65,14 @@ export class GitHubService implements GitHubClientInterface {
   }
 
   /**
-   * "Good First Issue"のイシューを検索
+   * Search for "Good First Issue" issues
    */
   async findGoodFirstIssues(
     params: GoodFirstIssuesParams
   ): Promise<GitHubSearchResponse<GitHubIssue>> {
     const { language, sort, page, perPage } = params;
 
-    // 検索クエリの構築
+    // Build search query
     let query = 'is:issue is:open label:"good first issue"';
     if (language) query += ` language:${language}`;
 
@@ -88,7 +88,7 @@ export class GitHubService implements GitHubClientInterface {
   }
 
   /**
-   * リポジトリ情報を取得
+   * Get repository information
    */
   async getRepository(owner: string, repo: string): Promise<GitHubRepository> {
     return this.fetchFromGitHub<GitHubRepository>(`/repos/${owner}/${repo}`);

@@ -2,8 +2,8 @@ import React, { ReactNode } from 'react';
 import { Card, CardContent, Typography, Box, CardProps, SxProps, Theme } from '@mui/material';
 
 /**
- * 機能カードコンポーネント
- * 機能紹介やハイライト情報を表示するためのカード
+ * Feature Card Component
+ * Card for displaying feature introductions or highlighted information
  */
 interface FeatureCardProps extends Omit<CardProps, 'children'> {
   title: string;

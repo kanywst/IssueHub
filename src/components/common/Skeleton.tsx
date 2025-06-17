@@ -3,8 +3,8 @@ import { styled } from '@mui/material/styles';
 import { Skeleton as MuiSkeleton, SkeletonProps as MuiSkeletonProps } from '@mui/material';
 
 /**
- * スケルトンローディングコンポーネント
- * コンテンツ読み込み中のプレースホルダーとして使用
+ * Skeleton loading component
+ * Used as a placeholder during content loading
  */
 const StyledSkeleton = styled(MuiSkeleton)(({ theme }) => ({
   backgroundColor:

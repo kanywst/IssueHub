@@ -1,6 +1,6 @@
 /**
- * 共通コンポーネントのエクスポートファイル
- * 一括インポートを可能にする
+ * Export file for common components
+ * Enables bulk imports
  */
 
 export { default as Button } from './Button';

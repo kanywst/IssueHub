@@ -8,8 +8,8 @@ import {
 } from '@mui/material';
 
 /**
- * チェックボックスコンポーネント
- * フォーム内でのブール値入力用
+ * Checkbox component
+ * For boolean input in forms
  */
 export interface CheckboxProps extends Omit<MuiCheckboxProps, 'onChange'> {
   label: string;

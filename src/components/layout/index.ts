@@ -1,6 +1,6 @@
 /**
- * レイアウトコンポーネントのエクスポートファイル
- * 一括インポートを可能にする
+ * Export file for layout components
+ * Enables bulk imports
  */
 
 export { default as AuthProvider } from './AuthProvider';

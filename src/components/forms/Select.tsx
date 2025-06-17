@@ -10,8 +10,8 @@ import {
 } from '@mui/material';
 
 /**
- * セレクトコンポーネント
- * ドロップダウン選択用
+ * Select component
+ * For dropdown selection
  */
 export interface SelectOption {
   value: string | number;

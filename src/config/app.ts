@@ -1,4 +1,4 @@
-// アプリケーション固有の設定
+// Application-specific configuration
 export const APP_CONFIG = {
   name: 'IssueHub',
   description: 'Find and manage good first issues for open-source contributions',

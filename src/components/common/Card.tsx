@@ -3,8 +3,8 @@ import { styled } from '@mui/material/styles';
 import { Paper, PaperProps } from '@mui/material';
 
 /**
- * カードコンポーネント
- * 情報を表示するための基本的なカードUIコンポーネント
+ * Card component
+ * Basic card UI component for displaying information
  */
 const StyledPaper = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(2),

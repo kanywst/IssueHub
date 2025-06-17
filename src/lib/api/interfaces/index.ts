@@ -1,6 +1,6 @@
 /**
- * APIインターフェースのエクスポートファイル
- * 一括インポートを可能にする
+ * Export file for API interfaces
+ * Enables bulk imports
  */
 
 export * from './github-client.interface';

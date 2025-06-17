@@ -2,8 +2,8 @@ import React from 'react';
 import { Button, ButtonProps, styled } from '@mui/material';
 
 /**
- * グラデーションボタンコンポーネント
- * カスタマイズ可能なグラデーションカラーを持つボタン
+ * Gradient Button component
+ * Button with customizable gradient colors
  */
 interface GradientButtonProps extends ButtonProps {
   startColor?: string;
