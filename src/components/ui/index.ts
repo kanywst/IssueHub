@@ -1,6 +1,6 @@
 /**
- * UI特化コンポーネントのエクスポートファイル
- * 一括インポートを可能にする
+ * UI-specific components export file
+ * Enables bulk imports
  */
 
 export { default as CallToAction } from './CallToAction';

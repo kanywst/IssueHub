@@ -1,6 +1,6 @@
 /**
- * 機能別モジュールのエクスポートファイル
- * 機能別のエントリーポイントを提供
+ * Feature modules export file
+ * Provides entry points for each feature
  */
 
 export * from './issues';

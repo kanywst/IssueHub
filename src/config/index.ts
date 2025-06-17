@@ -1,6 +1,6 @@
 /**
- * 設定ファイルのエクスポートファイル
- * 一括インポートを可能にする
+ * Configuration files export file
+ * Enables bulk imports
  */
 
 export * from './app';
