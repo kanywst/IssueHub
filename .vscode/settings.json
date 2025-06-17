@@ -23,5 +23,44 @@
   "github.copilot.editor.enableCodeActions": true,
   "github.copilot.advanced": {
     "language": "english"
-  }
+  },
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/.next": true,
+    "**/dist": true,
+    "**/build": true,
+    "**/coverage": true,
+    "**/test-results": true,
+    "**/playwright-report": true
+  },
+  "files.exclude": {
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.DS_Store": true,
+    "**/node_modules": false
+  },
+  "files.associations": {
+    "*.css": "tailwindcss"
+  },
+  "editor.quickSuggestions": {
+    "strings": true
+  },
+  "explorer.fileNesting.enabled": true,
+  "explorer.fileNesting.patterns": {
+    "*.tsx": "${capture}.test.tsx, ${capture}.spec.tsx, ${capture}.styles.ts",
+    "*.ts": "${capture}.test.ts, ${capture}.spec.ts",
+    "package.json": "package-lock.json, yarn.lock, pnpm-lock.yaml, .npmrc"
+  },
+  "workbench.colorCustomizations": {
+    "titleBar.activeBackground": "#1e3a8a",
+    "titleBar.activeForeground": "#ffffff"
+  },
+  "todo-tree.general.tags": ["TODO", "FIXME", "BUG", "HACK", "XXX", "REVIEW"],
+  "todo-tree.highlights.defaultHighlight": {
+    "foreground": "white",
+    "background": "#ffbd2a",
+    "icon": "alert",
+    "iconColour": "#ffbd2a"
+  },
+  "cSpell.words": ["issuehub", "tailwindcss", "nextjs", "mui", "prisma"]
 }

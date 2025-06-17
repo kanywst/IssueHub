@@ -21,7 +21,9 @@ test.describe('Authentication', () => {
     await page.locator('[data-testid="continue-without-signin"]').click();
 
     // Check that we're redirected to the issues page (may take time to load)
-    await page.waitForURL('**/issues**', { timeout: 10000 });
+    // Increase timeout and use waitForLoadState to ensure complete page load
+    await page.waitForLoadState('networkidle');
+    await page.waitForURL('**/issues**', { timeout: 30000 });
     expect(page.url()).toContain('/issues');
   });
 

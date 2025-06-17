@@ -177,69 +177,20 @@ Debug mode enables:
 ## 📁 Project Structure
 
 ```
-.
-├── docs/                   # プロジェクトのドキュメント
-├── e2e/                    # E2Eテスト
-│   └── helpers/            # テスト用ヘルパー関数
-├── prisma/                 # Prismaデータベース設定
-│   └── migrations/         # データベースマイグレーション
-├── public/                 # 静的ファイル
-├── scripts/                # シェルスクリプト
-├── src/                    # ソースコード
-│   ├── app/                # Next.js App Router
-│   ├── components/         # コンポーネント
-│   │   ├── common/         # 共通コンポーネント
-│   │   ├── forms/          # フォームコンポーネント
-│   │   ├── layout/         # レイアウトコンポーネント
-│   │   └── ui/             # UIコンポーネント
-│   ├── config/             # 設定ファイル
-│   ├── features/           # 機能別コード
-│   ├── generated/          # 生成されたコード
-│   ├── lib/                # ユーティリティとAPI
-│   │   ├── api/            # APIクライアント
-│   │   │   └── interfaces/ # APIインターフェース
-│   │   └── utils/          # ユーティリティ関数
-│   ├── server/             # サーバーサイドコード
-│   │   └── routers/        # tRPCルーター
-│   ├── services/           # サービスレイヤー
-│   └── types/              # 型定義
-└── tests/                  # テスト
-    ├── integration/        # インテグレーションテスト
-    └── unit/               # ユニットテスト
+src/
+  app/            # Next.js App Router pages
+  components/     # Shared components
+    layout/       # Layout components (Header, Footer)
+    ui/           # UI components (buttons, cards, etc.)
+  features/       # Feature-specific components and logic
+    issues/       # Issues-related features
+    auth/         # Authentication-related features
+    profile/      # User profile features
+  hooks/          # Custom React hooks
+  lib/            # Library configurations
+  server/         # Server-side code
+  utils/          # Utility functions
 ```
-
-詳細なプロジェクト構造の説明は [docs/project-structure.md](docs/project-structure.md) を参照してください。
-
-### 📋 重要なファイルの場所
-
-- **セットアップガイド**: [docs/SETUP.md](docs/SETUP.md)
-- **開発手順**: [docs/INSTRUCTIONS.md](docs/INSTRUCTIONS.md)
-- **ディレクトリ構造**: [docs/project-structure.md](docs/project-structure.md)
-- **リポジトリ整理情報**: [docs/repository-migration.md](docs/repository-migration.md)
-
-### 🚀 開発スクリプト
-
-以下のスクリプトは `/scripts` ディレクトリに配置されています：
-
-```bash
-# 開発サーバーを起動
-npm run dev
-# または
-./scripts/start-dev.sh
-
-# デバッグモードで起動
-npm run debug
-# または
-./scripts/start-debug.sh
-
-# データベースセットアップ
-./scripts/setup-database.sh
-
-# デバッグ情報の表示
-./scripts/inspect.sh
-```
-
-詳細なリポジトリ再編成の作業履歴は [docs/directory-reorganization-summary.md](docs/directory-reorganization-summary.md) を参照してください。
 
 ## 🤝 Contributing
 

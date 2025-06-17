@@ -6,7 +6,6 @@ import {
   Typography,
   Box,
   CardContent,
-  Grid,
   MenuItem,
   Button,
   Divider,
@@ -143,7 +142,7 @@ export default function IssuesPage() {
     setPage(value);
   };
 
-  const handleSaveIssue = (issue: GitHubIssue) => {
+  const handleSaveIssue = (issue: GitHubIssue | GitHubIssueFromApi) => {
     if (!session) return;
 
     const repoUrl = issue.repository_url.replace(
@@ -197,8 +196,15 @@ export default function IssuesPage() {
         }}
       >
         <CardContent sx={{ p: 1 }}>
-          <Grid container spacing={2} alignItems="center">
-            <Grid container item xs={12} md={4}>
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: { xs: 'column', md: 'row' },
+              gap: 2,
+              alignItems: 'center',
+            }}
+          >
+            <Box sx={{ width: { xs: '100%', md: '30%' } }}>
               <FormControl fullWidth variant="outlined">
                 <InputLabel id="language-select-label">Programming Language</InputLabel>
                 <Select
@@ -216,8 +222,8 @@ export default function IssuesPage() {
                   ))}
                 </Select>
               </FormControl>
-            </Grid>
-            <Grid container item xs={12} md={5}>
+            </Box>
+            <Box sx={{ width: { xs: '100%', md: '50%' } }}>
               <TextField
                 fullWidth
                 variant="outlined"
@@ -229,8 +235,8 @@ export default function IssuesPage() {
                 data-testid="keyword-search"
                 inputProps={{ 'data-testid': 'keyword-search-input' }}
               />
-            </Grid>
-            <Grid container item xs={12} md={3}>
+            </Box>
+            <Box sx={{ width: { xs: '100%', md: '20%' } }}>
               <GradientButton
                 fullWidth
                 startIcon={<SearchIcon />}
@@ -239,8 +245,8 @@ export default function IssuesPage() {
               >
                 Search
               </GradientButton>
-            </Grid>
-          </Grid>
+            </Box>
+          </Box>
         </CardContent>
       </Paper>
 

@@ -4,9 +4,15 @@ import { Typography, Button, Paper, Container, Divider } from '@mui/material';
 import { GitHub as GitHubIcon } from '@mui/icons-material';
 import { signIn } from 'next-auth/react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import MainLayout from '@/components/layout/MainLayout';
 
 export default function SignInPage() {
+  const router = useRouter();
+
+  const handleContinueWithoutSignIn = () => {
+    router.push('/issues');
+  };
   return (
     <MainLayout>
       <Container maxWidth="sm">
@@ -60,8 +66,7 @@ export default function SignInPage() {
 
           <Button
             variant="outlined"
-            component={Link}
-            href="/issues"
+            onClick={handleContinueWithoutSignIn}
             data-testid="continue-without-signin"
             fullWidth
             sx={{
