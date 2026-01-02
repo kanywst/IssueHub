@@ -8,7 +8,7 @@ import { useRouter } from 'next/navigation';
 
 export default function DebugPage() {
   const { data: session, status, update } = useSession();
-  const [browserInfo, setBrowserInfo] = useState<Record<string, unknown>>(null);
+  const [browserInfo, setBrowserInfo] = useState<Record<string, unknown> | null>(null);
   const router = useRouter();
 
   useEffect(() => {

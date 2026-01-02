@@ -7,8 +7,8 @@ export interface GitHubIssue {
   html_url: string;
   number: number;
   title: string;
-  body: string;
-  state: 'open' | 'closed';
+  body?: string;
+  state: string;
   created_at: string;
   updated_at: string;
   closed_at: string | null;
@@ -16,16 +16,16 @@ export interface GitHubIssue {
     login: string;
     avatar_url: string;
     html_url: string;
-  };
+  } | null;
   repository_url: string;
-  labels: {
-    id: number;
-    name: string;
-    color: string;
-    description?: string;
+  labels?: {
+    id?: number;
+    name?: string;
+    color?: string;
+    description?: string | null;
   }[];
   comments: number;
-  reactions: {
+  reactions?: {
     total_count: number;
     '+1': number;
     '-1': number;
@@ -35,6 +35,10 @@ export interface GitHubIssue {
     heart: number;
     rocket: number;
     eyes: number;
+  };
+  owner_info?: {
+    avatar_url: string | null;
+    html_url: string;
   };
 }
 

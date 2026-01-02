@@ -1,9 +1,9 @@
 # 🚀 IssueHub
 
 <p>
-  <img src="https://img.shields.io/badge/Next.js-14-black?style=flat-square&logo=next.js" alt="Next.js" />
+  <img src="https://img.shields.io/badge/Next.js-15-black?style=flat-square&logo=next.js" alt="Next.js" />
   <img src="https://img.shields.io/badge/TypeScript-5-blue?style=flat-square&logo=typescript" alt="TypeScript" />
-  <img src="https://img.shields.io/badge/MUI-5-blue?style=flat-square&logo=mui" alt="Material UI" />
+  <img src="https://img.shields.io/badge/MUI-6-blue?style=flat-square&logo=mui" alt="Material UI" />
   <img src="https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square" alt="License: MIT" />
 </p>
 
@@ -14,6 +14,7 @@
 <p>
   <a href="#features">Features</a> •
   <a href="#getting-started">Getting Started</a> •
+  <a href="#running-on-kind">Running on Kind</a> •
   <a href="#tech-stack">Tech Stack</a> •
   <a href="#project-structure">Project Structure</a> •
   <a href="#contributing">Contributing</a> •
@@ -57,32 +58,13 @@ npm run test:e2e:debug
 npm run test:e2e:report
 ```
 
-#### Test Structure
-
-- `e2e/basic.spec.ts`: Basic navigation and homepage tests
-- `e2e/auth.spec.ts`: Authentication-related tests
-- `e2e/issues.spec.ts`: Issue listing and filtering tests
-- `e2e/authenticated.spec.ts`: Tests requiring authentication
-
-#### Debugging Tests
-
-If tests fail, you can:
-
-1. Run with `--debug` flag: `npx playwright test --debug`
-2. Check the HTML report: `npm run test:e2e:report`
-3. Look at test artifacts in the `test-results/` directory
-
-### Continuous Integration
-
-E2E tests are automatically run on GitHub Actions for all pull requests and pushes to the main branch. The workflow configuration is located in `.github/workflows/e2e.yml`.
-
 ## 🚀 Getting Started
 
 ### Prerequisites
 
-- Node.js 18+ and npm
+- Node.js 20+ and npm/yarn
 - GitHub account (for authentication)
-- MySQL database (local or PlanetScale)
+- MySQL database (local, Docker, or PlanetScale)
 
 ### Installation
 
@@ -92,25 +74,38 @@ git clone https://github.com/kanywst/issuehub.git
 cd issuehub
 
 # Install dependencies
-npm install
+yarn install
 
 # Setup environment variables
-cp .env.example .env.local
-# Edit .env.local with your configuration values
+cp .env.example .env
+# Edit .env with your configuration values
 
 # Initialize database
-npx prisma migrate dev --name init
-npx prisma generate
+yarn prisma:migrate
+yarn prisma:generate
 
 # Start development server
-npm run dev
+yarn dev
 ```
 
 Visit `http://localhost:3000` to see the application running!
 
+## 🐳 Running on Kind (Kubernetes)
+
+IssueHub can be easily deployed to a local Kubernetes cluster using Kind and Helm.
+
+For detailed instructions, please refer to the [Kind Setup Guide](docs/KIND_SETUP.md).
+
+Quick summary:
+1. Create a Kind cluster.
+2. Deploy MySQL using Kubernetes manifests.
+3. Build and load Docker images (application & migration).
+4. Run database migrations using a Kubernetes Job.
+5. Deploy the application using Helm.
+
 ## 🔧 Environment Setup
 
-Create a `.env.local` file with the following variables:
+Create a `.env` file with the following variables:
 
 ```
 # Database
@@ -120,7 +115,7 @@ DATABASE_URL="mysql://username:password@localhost:3306/issuehub"
 NEXTAUTH_URL="http://localhost:3000"
 NEXTAUTH_SECRET="generate-a-secure-random-string"
 
-# GitHub OAuth
+# GitHub OAuth (Optional for local dev if using mock)
 GITHUB_CLIENT_ID="your-github-client-id"
 GITHUB_CLIENT_SECRET="your-github-client-secret"
 
@@ -128,118 +123,49 @@ GITHUB_CLIENT_SECRET="your-github-client-secret"
 GITHUB_API_TOKEN="your-github-personal-access-token"
 
 # Debug Settings (optional)
-DEBUG_AUTH="false"
 NEXT_PUBLIC_DEBUG_MODE="false"
 ```
-
-## 💻 Development Modes
-
-Two development modes are available:
-
-**Standard Mode**
-
-```bash
-./start-dev.sh
-```
-
-**Debug Mode** (includes additional logging and debug features)
-
-```bash
-./start-debug.sh
-```
-
-Debug mode enables:
-
-- User session information on homepage
-- Authentication debugging logs
-- Debug page access (`/debug`)
-- Advanced issue recommendations
-- Additional GitHub integration features
 
 ## 🧰 Tech Stack
 
 ### Frontend
 
-- **Next.js 14** with App Router and RSC
+- **Next.js 15** with App Router and RSC
 - **TypeScript** for type safety
-- **Material UI v5** with Emotion
-- **SWR** for data fetching
+- **Material UI v6** with Emotion
+- **React Query** for data fetching
 - **NextAuth.js** for authentication
 - **Tailwind CSS** for styling
 
 ### Backend
 
-- **NestJS 10** with TypeScript
+- **Next.js API Routes**
 - **tRPC** for type-safe API calls
 - **Octokit** for GitHub API integration
-- **Prisma ORM** with PlanetScale (MySQL)
+- **Prisma ORM** with MySQL
 
 ## 📁 Project Structure
 
 ```
 .
+├── charts/                 # Helm charts for Kubernetes deployment
 ├── docs/                   # Project documentation
-├── e2e/                    # E2E tests
-│   └── helpers/            # Test helper functions
-├── prisma/                 # Prisma database configuration
-│   └── migrations/         # Database migrations
+├── e2e/                    # E2E tests (Playwright)
+├── k8s/                    # Kubernetes manifests
+├── prisma/                 # Prisma database configuration & migrations
 ├── public/                 # Static files
 ├── scripts/                # Shell scripts
 ├── src/                    # Source code
-│   ├── app/                # Next.js App Router
-│   ├── components/         # Components
-│   │   ├── common/         # Common components
-│   │   ├── forms/          # Form components
-│   │   ├── layout/         # Layout components
-│   │   └── ui/             # UI components
-│   ├── config/             # Configuration files
-│   ├── features/           # Feature-specific code
-│   ├── generated/          # Generated code
-│   ├── lib/                # Utilities and API
-│   │   ├── api/            # API clients
-│   │   │   └── interfaces/ # API interfaces
-│   │   └── utils/          # Utility functions
-│   ├── server/             # Server-side code
-│   │   └── routers/        # tRPC routers
-│   ├── services/           # Service layer
-│   └── types/              # Type definitions
-└── tests/                  # Tests
-    ├── integration/        # Integration tests
-    └── unit/               # Unit tests
+│   ├── app/                # Next.js App Router pages
+│   ├── components/         # Reusable React components
+│   ├── config/             # App configuration
+│   ├── features/           # Feature-based modules
+│   ├── lib/                # Utilities and libraries
+│   ├── server/             # Server-side logic (tRPC routers)
+│   ├── services/           # Business logic services
+│   └── types/              # TypeScript type definitions
+└── ...
 ```
-
-For detailed project structure explanation, please refer to [docs/project-structure.md](docs/project-structure.md).
-
-### 📋 Important File Locations
-
-- **Setup Guide**: [docs/SETUP.md](docs/SETUP.md)
-- **Development Instructions**: [docs/INSTRUCTIONS.md](docs/INSTRUCTIONS.md)
-- **Directory Structure**: [docs/project-structure.md](docs/project-structure.md)
-- **Repository Organization Information**: [docs/repository-migration.md](docs/repository-migration.md)
-
-### 🚀 Development Scripts
-
-The following scripts are located in the `/scripts` directory:
-
-```bash
-# Start development server
-npm run dev
-# or
-./scripts/start-dev.sh
-
-# Start in debug mode
-npm run debug
-# or
-./scripts/start-debug.sh
-
-# Database setup
-./scripts/setup-database.sh
-
-# Display debug information
-./scripts/inspect.sh
-```
-
-For detailed repository reorganization work history, please refer to [docs/directory-reorganization-summary.md](docs/directory-reorganization-summary.md).
 
 ## 🤝 Contributing
 

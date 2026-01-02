@@ -73,7 +73,7 @@ export default function AboutPage() {
             Technology Stack
           </Typography>
           <Grid container spacing={3}>
-            <Grid item xs={12} md={6}>
+            <Grid size={{ xs: 12, md: 6 }}>
               <Card
                 sx={{
                   height: '100%',
@@ -99,7 +99,7 @@ export default function AboutPage() {
                 </CardContent>
               </Card>
             </Grid>
-            <Grid item xs={12} md={6}>
+            <Grid size={{ xs: 12, md: 6 }}>
               <Card
                 sx={{
                   height: '100%',

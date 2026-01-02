@@ -44,3 +44,5 @@ export function Button({
     </MuiButton>
   );
 }
+
+export default Button;

@@ -58,7 +58,7 @@ test.describe('Protected Routes', () => {
         expect(true).toBeTruthy();
       } else {
         // Otherwise, there's an issue with authentication
-        expect(false).toBeTruthy('Unauthenticated user was able to access profile page');
+        expect(false, 'Unauthenticated user was able to access profile page').toBeTruthy();
       }
     } catch (_e) {
       // If all waits fail, check if the profile page is still displayed
@@ -66,8 +66,8 @@ test.describe('Protected Routes', () => {
       // Some projects might display only a "Please login" message to unauthenticated users
       // So the test passes if any authentication-related UI is shown
 
-      const loginRequired = (await page.getByText(/sign|log|auth/i).count()) > 0;
-      expect(loginRequired).toBeTruthy('No authentication prompt UI is displayed');
+      const loginRequired = await page.getByText(/sign in|login/i).isVisible() || page.url().includes('auth');
+      expect(loginRequired, 'No authentication prompt UI is displayed').toBeTruthy();
     }
   });
 });

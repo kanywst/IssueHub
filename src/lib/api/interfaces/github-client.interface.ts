@@ -5,6 +5,7 @@ export interface GoodFirstIssuesParams {
   keyword?: string;
   page?: number;
   perPage?: number;
+  sort?: string;
 }
 
 export interface RepositoryDetails {
