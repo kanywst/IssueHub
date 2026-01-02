@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   AppBar,
   Toolbar,
@@ -11,9 +11,9 @@ import {
   Menu,
   MenuItem,
   Avatar,
-  Container,
   useMediaQuery,
   useTheme,
+  alpha,
 } from '@mui/material';
 import { GitHub as GitHubIcon, Menu as MenuIcon } from '@mui/icons-material';
 import Link from 'next/link';
@@ -25,6 +25,15 @@ export default function Header() {
   const router = useRouter();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [mobileMenuAnchorEl, setMobileMenuAnchorEl] = useState<null | HTMLElement>(null);
@@ -57,144 +66,183 @@ export default function Header() {
   ];
 
   return (
-    <AppBar position="static" color="primary" elevation={0}>
-      <Container maxWidth="lg">
-        <Toolbar>
-          <Typography
-            variant="h6"
-            component="div"
-            data-testid="header-logo"
+    <Box
+      sx={{
+        position: 'fixed',
+        top: 24,
+        left: 0,
+        right: 0,
+        zIndex: 1100,
+        display: 'flex',
+        justifyContent: 'center',
+        px: 2,
+        pointerEvents: 'none', // Allow clicks to pass through outside the navbar
+      }}
+    >
+      <AppBar
+        position="static"
+        elevation={0}
+        sx={{
+          pointerEvents: 'auto',
+          width: '100%',
+          maxWidth: '1000px',
+          borderRadius: '999px', // Pill shape
+          backgroundColor: alpha('#0F172A', 0.65),
+          backdropFilter: 'blur(16px)',
+          border: '1px solid rgba(255, 255, 255, 0.08)',
+          boxShadow: scrolled
+            ? '0 8px 32px rgba(0, 0, 0, 0.4)'
+            : '0 4px 20px rgba(0, 0, 0, 0.2)',
+          transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+        }}
+      >
+        <Toolbar sx={{ justifyContent: 'space-between', px: '20px!important', minHeight: '64px!important' }}>
+          {/* Logo */}
+          <Box
             sx={{
-              flexGrow: 1,
               display: 'flex',
               alignItems: 'center',
-              fontWeight: 'bold',
               cursor: 'pointer',
+              gap: 1.5,
             }}
             onClick={() => router.push('/')}
+            data-testid="header-logo"
           >
-            <GitHubIcon sx={{ mr: 1 }} />
-            IssueHub
-          </Typography>
+            <Box
+              sx={{
+                width: 32,
+                height: 32,
+                borderRadius: '50%',
+                background: '#fff',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: '#000',
+              }}
+            >
+              <GitHubIcon sx={{ fontSize: 20 }} />
+            </Box>
+            <Typography
+              variant="subtitle1"
+              sx={{
+                fontWeight: 700,
+                color: '#fff',
+                letterSpacing: '-0.02em',
+              }}
+            >
+              IssueHub
+            </Typography>
+          </Box>
 
-          {/* Desktop Navigation */}
+          {/* Desktop Nav */}
           {!isMobile && (
-            <Box sx={{ display: 'flex', gap: 2 }}>
-              {navItems.map(item => {
+            <Box sx={{ display: 'flex', gap: 0.5, alignItems: 'center' }}>
+              {navItems.map((item) => {
                 if (item.authRequired && !session) return null;
                 return (
                   <Button
                     key={item.path}
-                    color="inherit"
                     component={Link}
                     href={item.path}
                     data-testid={`nav-${item.label.toLowerCase()}`}
+                    sx={{
+                      color: 'text.secondary',
+                      fontSize: '0.875rem',
+                      fontWeight: 500,
+                      px: 2,
+                      borderRadius: '50px',
+                      '&:hover': {
+                        color: '#fff',
+                        backgroundColor: 'rgba(255,255,255,0.08)',
+                      },
+                    }}
                   >
                     {item.label}
                   </Button>
                 );
               })}
-
-              {session ? (
-                <Box>
-                  <IconButton onClick={handleMenu} color="inherit">
-                    <Avatar
-                      alt={session.user.name || ''}
-                      src={session.user.image || ''}
-                      sx={{ width: 32, height: 32 }}
-                    />
-                  </IconButton>
-                  <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
-                    <MenuItem
-                      onClick={() => {
-                        router.push('/profile');
-                        handleClose();
-                      }}
-                    >
-                      Profile
-                    </MenuItem>
-                    <MenuItem onClick={handleSignOut}>Logout</MenuItem>
-                  </Menu>
-                </Box>
-              ) : (
-                <Button
-                  color="inherit"
-                  variant="outlined"
-                  data-testid="github-login-button"
-                  onClick={() => signIn('github', { callbackUrl: window.location.href })}
-                  startIcon={<GitHubIcon />}
-                >
-                  Login with GitHub
-                </Button>
-              )}
             </Box>
           )}
 
-          {/* Mobile Navigation */}
-          {isMobile && (
-            <Box>
+          {/* Right Actions */}
+          <Box sx={{ display: 'flex', gap: 1.5, alignItems: 'center' }}>
+            {session ? (
+              <IconButton onClick={handleMenu} sx={{ p: 0 }}>
+                <Avatar
+                  alt={session.user.name || ''}
+                  src={session.user.image || ''}
+                  sx={{ width: 32, height: 32, border: '2px solid rgba(255,255,255,0.1)' }}
+                />
+              </IconButton>
+            ) : (
+              <Button
+                variant="contained"
+                size="small"
+                onClick={() => signIn('github')}
+                sx={{
+                  borderRadius: '50px',
+                  backgroundColor: '#fff',
+                  color: '#000',
+                  px: 2.5,
+                  '&:hover': {
+                    backgroundColor: '#e2e2e2',
+                  },
+                }}
+              >
+                Sign In
+              </Button>
+            )}
+
+            {/* Mobile Menu Icon */}
+            {isMobile && (
               <IconButton
                 color="inherit"
                 onClick={handleMobileMenu}
-                edge="end"
-                data-testid="mobile-menu-button"
+                sx={{ ml: 1, color: 'text.secondary' }}
               >
-                <MenuIcon data-testid="MenuIcon" />
+                <MenuIcon />
               </IconButton>
-              <Menu
-                anchorEl={mobileMenuAnchorEl}
-                open={Boolean(mobileMenuAnchorEl)}
-                onClose={handleMobileMenuClose}
-              >
-                {navItems.map(item => {
-                  if (item.authRequired && !session) return null;
-                  return (
-                    <MenuItem
-                      key={item.path}
-                      onClick={() => {
-                        router.push(item.path);
-                        handleMobileMenuClose();
-                      }}
-                    >
-                      {item.label}
-                    </MenuItem>
-                  );
-                })}
+            )}
+          </Box>
 
-                {session ? (
-                  <>
-                    <MenuItem
-                      onClick={() => {
-                        router.push('/profile');
-                        handleMobileMenuClose();
-                      }}
-                    >
-                      Profile
-                    </MenuItem>
-                    <MenuItem
-                      onClick={() => {
-                        signOut();
-                        handleMobileMenuClose();
-                      }}
-                    >
-                      Logout
-                    </MenuItem>
-                  </>
-                ) : (
-                  <MenuItem
-                    onClick={() => {
-                      signIn('github', { callbackUrl: window.location.href });
-                      handleMobileMenuClose();
-                    }}
-                  >
-                    Login with GitHub
-                  </MenuItem>
-                )}
-              </Menu>
-            </Box>
-          )}
+          {/* Menus */}
+          <Menu
+            anchorEl={anchorEl}
+            open={Boolean(anchorEl)}
+            onClose={handleClose}
+            PaperProps={{
+              sx: {
+                mt: 1.5,
+                backgroundColor: '#1E293B',
+                border: '1px solid rgba(255,255,255,0.1)',
+                minWidth: 180,
+              }
+            }}
+          >
+            <MenuItem onClick={() => { router.push('/profile'); handleClose(); }}>Profile</MenuItem>
+            <MenuItem onClick={handleSignOut} sx={{ color: 'error.main' }}>Logout</MenuItem>
+          </Menu>
+
+          <Menu
+            anchorEl={mobileMenuAnchorEl}
+            open={Boolean(mobileMenuAnchorEl)}
+            onClose={handleMobileMenuClose}
+            PaperProps={{ sx: { mt: 1.5, backgroundColor: '#1E293B' } }}
+          >
+            {navItems.map((item) => {
+              if (item.authRequired && !session) return null;
+              return (
+                <MenuItem
+                  key={item.path}
+                  onClick={() => { router.push(item.path); handleMobileMenuClose(); }}
+                >
+                  {item.label}
+                </MenuItem>
+              );
+            })}
+          </Menu>
         </Toolbar>
-      </Container>
-    </AppBar>
+      </AppBar>
+    </Box>
   );
 }

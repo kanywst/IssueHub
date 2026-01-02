@@ -3,12 +3,12 @@
 <p>
   <img src="https://img.shields.io/badge/Next.js-15-black?style=flat-square&logo=next.js" alt="Next.js" />
   <img src="https://img.shields.io/badge/TypeScript-5-blue?style=flat-square&logo=typescript" alt="TypeScript" />
-  <img src="https://img.shields.io/badge/MUI-6-blue?style=flat-square&logo=mui" alt="Material UI" />
+  <img src="https://img.shields.io/badge/MUI-7-blue?style=flat-square&logo=mui" alt="Material UI" />
   <img src="https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square" alt="License: MIT" />
 </p>
 
 <p>
-  <strong>Discover and track the perfect "good first issues" for your open source journey</strong>
+  <strong>A modern, high-performance platform to discover and track the perfect "good first issues" for your open source journey.</strong>
 </p>
 
 <p>
@@ -25,48 +25,47 @@
 
 ## ✨ Overview
 
-IssueHub is a modern platform designed to help beginners find their first contribution opportunities in open source software. It streamlines the discovery of GitHub issues labeled as "good first issue", allowing new developers to easily find projects that welcome their contributions.
+IssueHub is a cutting-edge platform designed for developers who want to dive into the open-source ecosystem. Featuring a **"Luminous Dark"** aesthetic, it provides a seamless experience for finding issues labeled as "good first issue" across the vast GitHub landscape. 
+
+By aggregating real-time data and offering intuitive filtering, IssueHub empowers newcomers to take their first step with confidence.
 
 ## 🎯 Features
 
-- **Smart Issue Discovery** - Seamlessly search for issues labeled as "good first issue" across GitHub
-- **Language Filtering** - Find issues in programming languages you're comfortable with
-- **Personal Issue Tracking** - Save interesting issues to your personal dashboard
-- **GitHub Integration** - One-click authentication with your GitHub account
-- **Responsive Design** - Optimized experience across desktop and mobile devices
+- **Luminous Dark UI** - A modern, immersive developer-centric interface with glassmorphism and subtle glow effects.
+- **Enhanced Issue Insights** - View issue status (Open/Closed), comment counts, and relative creation times at a glance.
+- **Smart Sorting** - Discover the freshest opportunities with default "Newest First" sorting.
+- **Deep Filtering** - Find issues in the programming languages you love.
+- **Personal Library** - Save interesting issues to your personal dashboard for later review.
+- **GitHub Powered** - One-click authentication and real-time data fetching via Octokit.
+- **Cloud Native Ready** - Fully containerized with Helm charts and Kind support for local Kubernetes development.
 
 ## 🧪 Testing
 
 ### E2E Tests
 
-IssueHub uses Playwright for end-to-end testing to ensure the application works correctly across different browsers and devices.
+IssueHub uses Playwright for end-to-end testing to ensure stability across browsers.
 
 ```bash
-# Install Playwright browsers (first time only)
+# Install Playwright browsers
 npx playwright install
 
 # Run all E2E tests
 npm run test:e2e
 
-# Run tests in a specific browser (for CI)
-npm run test:e2e:ci
-
 # Run tests in debug mode
 npm run test:e2e:debug
-
-# View test report
-npm run test:e2e:report
 ```
 
 ## 🚀 Getting Started
 
 ### Prerequisites
 
-- Node.js 20+ and npm/yarn
-- GitHub account (for authentication)
-- MySQL database (local, Docker, or PlanetScale)
+- Node.js 20+
+- Yarn (recommended) or NPM
+- GitHub Personal Access Token (for API access)
+- MySQL database
 
-### Installation
+### Quick Install
 
 ```bash
 # Clone the repository
@@ -76,113 +75,84 @@ cd issuehub
 # Install dependencies
 yarn install
 
-# Setup environment variables
+# Setup environment
 cp .env.example .env
-# Edit .env with your configuration values
+# Fill in your DATABASE_URL and GITHUB_API_TOKEN
 
 # Initialize database
 yarn prisma:migrate
 yarn prisma:generate
 
-# Start development server
+# Launch development server
 yarn dev
 ```
 
-Visit `http://localhost:3000` to see the application running!
+Visit `http://localhost:3000` to start exploring.
 
 ## 🐳 Running on Kind (Kubernetes)
 
-IssueHub can be easily deployed to a local Kubernetes cluster using Kind and Helm.
+IssueHub is built with modern infrastructure in mind. You can spin up a full environment locally using Kind.
 
-For detailed instructions, please refer to the [Kind Setup Guide](docs/KIND_SETUP.md).
+See the [Kind Setup Guide](docs/KIND_SETUP.md) for detailed instructions.
 
-Quick summary:
-1. Create a Kind cluster.
-2. Deploy MySQL using Kubernetes manifests.
-3. Build and load Docker images (application & migration).
-4. Run database migrations using a Kubernetes Job.
-5. Deploy the application using Helm.
-
-## 🔧 Environment Setup
-
-Create a `.env` file with the following variables:
-
-```
-# Database
-DATABASE_URL="mysql://username:password@localhost:3306/issuehub"
-
-# Authentication
-NEXTAUTH_URL="http://localhost:3000"
-NEXTAUTH_SECRET="generate-a-secure-random-string"
-
-# GitHub OAuth (Optional for local dev if using mock)
-GITHUB_CLIENT_ID="your-github-client-id"
-GITHUB_CLIENT_SECRET="your-github-client-secret"
-
-# GitHub API
-GITHUB_API_TOKEN="your-github-personal-access-token"
-
-# Debug Settings (optional)
-NEXT_PUBLIC_DEBUG_MODE="false"
+```bash
+# Quick Cluster Creation
+kind create cluster --name issuehub-cluster
+kubectl apply -f k8s/mysql.yaml
+helm install issuehub ./charts/issuehub --set ...
 ```
 
 ## 🧰 Tech Stack
 
-### Frontend
+### Frontend & API
+- **Next.js 15** (App Router, Server Components)
+- **tRPC v11** (End-to-end typesafe API)
+- **TypeScript**
+- **Material UI v7** (Modernized Grid & Component APIs)
+- **Tailwind CSS** (Utility-first styling)
+- **React Query** (State management & caching)
 
-- **Next.js 15** with App Router and RSC
-- **TypeScript** for type safety
-- **Material UI v6** with Emotion
-- **React Query** for data fetching
-- **NextAuth.js** for authentication
-- **Tailwind CSS** for styling
-
-### Backend
-
-- **Next.js API Routes**
-- **tRPC** for type-safe API calls
-- **Octokit** for GitHub API integration
-- **Prisma ORM** with MySQL
+### Backend & Data
+- **Prisma ORM**
+- **MySQL**
+- **NextAuth.js** (GitHub OAuth)
+- **Octokit** (GitHub REST API)
 
 ## 📁 Project Structure
 
 ```
 .
-├── charts/                 # Helm charts for Kubernetes deployment
-├── docs/                   # Project documentation
-├── e2e/                    # E2E tests (Playwright)
-├── k8s/                    # Kubernetes manifests
-├── prisma/                 # Prisma database configuration & migrations
-├── public/                 # Static files
-├── scripts/                # Shell scripts
-├── src/                    # Source code
-│   ├── app/                # Next.js App Router pages
-│   ├── components/         # Reusable React components
-│   ├── config/             # App configuration
-│   ├── features/           # Feature-based modules
-│   ├── lib/                # Utilities and libraries
-│   ├── server/             # Server-side logic (tRPC routers)
-│   ├── services/           # Business logic services
-│   └── types/              # TypeScript type definitions
+├── charts/                 # Production-ready Helm charts
+├── docs/                   # Documentation (Kind setup, architecture)
+├── e2e/                    # Playwright end-to-end tests
+├── k8s/                    # Kubernetes manifests for local dev
+├── prisma/                 # Database schema and migrations
+├── src/
+│   ├── app/                # Next.js routes and layouts
+│   ├── components/         # Atomic UI components
+│   ├── features/           # Modularized business logic
+│   ├── lib/                # Shared libraries & API clients
+│   ├── server/             # tRPC routers and context
+│   └── services/           # External service integrations
 └── ...
 ```
 
 ## 🤝 Contributing
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+Contributions make the open-source community an amazing place!
 
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
+1. Fork the Project
+2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the Branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+Distributed under the MIT License. See `LICENSE` for more information.
 
 ---
 
 <div align="center">
-  Made with ❤️ for the open source community
+  Built with ❤️ for the next generation of OSS contributors.
 </div>

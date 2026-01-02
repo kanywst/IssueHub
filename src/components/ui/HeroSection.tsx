@@ -1,114 +1,145 @@
+'use client';
+
 import React from 'react';
-import { Box, Button, Container, Stack, Typography } from '@mui/material';
-import { GitHub as GitHubIcon, Search as SearchIcon } from '@mui/icons-material';
+import { Box, Container, Stack, Typography, useTheme, Button } from '@mui/material';
+import { ArrowForward } from '@mui/icons-material';
 import Link from 'next/link';
-import { signIn, useSession } from 'next-auth/react';
-import GradientButton from './buttons/GradientButton';
+import GradientButton from '@/components/ui/buttons/GradientButton';
 
 const HeroSection: React.FC = () => {
-  const { data: session } = useSession();
+  const theme = useTheme();
 
   return (
     <Box
       sx={{
-        background:
-          'linear-gradient(135deg, rgba(79, 70, 229, 0.08) 0%, rgba(16, 185, 129, 0.08) 100%)',
-        borderRadius: 4,
-        py: { xs: 8, md: 12 },
-        px: { xs: 2, md: 6 },
-        mb: 8,
         position: 'relative',
+        pt: 0,
+        pb: { xs: 12, md: 20 },
+        textAlign: 'center',
         overflow: 'hidden',
       }}
     >
-      {/* Decorative elements */}
-      <Box
-        sx={{
-          position: 'absolute',
-          top: -100,
-          right: -100,
-          width: 300,
-          height: 300,
-          borderRadius: '50%',
-          background:
-            'radial-gradient(circle, rgba(79, 70, 229, 0.15) 0%, rgba(79, 70, 229, 0) 70%)',
-        }}
-      />
-      <Box
-        sx={{
-          position: 'absolute',
-          bottom: -50,
-          left: -50,
-          width: 200,
-          height: 200,
-          borderRadius: '50%',
-          background:
-            'radial-gradient(circle, rgba(16, 185, 129, 0.15) 0%, rgba(16, 185, 129, 0) 70%)',
-        }}
-      />
-
       <Container maxWidth="lg">
-        <Box sx={{ textAlign: 'center', position: 'relative', zIndex: 1 }}>
+        <Box sx={{ position: 'relative', zIndex: 1 }}>
+          {/* Badge */}
+          <Box
+            sx={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: 1,
+              px: 1.5,
+              py: 0.5,
+              mb: 4,
+              borderRadius: '999px',
+              backgroundColor: 'rgba(255,255,255,0.05)',
+              border: '1px solid rgba(255,255,255,0.1)',
+              backdropFilter: 'blur(10px)',
+            }}
+          >
+            <Box
+              sx={{
+                width: 6,
+                height: 6,
+                borderRadius: '50%',
+                backgroundColor: theme.palette.secondary.main,
+                boxShadow: `0 0 8px ${theme.palette.secondary.main}`,
+              }}
+            />
+            <Typography
+              variant="caption"
+              sx={{ color: 'text.secondary', fontWeight: 500, letterSpacing: 0.5 }}
+            >
+              IssueHub v0.2.0
+            </Typography>
+          </Box>
+
+          {/* Main Title */}
           <Typography
             variant="h1"
             component="h1"
             sx={{
+              fontSize: { xs: '3.5rem', sm: '5rem', md: '7rem' },
+              lineHeight: 0.95,
               fontWeight: 800,
-              mb: 3,
-              fontSize: { xs: '2.5rem', sm: '3rem', md: '3.75rem' },
-              background: 'linear-gradient(90deg, #4F46E5 0%, #10B981 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              letterSpacing: '-0.02em',
+              letterSpacing: '-0.04em',
+              mb: 4,
+              color: '#fff',
+              textShadow: '0 0 80px rgba(255,255,255,0.15)',
             }}
           >
-            Find Your First Step
+            Contribute to
             <br />
-            into Open Source
+            <Box
+              component="span"
+              sx={{
+                color: 'transparent',
+                background: 'linear-gradient(to right, #818CF8, #34D399)',
+                WebkitBackgroundClip: 'text',
+                opacity: 0.9,
+              }}
+            >
+              Open Source.
+            </Box>
           </Typography>
 
+          {/* Subtitle */}
           <Typography
             variant="h5"
             sx={{
-              mb: 5,
-              maxWidth: '800px',
+              mb: 6,
+              maxWidth: '600px',
               mx: 'auto',
               color: 'text.secondary',
               fontWeight: 400,
-              lineHeight: 1.5,
+              fontSize: { xs: '1.1rem', md: '1.35rem' },
+              lineHeight: 1.6,
             }}
           >
-            IssueHub helps beginners discover &quot;good first issue&quot; labeled tasks to make
-            contributing to open source projects easy and accessible.
+            The curated search engine for &quot;good first issues&quot;.
+            <br className="hidden md:block" />
+            Find your next commit in seconds, not hours.
           </Typography>
 
+          {/* CTA */}
           <Stack
             direction={{ xs: 'column', sm: 'row' }}
-            spacing={3}
+            spacing={2}
             justifyContent="center"
-            sx={{ mb: 2 }}
+            alignItems="center"
           >
             <GradientButton
               size="large"
               component={Link}
               href="/issues"
-              startIcon={<SearchIcon />}
-              sx={{ px: 4, py: 1.5, fontSize: '1rem' }}
+              endIcon={<ArrowForward />}
+              sx={{
+                px: 5,
+                py: 2,
+                fontSize: '1rem',
+                borderRadius: '50px',
+                background: '#fff',
+                color: '#000',
+                '&:hover': {
+                  background: '#e2e2e2',
+                  transform: 'translateY(-2px)',
+                  boxShadow: '0 10px 40px -10px rgba(255,255,255,0.3)',
+                },
+              }}
             >
-              Browse Issues
+              Start Exploring
             </GradientButton>
 
-            {!session && (
-              <Button
-                variant="outlined"
-                size="large"
-                onClick={() => signIn('github')}
-                startIcon={<GitHubIcon />}
-                sx={{ px: 4, py: 1.5, fontSize: '1rem', borderWidth: 2 }}
-              >
-                Sign in with GitHub
-              </Button>
-            )}
+            <Button
+              component={Link}
+              href="/about"
+              sx={{
+                color: 'text.secondary',
+                px: 3,
+                '&:hover': { color: '#fff', backgroundColor: 'transparent' },
+              }}
+            >
+              How it works
+            </Button>
           </Stack>
         </Box>
       </Container>

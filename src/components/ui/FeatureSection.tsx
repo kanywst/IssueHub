@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Container, Typography } from '@mui/material';
+import { Box, Container, Typography, Grid } from '@mui/material';
 import {
   Search as SearchIcon,
   GitHub as GitHubIcon,
@@ -9,91 +9,63 @@ import FeatureCard from './cards/FeatureCard';
 
 const FeatureSection: React.FC = () => {
   return (
-    <Container maxWidth="lg" sx={{ mb: 12 }}>
-      <Box sx={{ textAlign: 'center', mb: 8 }}>
+    <Container maxWidth="lg" sx={{ mb: 20 }}>
+      <Box sx={{ textAlign: 'center', mb: 10 }}>
         <Typography
           variant="h2"
           component="h2"
           sx={{
-            fontWeight: 700,
-            mb: 2,
-            fontSize: { xs: '1.875rem', sm: '2.25rem' },
+            fontWeight: 800,
+            mb: 3,
+            background: 'linear-gradient(to right, #fff, #94a3b8)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
           }}
         >
           Built for Open Source Beginners
         </Typography>
         <Typography
-          variant="subtitle1"
+          variant="h6"
           sx={{
             color: 'text.secondary',
             maxWidth: 700,
             mx: 'auto',
-            fontSize: { xs: '1rem', sm: '1.125rem' },
+            fontWeight: 400,
+            lineHeight: 1.6,
           }}
         >
           Everything you need to find and track your first open source contributions
         </Typography>
       </Box>
 
-      <Box
-        sx={{
-          display: 'flex',
-          flexWrap: 'wrap',
-          justifyContent: 'center',
-          gap: 4,
-        }}
-      >
-        <Box
-          sx={{
-            width: {
-              xs: '100%',
-              sm: 'calc(50% - 16px)',
-              md: 'calc(33.333% - 16px)',
-            },
-            maxWidth: 350,
-          }}
-        >
+      <Grid container spacing={4} justifyContent="center">
+        <Grid size={{ xs: 12, md: 4 }}>
           <FeatureCard
             title="Easy to Find"
             description="Filter by programming language or repository to quickly find issues that match your skills and interests."
             icon={<SearchIcon />}
+            iconColor="primary"
           />
-        </Box>
+        </Grid>
 
-        <Box
-          sx={{
-            width: {
-              xs: '100%',
-              sm: 'calc(50% - 16px)',
-              md: 'calc(33.333% - 16px)',
-            },
-            maxWidth: 350,
-          }}
-        >
+        <Grid size={{ xs: 12, md: 4 }}>
           <FeatureCard
             title="Beginner Friendly"
             description="Focus exclusively on issues with the 'good first issue' label, ensuring they're suitable for newcomers."
             icon={<GitHubIcon />}
+            iconColor="secondary"
           />
-        </Box>
+        </Grid>
 
-        <Box
-          sx={{
-            width: {
-              xs: '100%',
-              sm: 'calc(50% - 16px)',
-              md: 'calc(33.333% - 16px)',
-            },
-            maxWidth: 350,
-          }}
-        >
+        <Grid size={{ xs: 12, md: 4 }}>
           <FeatureCard
             title="Save for Later"
             description="Bookmark interesting issues to review later. Connect with your GitHub account for a seamless experience."
             icon={<BookmarkAddIcon />}
+            iconColor="info"
           />
-        </Box>
-      </Box>
+        </Grid>
+      </Grid>
     </Container>
   );
 };
