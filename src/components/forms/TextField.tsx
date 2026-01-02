@@ -3,11 +3,11 @@
 import { TextField as MuiTextField, TextFieldProps as MuiTextFieldProps } from '@mui/material';
 import { forwardRef } from 'react';
 
-export interface TextFieldProps extends MuiTextFieldProps {
+export type TextFieldProps = MuiTextFieldProps & {
   label: string;
   error?: boolean;
   helperText?: string;
-}
+};
 
 export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
   ({ label, error, helperText, ...props }, ref) => {
@@ -26,3 +26,5 @@ export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
 );
 
 TextField.displayName = 'TextField';
+
+export default TextField;

@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { router, procedure } from '../trpc';
+import { GitHubIssue } from '@/lib/api/interfaces/github-types';
 
 export const issuesRouter = router({
   getGoodFirstIssues: procedure
@@ -25,7 +26,7 @@ export const issuesRouter = router({
 
       // Add repository owner information to each issue
       const enhancedItems = await Promise.all(
-        data.items.map(async (issue: { repository_url: string; [key: string]: unknown }) => {
+        data.items.map(async (issue: GitHubIssue) => {
           const repoUrl = issue.repository_url;
           const [owner] = repoUrl.replace('https://api.github.com/repos/', '').split('/');
 
@@ -37,8 +38,7 @@ export const issuesRouter = router({
                 avatar_url: ownerInfo.avatar_url,
                 html_url: ownerInfo.html_url,
               });
-              // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            } catch (_error) {
+            } catch {
               ownerInfoCache.set(owner, {
                 avatar_url: null,
                 html_url: `https://github.com/${owner}`,
@@ -89,8 +89,7 @@ export const issuesRouter = router({
               avatar_url: ownerInfo.avatar_url,
               html_url: ownerInfo.html_url,
             });
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-          } catch (_error) {
+          } catch {
             ownerInfoCache.set(owner, {
               avatar_url: null,
               html_url: `https://github.com/${owner}`,

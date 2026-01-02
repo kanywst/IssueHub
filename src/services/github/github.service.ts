@@ -6,11 +6,12 @@
 import {
   GitHubClientInterface,
   GoodFirstIssuesParams,
+  OrganizationDetails,
+  RepositoryDetails,
 } from '@/lib/api/interfaces/github-client.interface';
 import {
   GitHubSearchResponse,
   GitHubIssue,
-  GitHubRepository,
 } from '@/lib/api/interfaces/github-types';
 
 /**
@@ -67,7 +68,7 @@ export class GitHubService implements GitHubClientInterface {
   /**
    * Search for "Good First Issue" issues
    */
-  async findGoodFirstIssues(
+  async getGoodFirstIssues(
     params: GoodFirstIssuesParams
   ): Promise<GitHubSearchResponse<GitHubIssue>> {
     const { language, sort, page, perPage } = params;
@@ -90,8 +91,20 @@ export class GitHubService implements GitHubClientInterface {
   /**
    * Get repository information
    */
-  async getRepository(owner: string, repo: string): Promise<GitHubRepository> {
-    return this.fetchFromGitHub<GitHubRepository>(`/repos/${owner}/${repo}`);
+  async getRepositoryDetails(owner: string, repo: string): Promise<RepositoryDetails> {
+    return this.fetchFromGitHub<RepositoryDetails>(`/repos/${owner}/${repo}`);
+  }
+
+  /**
+   * Get organization information
+   */
+  async getOrganizationDetails(org: string): Promise<OrganizationDetails> {
+    try {
+      return await this.fetchFromGitHub<OrganizationDetails>(`/orgs/${org}`);
+    } catch {
+      // If organization is not found, fetch user information instead
+      return await this.fetchFromGitHub<OrganizationDetails>(`/users/${org}`);
+    }
   }
 }
 

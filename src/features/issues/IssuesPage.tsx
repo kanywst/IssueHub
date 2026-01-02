@@ -262,7 +262,7 @@ export default function IssuesPage() {
 
           <Stack spacing={2}>
             {issuesData?.items &&
-              issuesData.items.map((issue: GitHubIssueFromApi) => {
+              issuesData.items.map((issue) => {
                 const repoUrl = issue.repository_url.replace(
                   'https://api.github.com/repos/',
                   'https://github.com/'
@@ -375,8 +375,8 @@ export default function IssuesPage() {
                               label={label.name}
                               size="small"
                               sx={{
-                                bgcolor: `#${label.color}`,
-                                color: parseInt(label.color, 16) > 0xffffff / 2 ? '#000' : '#fff',
+                                bgcolor: `#${label.color || 'eee'}`,
+                                color: parseInt(label.color || 'eee', 16) > 0xffffff / 2 ? '#000' : '#fff',
                                 fontWeight: 500,
                                 borderRadius: '4px',
                               }}

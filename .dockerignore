@@ -1,0 +1,15 @@
+Dockerfile
+.dockerignore
+.git
+.gitignore
+.next
+.vscode
+node_modules
+npm-debug.log
+README.md
+build
+charts
+docs
+e2e
+playwright-report
+test-results
