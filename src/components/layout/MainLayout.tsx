@@ -21,8 +21,8 @@ export default function MainLayout({ children }: MainLayoutProps) {
         component="main"
         maxWidth="lg"
         sx={{
-          mt: 4,
-          mb: 4,
+          pt: { xs: 10, md: 12 }, // Adjusted for fixed header and close proximity
+          pb: 8,
           flex: 1,
         }}
       >

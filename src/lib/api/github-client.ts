@@ -28,7 +28,7 @@ export class GitHubClient {
 
     const response = await this.octokit.request('GET /search/issues', {
       q: query,
-      sort: 'updated',
+      sort: 'created',
       order: 'desc',
       per_page: perPage,
       page,
