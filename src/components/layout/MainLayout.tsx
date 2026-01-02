@@ -21,7 +21,7 @@ export default function MainLayout({ children }: MainLayoutProps) {
         component="main"
         maxWidth="lg"
         sx={{
-          pt: { xs: 10, md: 12 }, // Adjusted for fixed header and close proximity
+          pt: { xs: 16, md: 20 }, // Increased padding to clear floating header
           pb: 8,
           flex: 1,
         }}

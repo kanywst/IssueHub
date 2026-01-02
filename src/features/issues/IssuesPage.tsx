@@ -34,6 +34,7 @@ import {
 import { trpc } from '@/lib/trpc-client';
 import Link from 'next/link';
 import { useSession } from 'next-auth/react';
+import GradientButton from '@/components/ui/buttons/GradientButton';
 import { GitHubIssue, GitHubIssueFromApi } from './types';
 import { timeAgo } from '@/lib/utils';
 
@@ -147,6 +148,7 @@ export default function IssuesPage() {
                 '& fieldset': { border: 'none' },
               }
             }}
+            inputProps={{ 'data-testid': 'keyword-search-input' }}
           />
           <FormControl sx={{ minWidth: 200 }}>
             <Select
@@ -154,6 +156,7 @@ export default function IssuesPage() {
               onChange={(e) => { setLanguage(e.target.value); setPage(1); }}
               displayEmpty
               startAdornment={<FilterIcon sx={{ ml: 1, mr: 1, color: 'text.secondary' }} />}
+              data-testid="language-select"
               sx={{
                 borderRadius: '12px',
                 backgroundColor: alpha('#000', 0.2),
@@ -168,6 +171,17 @@ export default function IssuesPage() {
               ))}
             </Select>
           </FormControl>
+
+          <Box sx={{ minWidth: 120 }}>
+            <GradientButton
+              fullWidth
+              onClick={handleSearch}
+              data-testid="search-button"
+              sx={{ height: '56px', borderRadius: '12px' }}
+            >
+              Search
+            </GradientButton>
+          </Box>
         </Box>
 
         {isLoading ? (

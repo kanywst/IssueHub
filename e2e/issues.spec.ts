@@ -5,10 +5,7 @@ test.describe('Issues Page', () => {
     await page.goto('/issues');
 
     // Check if the main heading is visible
-    await expect(page.locator('h1').first()).toBeVisible();
-
-    // Using more specific selector
-    await expect(page.getByRole('heading', { name: /Find Good First Issues/i })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Explore Issues' })).toBeVisible();
   });
 
   test('should filter issues by language', async ({ page }) => {
@@ -20,12 +17,15 @@ test.describe('Issues Page', () => {
 
     await page.goto('/issues');
 
+    // Wait for the page to be ready
+    await expect(page.getByRole('heading', { name: 'Explore Issues' })).toBeVisible();
+
     // Basic interaction with the form
-    await page.locator('[data-testid="language-select"]').click();
+    await page.getByTestId('language-select').click();
     await page.getByRole('option').nth(1).click();
 
     // Click the search button
-    await page.locator('[data-testid="search-button"]').click();
+    await page.getByTestId('search-button').click();
 
     // Wait for the spinner to disappear or for results to load
     try {
@@ -35,7 +35,7 @@ test.describe('Issues Page', () => {
       });
 
       // If we get here, we found results, so verify count
-      const issueCount = await page.locator('[data-testid="issue-card"]').count();
+      const issueCount = await page.getByTestId('issue-card').count();
       expect(issueCount).toBeGreaterThan(0);
     } catch (_e) {
       // If no results found (which can happen in tests without real API access),
@@ -57,11 +57,14 @@ test.describe('Issues Page', () => {
 
     await page.goto('/issues');
 
+    // Wait for the page to be ready
+    await expect(page.getByRole('heading', { name: 'Explore Issues' })).toBeVisible();
+
     // Input a search keyword
-    await page.locator('[data-testid="keyword-search-input"]').fill('documentation');
+    await page.getByTestId('keyword-search-input').fill('documentation');
 
     // Click the search button
-    await page.locator('[data-testid="search-button"]').click();
+    await page.getByTestId('search-button').click();
 
     // Wait for the spinner to disappear or for results to load
     try {
@@ -71,7 +74,7 @@ test.describe('Issues Page', () => {
       });
 
       // If we get here, we found results, so verify count
-      const issueCount = await page.locator('[data-testid="issue-card"]').count();
+      const issueCount = await page.getByTestId('issue-card').count();
       expect(issueCount).toBeGreaterThan(0);
     } catch (_e) {
       // If no results found (which can happen in tests without real API access),

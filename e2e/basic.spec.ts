@@ -5,10 +5,10 @@ test.describe('Homepage', () => {
     await page.goto('/');
 
     // Check if the main heading is visible
-    await expect(page.locator('h1').filter({ hasText: 'Find Your First Step' })).toBeVisible();
+    await expect(page.locator('h1').filter({ hasText: 'Contribute to' })).toBeVisible();
 
-    // Check for the Browse Issues button
-    await expect(page.getByRole('link', { name: 'Browse Issues' })).toBeVisible();
+    // Check for the Start Exploring button
+    await expect(page.getByRole('link', { name: 'Start Exploring' }).first()).toBeVisible();
   });
 });
 
@@ -26,7 +26,7 @@ test.describe('Navigation', () => {
 
     // Check that we're on the issues page
     await expect(page).toHaveURL('/issues');
-    await expect(page.locator('h1')).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Explore Issues' })).toBeVisible();
   });
 
   test('should navigate to home page', async ({ page, isMobile }) => {
@@ -42,6 +42,6 @@ test.describe('Navigation', () => {
 
     // Check that we're on the home page
     await expect(page).toHaveURL('/');
-    await expect(page.locator('h1').filter({ hasText: 'Find Your First Step' })).toBeVisible();
+    await expect(page.locator('h1').filter({ hasText: 'Contribute to' })).toBeVisible();
   });
 });
