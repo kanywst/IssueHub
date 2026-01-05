@@ -25,7 +25,7 @@
 
 ## ✨ Overview
 
-IssueHub is a cutting-edge platform designed for developers who want to dive into the open-source ecosystem. Featuring a **"Luminous Dark"** aesthetic, it provides a seamless experience for finding issues labeled as "good first issue" across the vast GitHub landscape. 
+IssueHub is a cutting-edge platform designed for developers who want to dive into the open-source ecosystem. Featuring a **"Luminous Dark"** aesthetic, it provides a seamless experience for finding issues labeled as "good first issue" across the vast GitHub landscape.
 
 By aggregating real-time data and offering intuitive filtering, IssueHub empowers newcomers to take their first step with confidence.
 
@@ -38,23 +38,6 @@ By aggregating real-time data and offering intuitive filtering, IssueHub empower
 - **Personal Library** - Save interesting issues to your personal dashboard for later review.
 - **GitHub Powered** - One-click authentication and real-time data fetching via Octokit.
 - **Cloud Native Ready** - Fully containerized with Helm charts and Kind support for local Kubernetes development.
-
-## 🧪 Testing
-
-### E2E Tests
-
-IssueHub uses Playwright for end-to-end testing to ensure stability across browsers.
-
-```bash
-# Install Playwright browsers
-npx playwright install
-
-# Run all E2E tests
-npm run test:e2e
-
-# Run tests in debug mode
-npm run test:e2e:debug
-```
 
 ## 🚀 Getting Started
 
@@ -102,9 +85,27 @@ kubectl apply -f k8s/mysql.yaml
 helm install issuehub ./charts/issuehub --set ...
 ```
 
+## 🧪 Testing
+
+### E2E Tests
+
+IssueHub uses Playwright for end-to-end testing to ensure stability across browsers.
+
+```bash
+# Install Playwright browsers
+npx playwright install
+
+# Run all E2E tests
+npm run test:e2e
+
+# Run tests in debug mode
+npm run test:e2e:debug
+```
+
 ## 🧰 Tech Stack
 
 ### Frontend & API
+
 - **Next.js 15** (App Router, Server Components)
 - **tRPC v11** (End-to-end typesafe API)
 - **TypeScript**
@@ -113,6 +114,7 @@ helm install issuehub ./charts/issuehub --set ...
 - **React Query** (State management & caching)
 
 ### Backend & Data
+
 - **Prisma ORM**
 - **MySQL**
 - **NextAuth.js** (GitHub OAuth)
@@ -120,7 +122,7 @@ helm install issuehub ./charts/issuehub --set ...
 
 ## 📁 Project Structure
 
-```
+```text
 .
 ├── charts/                 # Production-ready Helm charts
 ├── docs/                   # Documentation (Kind setup, architecture)
@@ -150,9 +152,3 @@ Contributions make the open-source community an amazing place!
 ## 📄 License
 
 Distributed under the MIT License. See `LICENSE` for more information.
-
----
-
-<div align="center">
-  Built with ❤️ for the next generation of OSS contributors.
-</div>
