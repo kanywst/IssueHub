@@ -1,6 +1,0 @@
-apiVersion: v2
-name: issuehub
-description: A Helm chart for IssueHub, a Next.js application for finding good first issues.
-type: application
-version: 0.1.0
-appVersion: "0.1.0"

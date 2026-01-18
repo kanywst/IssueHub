@@ -13,42 +13,18 @@ import {
   Paper,
   Avatar,
   Tooltip,
+  useTheme,
+  alpha,
 } from '@mui/material';
 import { Delete as DeleteIcon } from '@mui/icons-material';
-import { trpc } from '@/lib/trpc-client';
 import Link from 'next/link';
-import { useSession } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
+import { useSavedIssues } from '@/hooks/useSavedIssues';
 
 export default function SavedIssuesPage() {
-  const router = useRouter();
-  const { data: session, status } = useSession({
-    required: true,
-    onUnauthenticated() {
-      router.push('/api/auth/signin');
-    },
-  });
+  const { savedIssues, isLoaded, removeIssue } = useSavedIssues();
+  const theme = useTheme();
 
-  const {
-    data: savedIssues,
-    isLoading,
-    refetch,
-  } = trpc.issues.getSavedIssues.useQuery(undefined, {
-    enabled: !!session,
-    refetchOnWindowFocus: false,
-  });
-
-  const { mutate: removeSavedIssue } = trpc.issues.removeSavedIssue.useMutation({
-    onSuccess: () => {
-      refetch();
-    },
-  });
-
-  const handleRemoveIssue = (id: string) => {
-    removeSavedIssue({ id });
-  };
-
-  if (status === 'loading' || isLoading) {
+  if (!isLoaded) {
     return (
       <MainLayout>
         <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
@@ -65,10 +41,11 @@ export default function SavedIssuesPage() {
         component="h1"
         sx={{
           mb: 4,
-          background: 'linear-gradient(90deg, #4F46E5 0%, #10B981 100%)',
+          background: 'linear-gradient(135deg, #3b82f6 0%, #a855f7 50%, #f43f5e 100%)',
           WebkitBackgroundClip: 'text',
           WebkitTextFillColor: 'transparent',
           fontWeight: 'bold',
+          filter: 'drop-shadow(0 0 10px rgba(59, 130, 246, 0.3))',
         }}
       >
         Saved Issues
@@ -76,99 +53,103 @@ export default function SavedIssuesPage() {
 
       {savedIssues && savedIssues.length > 0 ? (
         <Stack spacing={2}>
-          {savedIssues.map(issue => (
-            <Paper
-              key={issue.id}
-              elevation={0}
-              data-testid="issue-card"
-              sx={{
-                mb: 2,
-                borderRadius: 2,
-                transition: 'transform 0.2s, box-shadow 0.2s',
-                border: '1px solid rgba(0,0,0,0.08)',
-                boxShadow: '0 2px 8px rgba(0, 0, 0, 0.05)',
-                '&:hover': {
-                  transform: 'translateY(-2px)',
-                  boxShadow: '0 6px 16px rgba(0,0,0,0.08)',
-                },
-              }}
-            >
-              <CardContent>
-                <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                  <Box sx={{ display: 'flex', gap: 2 }}>
-                    {issue.owner_info && issue.owner_info.avatar_url && (
-                      <Tooltip title={issue.repoName.split('/')[0]}>
-                        <Avatar
-                          src={issue.owner_info.avatar_url}
-                          alt={issue.repoName.split('/')[0]}
-                          sx={{ width: 40, height: 40 }}
-                          component={Link}
-                          href={issue.owner_info.html_url}
-                          target="_blank"
-                        />
-                      </Tooltip>
-                    )}
-                    <Box>
-                      <Typography variant="h6" component="h2" sx={{ mb: 1, fontWeight: 'bold' }}>
-                        <Link
-                          href={issue.issueUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          style={{
-                            textDecoration: 'none',
-                            color: '#4F46E5',
-                          }}
-                        >
-                          {issue.title}
-                        </Link>
-                      </Typography>
-                      <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-                        <Link
-                          href={issue.repoUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          style={{
-                            textDecoration: 'none',
-                            color: '#64748B',
-                          }}
-                        >
-                          {issue.repoName}
-                        </Link>
-                      </Typography>
+          {savedIssues.map(issue => {
+            const owner = issue.repoName.split('/')[0];
+            return (
+              <Paper
+                key={issue.issueId}
+                elevation={0}
+                data-testid="issue-card"
+                sx={{
+                  mb: 2,
+                  borderRadius: 3,
+                  transition: 'all 0.2s',
+                  backgroundColor: alpha(theme.palette.background.paper, 0.4),
+                  border: '1px solid rgba(255, 255, 255, 0.08)',
+                  '&:hover': {
+                    borderColor: 'rgba(255, 255, 255, 0.2)',
+                    backgroundColor: alpha(theme.palette.background.paper, 0.8),
+                    transform: 'translateY(-2px)',
+                  },
+                }}
+              >
+                <CardContent>
+                  <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <Box sx={{ display: 'flex', gap: 2 }}>
+                      {owner && (
+                        <Tooltip title={owner}>
+                          <Avatar
+                            src={`https://github.com/${owner}.png`}
+                            alt={owner}
+                            sx={{ width: 40, height: 40, border: '1px solid rgba(255, 255, 255, 0.1)' }}
+                          />
+                        </Tooltip>
+                      )}
+                      <Box>
+                        <Typography variant="h6" component="h2" sx={{ mb: 1, fontWeight: 'bold' }}>
+                          <Link
+                            href={issue.issueUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            style={{
+                              textDecoration: 'none',
+                              color: theme.palette.text.primary,
+                            }}
+                          >
+                            {issue.title}
+                          </Link>
+                        </Typography>
+                        <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                          <Link
+                            href={issue.repoUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            style={{
+                              textDecoration: 'none',
+                              color: theme.palette.text.secondary,
+                            }}
+                          >
+                            {issue.repoName}
+                          </Link>
+                        </Typography>
+                      </Box>
                     </Box>
+                    <Button
+                      startIcon={<DeleteIcon />}
+                      color="error"
+                      size="small"
+                      data-testid="remove-button"
+                      onClick={() => removeIssue(issue.issueId)}
+                      sx={{
+                        '&:hover': {
+                          backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                        },
+                      }}
+                    >
+                      Remove
+                    </Button>
                   </Box>
-                  <Button
-                    startIcon={<DeleteIcon />}
-                    color="error"
-                    size="small"
-                    data-testid="remove-button"
-                    onClick={() => handleRemoveIssue(issue.id)}
-                    sx={{
-                      '&:hover': {
-                        backgroundColor: 'rgba(239, 68, 68, 0.05)',
-                      },
-                    }}
-                  >
-                    Remove
-                  </Button>
-                </Box>
 
-                <Divider sx={{ my: 2 }} />
+                  <Divider sx={{ my: 2, borderColor: 'rgba(255, 255, 255, 0.08)' }} />
 
-                <Typography variant="body2" color="text.secondary">
-                  Saved on: {new Date(issue.createdAt).toLocaleDateString()}
-                </Typography>
-              </CardContent>
-            </Paper>
-          ))}
+                  <Typography variant="body2" color="text.secondary">
+                    Saved on: {new Date(issue.savedAt).toLocaleDateString()}
+                  </Typography>
+                </CardContent>
+              </Paper>
+            );
+          })}
         </Stack>
       ) : (
         <Alert
           severity="info"
           sx={{
             borderRadius: 2,
+            backgroundColor: alpha(theme.palette.background.paper, 0.4),
+            color: 'text.primary',
+            border: '1px solid rgba(255, 255, 255, 0.08)',
             '& .MuiAlert-icon': {
-              color: '#4F46E5',
+              color: '#3b82f6',
             },
           }}
         >

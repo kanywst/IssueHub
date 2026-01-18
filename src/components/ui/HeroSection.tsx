@@ -1,18 +1,16 @@
 'use client';
 
 import React from 'react';
-import { Box, Container, Stack, Typography, useTheme, Button } from '@mui/material';
+import { Box, Container, Stack, Typography, Button } from '@mui/material';
 import { ArrowForward } from '@mui/icons-material';
 import Link from 'next/link';
-import GradientButton from '@/components/ui/buttons/GradientButton';
 
 const HeroSection: React.FC = () => {
-  const theme = useTheme();
-
   return (
     <Box
       sx={{
         position: 'relative',
+        // Set to 0 to achieve "zero distance" since MainLayout handles the header spacing
         pt: 0,
         pb: { xs: 12, md: 20 },
         textAlign: 'center',
@@ -20,36 +18,40 @@ const HeroSection: React.FC = () => {
       }}
     >
       <Container maxWidth="lg">
-        <Box sx={{ position: 'relative', zIndex: 1 }}>
-          {/* Badge */}
+        <Box
+          sx={{
+            position: 'relative',
+            zIndex: 1,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+          }}
+        >
+          {/* Badge - Technical Look */}
           <Box
             sx={{
               display: 'inline-flex',
               alignItems: 'center',
-              gap: 1,
               px: 1.5,
               py: 0.5,
-              mb: 4,
-              borderRadius: '999px',
-              backgroundColor: 'rgba(255,255,255,0.05)',
-              border: '1px solid rgba(255,255,255,0.1)',
-              backdropFilter: 'blur(10px)',
+              mb: 3,
+              mt: 0,
+              borderRadius: '4px',
+              backgroundColor: 'rgba(59, 130, 246, 0.1)',
+              border: '1px solid rgba(59, 130, 246, 0.2)',
+              boxShadow: '0 0 10px rgba(59, 130, 246, 0.1)',
             }}
           >
-            <Box
-              sx={{
-                width: 6,
-                height: 6,
-                borderRadius: '50%',
-                backgroundColor: theme.palette.secondary.main,
-                boxShadow: `0 0 8px ${theme.palette.secondary.main}`,
-              }}
-            />
             <Typography
               variant="caption"
-              sx={{ color: 'text.secondary', fontWeight: 500, letterSpacing: 0.5 }}
+              sx={{
+                color: '#60a5fa',
+                fontWeight: 600,
+                fontSize: '0.75rem',
+                letterSpacing: '0.05em',
+              }}
             >
-              IssueHub v0.2.0
+              ISSUEHUB v0.3.0
             </Typography>
           </Box>
 
@@ -58,13 +60,13 @@ const HeroSection: React.FC = () => {
             variant="h1"
             component="h1"
             sx={{
-              fontSize: { xs: '3.5rem', sm: '5rem', md: '7rem' },
+              fontSize: { xs: '3.5rem', sm: '5rem', md: '6.5rem' },
               lineHeight: 0.95,
               fontWeight: 800,
               letterSpacing: '-0.04em',
               mb: 4,
               color: '#fff',
-              textShadow: '0 0 80px rgba(255,255,255,0.15)',
+              textShadow: '0 0 40px rgba(255,255,255,0.1)',
             }}
           >
             Contribute to
@@ -72,10 +74,10 @@ const HeroSection: React.FC = () => {
             <Box
               component="span"
               sx={{
-                color: 'transparent',
-                background: 'linear-gradient(to right, #818CF8, #34D399)',
+                background: 'linear-gradient(135deg, #3b82f6 0%, #a855f7 50%, #f43f5e 100%)',
                 WebkitBackgroundClip: 'text',
-                opacity: 0.9,
+                WebkitTextFillColor: 'transparent',
+                filter: 'drop-shadow(0 0 15px rgba(59, 130, 246, 0.3))',
               }}
             >
               Open Source.
@@ -87,16 +89,16 @@ const HeroSection: React.FC = () => {
             variant="h5"
             sx={{
               mb: 6,
-              maxWidth: '600px',
+              maxWidth: '580px',
               mx: 'auto',
               color: 'text.secondary',
               fontWeight: 400,
-              fontSize: { xs: '1.1rem', md: '1.35rem' },
+              fontSize: { xs: '1.125rem', md: '1.25rem' },
               lineHeight: 1.6,
             }}
           >
             The curated search engine for &quot;good first issues&quot;.
-            <br className="hidden md:block" />
+            <br className="hidden sm:block" />
             Find your next commit in seconds, not hours.
           </Typography>
 
@@ -107,7 +109,8 @@ const HeroSection: React.FC = () => {
             justifyContent="center"
             alignItems="center"
           >
-            <GradientButton
+            <Button
+              variant="contained"
               size="large"
               component={Link}
               href="/issues"
@@ -116,26 +119,35 @@ const HeroSection: React.FC = () => {
                 px: 5,
                 py: 2,
                 fontSize: '1rem',
-                borderRadius: '50px',
-                background: '#fff',
+                borderRadius: '8px',
+                backgroundColor: '#fff',
                 color: '#000',
                 '&:hover': {
-                  background: '#e2e2e2',
-                  transform: 'translateY(-2px)',
-                  boxShadow: '0 10px 40px -10px rgba(255,255,255,0.3)',
+                  backgroundColor: '#e5e7eb',
+                  boxShadow: '0 0 20px rgba(255,255,255,0.2)',
                 },
+                transition: 'all 0.3s',
               }}
             >
               Start Exploring
-            </GradientButton>
+            </Button>
 
             <Button
+              variant="outlined"
+              size="large"
               component={Link}
               href="/about"
               sx={{
-                color: 'text.secondary',
-                px: 3,
-                '&:hover': { color: '#fff', backgroundColor: 'transparent' },
+                px: 5,
+                py: 2,
+                fontSize: '1rem',
+                borderRadius: '8px',
+                borderColor: 'rgba(255,255,255,0.2)',
+                color: '#fff',
+                '&:hover': {
+                  borderColor: '#fff',
+                  backgroundColor: 'rgba(255,255,255,0.05)',
+                },
               }}
             >
               How it works
