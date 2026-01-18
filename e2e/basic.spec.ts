@@ -1,47 +1,35 @@
 import { test, expect } from '@playwright/test';
 
-test.describe('Homepage', () => {
-  test('should display the homepage correctly', async ({ page }) => {
-    await page.goto('/');
+test('basic navigation and homepage content', async ({ page }) => {
+  await page.goto('/');
 
-    // Check if the main heading is visible
-    await expect(page.locator('h1').filter({ hasText: 'Contribute to' })).toBeVisible();
+  // Check the title
+  await expect(page).toHaveTitle(/IssueHub/);
 
-    // Check for the Start Exploring button
-    await expect(page.getByRole('link', { name: 'Start Exploring' }).first()).toBeVisible();
-  });
+  // Check for the main heading
+  await expect(page.getByRole('heading', { name: /Contribute to/i })).toBeVisible();
+
+  // Scope the "Open Source" check to the main heading to avoid matching other occurrences (footer, features, etc.)
+  await expect(page.locator('h1').getByText(/Open Source/i)).toBeVisible();
+
+  // Check if "Start Exploring" button exists  const exploreButton = page.getByRole('link', { name: /Start Exploring/i });
+  await expect(exploreButton).toBeVisible();
 });
 
-test.describe('Navigation', () => {
-  test('should navigate to issues page', async ({ page, isMobile }) => {
-    await page.goto('/');
+test('navigation to issues page', async ({ page }) => {
+  await page.goto('/');
+  await page
+    .getByRole('link', { name: /Issues/i })
+    .first()
+    .click();
 
-    if (isMobile) {
-      await page.goto('/issues');
-    } else {
-      await page.locator('[data-testid="nav-issues"]').click();
-      // Wait for navigation to complete
-      await page.waitForURL('**/issues');
-    }
+  await expect(page).toHaveURL(/\/issues/);
+  await expect(page.getByRole('heading', { name: /Explore Issues/i })).toBeVisible();
+});
 
-    // Check that we're on the issues page
-    await expect(page).toHaveURL('/issues');
-    await expect(page.getByRole('heading', { name: 'Explore Issues' })).toBeVisible();
-  });
+test('navigation to about page', async ({ page }) => {
+  await page.goto('/');
+  await page.getByRole('link', { name: /About/i }).click();
 
-  test('should navigate to home page', async ({ page, isMobile }) => {
-    await page.goto('/issues');
-
-    if (isMobile) {
-      await page.goto('/');
-    } else {
-      await page.locator('[data-testid="header-logo"]').click();
-      // Wait for navigation to complete
-      await page.waitForURL('**/');
-    }
-
-    // Check that we're on the home page
-    await expect(page).toHaveURL('/');
-    await expect(page.locator('h1').filter({ hasText: 'Contribute to' })).toBeVisible();
-  });
+  await expect(page).toHaveURL(/\/about/);
 });

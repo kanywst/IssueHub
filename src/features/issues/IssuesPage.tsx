@@ -18,9 +18,9 @@ import {
   Alert,
   TextField,
   InputAdornment,
+  IconButton,
   alpha,
   useTheme,
-  IconButton,
 } from '@mui/material';
 import {
   Search as SearchIcon,
@@ -31,12 +31,12 @@ import {
   Circle as CircleIcon,
   AccessTime as TimeIcon,
 } from '@mui/icons-material';
-import { trpc } from '@/lib/trpc-client';
 import Link from 'next/link';
-import { useSession } from 'next-auth/react';
-import GradientButton from '@/components/ui/buttons/GradientButton';
-import { GitHubIssue, GitHubIssueFromApi } from './types';
 import { timeAgo } from '@/lib/utils';
+import { useQuery } from '@tanstack/react-query';
+import { getGoodFirstIssues } from '@/lib/api/github-client';
+import { useSavedIssues } from '@/hooks/useSavedIssues';
+import { GitHubIssue, GitHubIssuesResponse } from './types';
 
 const POPULAR_LANGUAGES = [
   { value: 'javascript', label: 'JavaScript' },
@@ -47,13 +47,12 @@ const POPULAR_LANGUAGES = [
 ];
 
 export default function IssuesPage() {
-  const { data: session } = useSession();
-  const theme = useTheme();
   const [language, setLanguage] = useState('');
   const [keyword, setKeyword] = useState('');
   const [tempKeyword, setTempKeyword] = useState('');
   const [page, setPage] = useState(1);
   const perPage = 10;
+  const theme = useTheme();
 
   const [snackbar, setSnackbar] = useState({
     open: false,
@@ -61,32 +60,13 @@ export default function IssuesPage() {
     severity: 'success' as 'success' | 'error' | 'info' | 'warning',
   });
 
-  const [savedIssueIds, setSavedIssueIds] = useState<string[]>([]);
+  const { isSaved, saveIssue } = useSavedIssues();
 
-  const { data: issuesData, isLoading } = trpc.issues.getGoodFirstIssues.useQuery(
-    { language, keyword, page, perPage },
-    { refetchOnWindowFocus: false }
-  );
-
-  const { data: savedIssues } = trpc.issues.getSavedIssues.useQuery(undefined, {
-    enabled: !!session,
-  });
-
-  React.useEffect(() => {
-    if (savedIssues) {
-      setSavedIssueIds(savedIssues.map(issue => issue.issueId));
-    }
-  }, [savedIssues]);
-
-  const { mutate: saveIssue } = trpc.issues.saveIssue.useMutation({
-    onSuccess: response => {
-      if (response.success) {
-        setSnackbar({ open: true, message: 'Saved to library', severity: 'success' });
-        if (response.savedIssue) {
-          setSavedIssueIds(prev => [...prev, response.savedIssue.issueId]);
-        }
-      }
-    },
+  // Fetch issues directly from GitHub API
+  const { data: issuesData, isLoading } = useQuery<GitHubIssuesResponse>({
+    queryKey: ['issues', { language, keyword, page, perPage }],
+    queryFn: () => getGoodFirstIssues({ language, keyword, page, perPage }) as Promise<GitHubIssuesResponse>,
+    staleTime: 1000 * 60 * 5, // 5 minutes
   });
 
   const handleSearch = () => {
@@ -94,18 +74,11 @@ export default function IssuesPage() {
     setPage(1);
   };
 
-  const handleSaveIssue = (issue: GitHubIssue | GitHubIssueFromApi) => {
-    if (!session) return;
-    const repoUrl = issue.repository_url.replace('https://api.github.com/repos/', 'https://github.com/');
-    const [owner, repo] = repoUrl.replace('https://github.com/', '').split('/');
-
-    saveIssue({
-      issueId: issue.id.toString(),
-      issueUrl: issue.html_url,
-      title: issue.title,
-      repoName: `${owner}/${repo}`,
-      repoUrl,
-    });
+  const handleSaveIssue = (issue: GitHubIssue) => {
+    const success = saveIssue(issue);
+    if (success) {
+      setSnackbar({ open: true, message: 'Saved to library', severity: 'success' });
+    }
   };
 
   return (
@@ -113,7 +86,7 @@ export default function IssuesPage() {
       <Box sx={{ maxWidth: '900px', mx: 'auto', pt: 4 }}>
         {/* Header */}
         <Box sx={{ mb: 6, textAlign: 'center' }}>
-          <Typography variant="h2" sx={{ mb: 2, color: '#fff' }}>
+          <Typography variant="h2" sx={{ mb: 2, color: 'text.primary' }}>
             Explore Issues
           </Typography>
           <Typography variant="body1" sx={{ color: 'text.secondary' }}>
@@ -128,10 +101,12 @@ export default function IssuesPage() {
             gap: 2, 
             mb: 6,
             flexDirection: { xs: 'column', sm: 'row' },
-            p: 0.5,
-            borderRadius: '16px',
-            backgroundColor: alpha('#1e293b', 0.3),
-            border: '1px solid rgba(255,255,255,0.05)',
+            p: 1,
+            borderRadius: 3,
+            backgroundColor: alpha(theme.palette.background.paper, 0.6),
+            backdropFilter: 'blur(12px)',
+            border: '1px solid rgba(255, 255, 255, 0.08)',
+            boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.5)',
           }}
         >
           <TextField
@@ -143,9 +118,10 @@ export default function IssuesPage() {
             InputProps={{
               startAdornment: <InputAdornment position="start"><SearchIcon sx={{ color: 'text.secondary' }} /></InputAdornment>,
               sx: { 
-                borderRadius: '12px',
+                borderRadius: '8px',
                 backgroundColor: 'transparent',
                 '& fieldset': { border: 'none' },
+                '& input': { color: 'text.primary' },
               }
             }}
             inputProps={{ 'data-testid': 'keyword-search-input' }}
@@ -158,11 +134,12 @@ export default function IssuesPage() {
               startAdornment={<FilterIcon sx={{ ml: 1, mr: 1, color: 'text.secondary' }} />}
               data-testid="language-select"
               sx={{
-                borderRadius: '12px',
-                backgroundColor: alpha('#000', 0.2),
+                borderRadius: '8px',
+                backgroundColor: 'rgba(255, 255, 255, 0.05)',
                 color: 'text.primary',
                 '& fieldset': { border: 'none' },
                 '& .MuiSelect-select': { py: 1.5 },
+                '& .MuiSvgIcon-root': { color: 'text.secondary' },
               }}
             >
               <MenuItem value="">All Languages</MenuItem>
@@ -173,14 +150,20 @@ export default function IssuesPage() {
           </FormControl>
 
           <Box sx={{ minWidth: 120 }}>
-            <GradientButton
-              fullWidth
+            <IconButton
               onClick={handleSearch}
               data-testid="search-button"
-              sx={{ height: '56px', borderRadius: '12px' }}
+              sx={{ 
+                height: '56px', 
+                width: '56px',
+                borderRadius: '12px',
+                backgroundColor: '#fff', 
+                color: '#000',
+                '&:hover': { backgroundColor: '#e5e7eb' }
+              }}
             >
-              Search
-            </GradientButton>
+              <SearchIcon />
+            </IconButton>
           </Box>
         </Box>
 
@@ -190,9 +173,10 @@ export default function IssuesPage() {
           </Box>
         ) : (
           <Stack spacing={2}>
-            {issuesData?.items.map((issue) => {
+            {issuesData?.items?.map((issue) => {
               const repoName = issue.repository_url.replace('https://api.github.com/repos/', '');
-              const isSaved = savedIssueIds.includes(issue.id.toString());
+              const [owner] = repoName.split('/');
+              const saved = isSaved(issue.id.toString());
               const isOpen = issue.state === 'open';
 
               return (
@@ -201,38 +185,39 @@ export default function IssuesPage() {
                   elevation={0}
                   sx={{
                     p: 3,
-                    borderRadius: '16px',
-                    backgroundColor: alpha('#1e293b', 0.2),
-                    border: '1px solid rgba(255,255,255,0.05)',
+                    borderRadius: 3,
+                    backgroundColor: alpha(theme.palette.background.paper, 0.4),
+                    border: '1px solid rgba(255, 255, 255, 0.08)',
                     transition: 'all 0.2s',
                     '&:hover': {
-                      backgroundColor: alpha('#1e293b', 0.4),
-                      borderColor: 'rgba(255,255,255,0.1)',
-                      transform: 'scale(1.005)',
+                      borderColor: 'rgba(255, 255, 255, 0.2)',
+                      backgroundColor: alpha(theme.palette.background.paper, 0.8),
+                      transform: 'translateY(-2px)',
                     },
                   }}
                 >
                   <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 3 }}>
                     <Box sx={{ flex: 1 }}>
                       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 1.5 }}>
-                        {issue.owner_info?.avatar_url && (
+                        {owner && (
                           <Avatar 
-                            src={issue.owner_info.avatar_url} 
-                            sx={{ width: 20, height: 20 }} 
+                            src={`https://github.com/${owner}.png`} 
+                            alt={owner}
+                            sx={{ width: 20, height: 20, border: '1px solid rgba(255, 255, 255, 0.1)' }} 
                           />
                         )}
-                        <Typography variant="caption" sx={{ color: 'text.secondary', fontWeight: 500 }}>
+                        <Typography variant="caption" sx={{ color: 'text.primary', fontWeight: 600 }}>
                           {repoName}
                         </Typography>
                         <Typography variant="caption" sx={{ color: 'text.disabled' }}>•</Typography>
-                        <Typography variant="caption" sx={{ color: 'text.disabled' }}>
+                        <Typography variant="caption" sx={{ color: 'text.secondary' }}>
                           #{issue.number}
                         </Typography>
                         <Typography variant="caption" sx={{ color: 'text.disabled' }}>•</Typography>
                         
                         {/* Status */}
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-                          <CircleIcon sx={{ fontSize: 8, color: isOpen ? 'secondary.main' : 'error.main' }} />
+                          <CircleIcon sx={{ fontSize: 6, color: isOpen ? 'secondary.main' : 'error.main' }} />
                           <Typography variant="caption" sx={{ color: isOpen ? 'secondary.main' : 'error.main', fontWeight: 600 }}>
                             {issue.state.toUpperCase()}
                           </Typography>
@@ -247,19 +232,6 @@ export default function IssuesPage() {
                             {timeAgo(issue.created_at)}
                           </Typography>
                         </Box>
-
-                        {/* Comments */}
-                        {issue.comments > 0 && (
-                          <>
-                            <Typography variant="caption" sx={{ color: 'text.disabled' }}>•</Typography>
-                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, color: 'text.secondary' }}>
-                              <ChatIcon sx={{ fontSize: 14 }} />
-                              <Typography variant="caption" sx={{ fontWeight: 500 }}>
-                                {issue.comments}
-                              </Typography>
-                            </Box>
-                          </>
-                        )}
                       </Box>
                       
                       <Typography 
@@ -268,11 +240,11 @@ export default function IssuesPage() {
                         href={issue.html_url}
                         target="_blank"
                         sx={{ 
-                          color: '#fff', 
+                          color: 'text.primary', 
                           textDecoration: 'none', 
-                          fontWeight: 600,
+                          fontWeight: 700,
                           lineHeight: 1.4,
-                          '&:hover': { textDecoration: 'underline' }
+                          '&:hover': { textDecoration: 'underline', color: 'secondary.main' }
                         }}
                       >
                         {issue.title}
@@ -286,28 +258,42 @@ export default function IssuesPage() {
                             size="small"
                             sx={{
                               height: 24,
-                              fontSize: '0.7rem',
-                              backgroundColor: alpha(`#${label.color || '333'}`, 0.1),
-                              color: theme.palette.text.secondary,
-                              border: `1px solid ${alpha(`#${label.color || '333'}`, 0.2)}`,
+                              fontSize: '0.75rem',
+                              backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                              color: 'text.secondary',
+                              border: '1px solid rgba(255, 255, 255, 0.1)',
+                              fontWeight: 500,
                             }}
                           />
                         ))}
+                        {/* Comments Count Chip */}
+                        {issue.comments > 0 && (
+                           <Chip
+                             icon={<ChatIcon style={{ fontSize: 14, color: 'inherit' }} />}
+                             label={issue.comments}
+                             size="small"
+                             sx={{ 
+                               height: 24, 
+                               fontSize: '0.75rem', 
+                               backgroundColor: 'transparent',
+                               border: 'none',
+                               color: 'text.secondary'
+                             }}
+                           />
+                        )}
                       </Box>
                     </Box>
 
-                    {session && (
-                      <IconButton 
-                        onClick={() => handleSaveIssue(issue)}
-                        disabled={isSaved}
-                        sx={{ 
-                          color: isSaved ? 'secondary.main' : 'text.disabled',
-                          '&:hover': { color: 'text.primary', backgroundColor: 'rgba(255,255,255,0.05)' }
-                        }}
-                      >
-                        {isSaved ? <BookmarkAddedIcon /> : <BookmarkAddIcon />}
-                      </IconButton>
-                    )}
+                    <IconButton 
+                      onClick={() => handleSaveIssue(issue)}
+                      disabled={saved}
+                      sx={{ 
+                        color: saved ? 'secondary.main' : 'text.disabled',
+                        '&:hover': { color: 'text.primary', backgroundColor: 'rgba(255, 255, 255, 0.05)' }
+                      }}
+                    >
+                      {saved ? <BookmarkAddedIcon /> : <BookmarkAddIcon />}
+                    </IconButton>
                   </Box>
                 </Paper>
               );
@@ -320,9 +306,10 @@ export default function IssuesPage() {
             count={Math.ceil((issuesData?.total_count || 0) / perPage)}
             page={page}
             onChange={(_, v) => setPage(v)}
+            shape="rounded"
             sx={{
               '& .MuiPaginationItem-root': { color: 'text.secondary' },
-              '& .Mui-selected': { backgroundColor: 'white', color: 'black', fontWeight: 'bold' }
+              '& .MuiPaginationItem-root.Mui-selected': { backgroundColor: '#fff', color: '#000' }
             }}
           />
         </Box>
@@ -334,7 +321,7 @@ export default function IssuesPage() {
         onClose={() => setSnackbar({ ...snackbar, open: false })}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
       >
-        <Alert severity={snackbar.severity} variant="filled" sx={{ borderRadius: '12px' }}>
+        <Alert severity={snackbar.severity} variant="filled" sx={{ borderRadius: '8px', backgroundColor: 'primary.main', color: 'primary.contrastText' }}>
           {snackbar.message}
         </Alert>
       </Snackbar>

@@ -1,5 +1,15 @@
 import React, { ReactNode } from 'react';
-import { Card, CardContent, Typography, Box, CardProps, SxProps, Theme, alpha, useTheme } from '@mui/material';
+import {
+  Card,
+  CardContent,
+  Typography,
+  Box,
+  CardProps,
+  SxProps,
+  Theme,
+  alpha,
+  useTheme,
+} from '@mui/material';
 
 interface FeatureCardProps extends Omit<CardProps, 'children'> {
   title: string;
@@ -81,7 +91,11 @@ const FeatureCard: React.FC<FeatureCardProps> = ({
         <Typography variant="h5" component="h3" gutterBottom sx={{ fontWeight: 700 }}>
           {title}
         </Typography>
-        <Typography variant="body1" color="text.secondary" sx={{ mx: 'auto', maxWidth: '90%', lineHeight: 1.7 }}>
+        <Typography
+          variant="body1"
+          color="text.secondary"
+          sx={{ mx: 'auto', maxWidth: '90%', lineHeight: 1.7 }}
+        >
           {description}
         </Typography>
       </CardContent>

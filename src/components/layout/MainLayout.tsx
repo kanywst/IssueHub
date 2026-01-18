@@ -21,7 +21,8 @@ export default function MainLayout({ children }: MainLayoutProps) {
         component="main"
         maxWidth="lg"
         sx={{
-          pt: { xs: 16, md: 20 }, // Increased padding to clear floating header
+          // Adjust padding top to match header height (approx 72px) so content starts immediately after
+          pt: { xs: 14, md: 15 },
           pb: 8,
           flex: 1,
         }}

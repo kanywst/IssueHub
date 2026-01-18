@@ -4,4 +4,3 @@
  */
 
 export * from './issues';
-export * from './profile';

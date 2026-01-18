@@ -23,7 +23,7 @@ export default defineConfig({
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: 'html',
   /* Global setup for tests */
-  globalSetup: path.join(__dirname, 'e2e/global-setup.ts'),
+  // globalSetup: path.join(__dirname, 'e2e/global-setup.ts'),
   /* Create a directory for authentication state */
   outputDir: './test-results/',
 
@@ -71,7 +71,7 @@ export default defineConfig({
 
   /* Run your local dev server before starting the tests */
   webServer: {
-    command: 'npm run dev',
+    command: 'yarn dev',
     url: 'http://localhost:3000',
     reuseExistingServer: !process.env.CI,
   },

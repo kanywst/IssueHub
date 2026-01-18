@@ -1,6 +1,7 @@
 // Type definition for GitHub Issue
 export interface GitHubIssue {
   id: number;
+  number: number;
   title: string;
   html_url: string;
   repository_url: string;
@@ -8,13 +9,14 @@ export interface GitHubIssue {
   updated_at: string;
   body?: string;
   state: string;
+  comments: number;
   labels?: GitHubLabel[];
   user?: {
     login: string;
     avatar_url: string;
     html_url: string;
   } | null;
-  // Extended property - Information added on the server side
+  // Extended property - Information added on the server side (Legacy)
   owner_info?: {
     avatar_url: string | null;
     html_url: string;

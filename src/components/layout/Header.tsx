@@ -10,18 +10,14 @@ import {
   IconButton,
   Menu,
   MenuItem,
-  Avatar,
   useMediaQuery,
   useTheme,
-  alpha,
 } from '@mui/material';
 import { GitHub as GitHubIcon, Menu as MenuIcon } from '@mui/icons-material';
 import Link from 'next/link';
-import { useSession, signIn, signOut } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 
 export default function Header() {
-  const { data: session } = useSession();
   const router = useRouter();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
@@ -35,68 +31,57 @@ export default function Header() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [mobileMenuAnchorEl, setMobileMenuAnchorEl] = useState<null | HTMLElement>(null);
-
-  const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
 
   const handleMobileMenu = (event: React.MouseEvent<HTMLElement>) => {
     setMobileMenuAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
   };
 
   const handleMobileMenuClose = () => {
     setMobileMenuAnchorEl(null);
   };
 
-  const handleSignOut = () => {
-    signOut();
-    handleClose();
-  };
-
   const navItems = [
     { label: 'Home', path: '/' },
     { label: 'Issues', path: '/issues' },
-    { label: 'Saved Issues', path: '/saved-issues', authRequired: true },
+    { label: 'Saved Issues', path: '/saved-issues' },
   ];
 
   return (
     <Box
       sx={{
         position: 'fixed',
-        top: 24,
+        top: 0, // Fixed to top for visibility and futuristic feel
         left: 0,
         right: 0,
         zIndex: 1100,
         display: 'flex',
         justifyContent: 'center',
-        px: 2,
-        pointerEvents: 'none', // Allow clicks to pass through outside the navbar
+        // Add border bottom to clearly define the section
+        borderBottom: scrolled ? '1px solid rgba(255,255,255,0.08)' : '1px solid transparent',
+        transition: 'all 0.3s ease',
+        backgroundColor: scrolled ? 'rgba(3, 7, 18, 0.8)' : 'transparent', // Background color on scroll
+        backdropFilter: scrolled ? 'blur(16px)' : 'none',
       }}
     >
       <AppBar
         position="static"
         elevation={0}
         sx={{
-          pointerEvents: 'auto',
+          backgroundColor: 'transparent', // AppBar itself is transparent
+          maxWidth: '1200px', // Widen the width
           width: '100%',
-          maxWidth: '1000px',
-          borderRadius: '999px', // Pill shape
-          backgroundColor: alpha('#0F172A', 0.65),
-          backdropFilter: 'blur(16px)',
-          border: '1px solid rgba(255, 255, 255, 0.08)',
-          boxShadow: scrolled
-            ? '0 8px 32px rgba(0, 0, 0, 0.4)'
-            : '0 4px 20px rgba(0, 0, 0, 0.2)',
-          transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
         }}
       >
-        <Toolbar sx={{ justifyContent: 'space-between', px: '20px!important', minHeight: '64px!important' }}>
+        <Toolbar
+          sx={{
+            justifyContent: 'space-between',
+            px: { xs: 2, md: 4 },
+            '&.MuiToolbar-root': {
+              minHeight: '72px',
+            },
+          }}
+        >
           {/* Logo */}
           <Box
             sx={{
@@ -110,9 +95,9 @@ export default function Header() {
           >
             <Box
               sx={{
-                width: 32,
-                height: 32,
-                borderRadius: '50%',
+                width: 36,
+                height: 36,
+                borderRadius: '8px', // Rounded square instead of circle
                 background: '#fff',
                 display: 'flex',
                 alignItems: 'center',
@@ -120,14 +105,15 @@ export default function Header() {
                 color: '#000',
               }}
             >
-              <GitHubIcon sx={{ fontSize: 20 }} />
+              <GitHubIcon sx={{ fontSize: 22 }} />
             </Box>
             <Typography
-              variant="subtitle1"
+              variant="h6"
               sx={{
                 fontWeight: 700,
                 color: '#fff',
                 letterSpacing: '-0.02em',
+                fontSize: '1.25rem',
               }}
             >
               IssueHub
@@ -136,110 +122,68 @@ export default function Header() {
 
           {/* Desktop Nav */}
           {!isMobile && (
-            <Box sx={{ display: 'flex', gap: 0.5, alignItems: 'center' }}>
-              {navItems.map((item) => {
-                if (item.authRequired && !session) return null;
-                return (
-                  <Button
-                    key={item.path}
-                    component={Link}
-                    href={item.path}
-                    data-testid={`nav-${item.label.toLowerCase()}`}
-                    sx={{
-                      color: 'text.secondary',
-                      fontSize: '0.875rem',
-                      fontWeight: 500,
-                      px: 2,
-                      borderRadius: '50px',
-                      '&:hover': {
-                        color: '#fff',
-                        backgroundColor: 'rgba(255,255,255,0.08)',
-                      },
-                    }}
-                  >
-                    {item.label}
-                  </Button>
-                );
-              })}
+            <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
+              {navItems.map(item => (
+                <Button
+                  key={item.path}
+                  component={Link}
+                  href={item.path}
+                  data-testid={`nav-${item.label.toLowerCase()}`}
+                  sx={{
+                    color: 'text.secondary',
+                    fontSize: '0.9rem',
+                    fontWeight: 500,
+                    px: 2,
+                    py: 1,
+                    borderRadius: '6px',
+                    '&:hover': {
+                      color: '#fff',
+                      backgroundColor: 'rgba(255,255,255,0.05)',
+                    },
+                  }}
+                >
+                  {item.label}
+                </Button>
+              ))}
             </Box>
           )}
 
-          {/* Right Actions */}
+          {/* Right Actions & Mobile */}
           <Box sx={{ display: 'flex', gap: 1.5, alignItems: 'center' }}>
-            {session ? (
-              <IconButton onClick={handleMenu} sx={{ p: 0 }}>
-                <Avatar
-                  alt={session.user.name || ''}
-                  src={session.user.image || ''}
-                  sx={{ width: 32, height: 32, border: '2px solid rgba(255,255,255,0.1)' }}
-                />
-              </IconButton>
-            ) : (
-              <Button
-                variant="contained"
-                size="small"
-                onClick={() => signIn('github')}
-                sx={{
-                  borderRadius: '50px',
-                  backgroundColor: '#fff',
-                  color: '#000',
-                  px: 2.5,
-                  '&:hover': {
-                    backgroundColor: '#e2e2e2',
-                  },
-                }}
-              >
-                Sign In
-              </Button>
-            )}
-
             {/* Mobile Menu Icon */}
             {isMobile && (
-              <IconButton
-                color="inherit"
-                onClick={handleMobileMenu}
-                sx={{ ml: 1, color: 'text.secondary' }}
-              >
+              <IconButton color="inherit" onClick={handleMobileMenu} sx={{ color: 'text.primary' }}>
                 <MenuIcon />
               </IconButton>
             )}
           </Box>
 
-          {/* Menus */}
-          <Menu
-            anchorEl={anchorEl}
-            open={Boolean(anchorEl)}
-            onClose={handleClose}
-            PaperProps={{
-              sx: {
-                mt: 1.5,
-                backgroundColor: '#1E293B',
-                border: '1px solid rgba(255,255,255,0.1)',
-                minWidth: 180,
-              }
-            }}
-          >
-            <MenuItem onClick={() => { router.push('/profile'); handleClose(); }}>Profile</MenuItem>
-            <MenuItem onClick={handleSignOut} sx={{ color: 'error.main' }}>Logout</MenuItem>
-          </Menu>
-
+          {/* Mobile Menu */}
           <Menu
             anchorEl={mobileMenuAnchorEl}
             open={Boolean(mobileMenuAnchorEl)}
             onClose={handleMobileMenuClose}
-            PaperProps={{ sx: { mt: 1.5, backgroundColor: '#1E293B' } }}
+            PaperProps={{
+              sx: {
+                mt: 1.5,
+                backgroundColor: '#111827',
+                border: '1px solid rgba(255,255,255,0.1)',
+                color: '#fff',
+              },
+            }}
           >
-            {navItems.map((item) => {
-              if (item.authRequired && !session) return null;
-              return (
-                <MenuItem
-                  key={item.path}
-                  onClick={() => { router.push(item.path); handleMobileMenuClose(); }}
-                >
-                  {item.label}
-                </MenuItem>
-              );
-            })}
+            {navItems.map(item => (
+              <MenuItem
+                key={item.path}
+                onClick={() => {
+                  router.push(item.path);
+                  handleMobileMenuClose();
+                }}
+                sx={{ '&:hover': { backgroundColor: 'rgba(255,255,255,0.05)' } }}
+              >
+                {item.label}
+              </MenuItem>
+            ))}
           </Menu>
         </Toolbar>
       </AppBar>

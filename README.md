@@ -1,154 +1,85 @@
-# 🚀 IssueHub
+# IssueHub
 
-<p>
-  <img src="https://img.shields.io/badge/Next.js-15-black?style=flat-square&logo=next.js" alt="Next.js" />
-  <img src="https://img.shields.io/badge/TypeScript-5-blue?style=flat-square&logo=typescript" alt="TypeScript" />
-  <img src="https://img.shields.io/badge/MUI-7-blue?style=flat-square&logo=mui" alt="Material UI" />
-  <img src="https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square" alt="License: MIT" />
-</p>
+**IssueHub** is a high-performance, minimalist static web application designed for developers to discover "Good First Issues" across the GitHub ecosystem. It features an **Industrial Dark / Technical Noir** aesthetic, optimized for a modern developer experience.
 
-<p>
-  <strong>A modern, high-performance platform to discover and track the perfect "good first issues" for your open source journey.</strong>
-</p>
+👉 **Live Demo:** [https://kanywst.github.io/IssueHub](https://kanywst.github.io/IssueHub)
 
-<p>
-  <a href="#features">Features</a> •
-  <a href="#getting-started">Getting Started</a> •
-  <a href="#running-on-kind">Running on Kind</a> •
-  <a href="#tech-stack">Tech Stack</a> •
-  <a href="#project-structure">Project Structure</a> •
-  <a href="#contributing">Contributing</a> •
-  <a href="#license">License</a>
-</p>
+## 🚀 Vision
 
-</div>
+IssueHub aims to lower the barrier to open source contribution. By stripping away complex server-side requirements and focusing on a pure, browser-based experience, it provides a lightning-fast way to find your next commit.
 
-## ✨ Overview
+## ✨ Key Features
 
-IssueHub is a cutting-edge platform designed for developers who want to dive into the open-source ecosystem. Featuring a **"Luminous Dark"** aesthetic, it provides a seamless experience for finding issues labeled as "good first issue" across the vast GitHub landscape.
+- **Technical Noir UI:** A sharp, dark-mode aesthetic with neon accents and high-contrast typography, inspired by 2026 industrial design trends.
+- **Zero-Server Architecture:** Fully static export. Operates entirely in the browser using the GitHub Public API.
+- **LocalStorage Persistence:** Save and track issues locally without needing an account or database.
+- **Optimized Discovery:** Real-time filtering by language and keywords with a focus on "good first issue" labels.
+- **Zero Latency Navigation:** Built on Next.js 15 for instant page transitions and reactive UI components.
 
-By aggregating real-time data and offering intuitive filtering, IssueHub empowers newcomers to take their first step with confidence.
+## 🛠 Tech Stack
 
-## 🎯 Features
+- **Framework:** [Next.js 15](https://nextjs.org/) (App Router, Static Export)
+- **Language:** TypeScript
+- **Styling:** [Material UI (MUI) v7](https://mui.com/) + Tailwind CSS
+- **Data Fetching:** [TanStack Query v5](https://tanstack.com/query) + Octokit
+- **Infrastructure:** GitHub Actions + GitHub Pages
 
-- **Luminous Dark UI** - A modern, immersive developer-centric interface with glassmorphism and subtle glow effects.
-- **Enhanced Issue Insights** - View issue status (Open/Closed), comment counts, and relative creation times at a glance.
-- **Smart Sorting** - Discover the freshest opportunities with default "Newest First" sorting.
-- **Deep Filtering** - Find issues in the programming languages you love.
-- **Personal Library** - Save interesting issues to your personal dashboard for later review.
-- **GitHub Powered** - One-click authentication and real-time data fetching via Octokit.
-- **Cloud Native Ready** - Fully containerized with Helm charts and Kind support for local Kubernetes development.
-
-## 🚀 Getting Started
+## 🏃‍♂️ Getting Started
 
 ### Prerequisites
 
-- Node.js 20+
-- Yarn (recommended) or NPM
-- GitHub Personal Access Token (for API access)
-- MySQL database
+- Node.js 18+
+- Yarn
 
-### Quick Install
+### Installation
+
+1. Clone the repository:
+
+   ```bash
+   git clone https://github.com/kanywst/IssueHub.git
+   cd IssueHub
+   ```
+
+2. Install dependencies:
+
+   ```bash
+   yarn install
+   ```
+
+3. Configure environment (Optional):
+
+   ```bash
+   cp .env.example .env
+   ```
+
+### Development
+
+Start the local development server:
 
 ```bash
-# Clone the repository
-git clone https://github.com/kanywst/issuehub.git
-cd issuehub
-
-# Install dependencies
-yarn install
-
-# Setup environment
-cp .env.example .env
-# Fill in your DATABASE_URL and GITHUB_API_TOKEN
-
-# Initialize database
-yarn prisma:migrate
-yarn prisma:generate
-
-# Launch development server
 yarn dev
 ```
 
-Visit `http://localhost:3000` to start exploring.
+The application will be available at `http://localhost:3000`.
 
-## 🐳 Running on Kind (Kubernetes)
+### Build & Static Export
 
-IssueHub is built with modern infrastructure in mind. You can spin up a full environment locally using Kind.
-
-See the [Kind Setup Guide](docs/KIND_SETUP.md) for detailed instructions.
+Generate optimized static files for production:
 
 ```bash
-# Quick Cluster Creation
-kind create cluster --name issuehub-cluster
-kubectl apply -f k8s/mysql.yaml
-helm install issuehub ./charts/issuehub --set ...
+yarn build
 ```
 
-## 🧪 Testing
+The output will be generated in the `out/` directory.
 
-### E2E Tests
+## 🚢 Deployment
 
-IssueHub uses Playwright for end-to-end testing to ensure stability across browsers.
+This project is configured for automated deployment via GitHub Actions.
 
-```bash
-# Install Playwright browsers
-npx playwright install
-
-# Run all E2E tests
-npm run test:e2e
-
-# Run tests in debug mode
-npm run test:e2e:debug
-```
-
-## 🧰 Tech Stack
-
-### Frontend & API
-
-- **Next.js 15** (App Router, Server Components)
-- **tRPC v11** (End-to-end typesafe API)
-- **TypeScript**
-- **Material UI v7** (Modernized Grid & Component APIs)
-- **Tailwind CSS** (Utility-first styling)
-- **React Query** (State management & caching)
-
-### Backend & Data
-
-- **Prisma ORM**
-- **MySQL**
-- **NextAuth.js** (GitHub OAuth)
-- **Octokit** (GitHub REST API)
-
-## 📁 Project Structure
-
-```text
-.
-├── charts/                 # Production-ready Helm charts
-├── docs/                   # Documentation (Kind setup, architecture)
-├── e2e/                    # Playwright end-to-end tests
-├── k8s/                    # Kubernetes manifests for local dev
-├── prisma/                 # Database schema and migrations
-├── src/
-│   ├── app/                # Next.js routes and layouts
-│   ├── components/         # Atomic UI components
-│   ├── features/           # Modularized business logic
-│   ├── lib/                # Shared libraries & API clients
-│   ├── server/             # tRPC routers and context
-│   └── services/           # External service integrations
-└── ...
-```
-
-## 🤝 Contributing
-
-Contributions make the open-source community an amazing place!
-
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+1. Push your changes to the `main` branch.
+2. The workflow in `.github/workflows/deploy.yml` will trigger, building the project and deploying it to the `gh-pages` environment.
+3. Ensure your GitHub Repository settings are set to deploy from the **GitHub Actions** source.
 
 ## 📄 License
 
-Distributed under the MIT License. See `LICENSE` for more information.
+Licensed under the [MIT License](LICENSE).

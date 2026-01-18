@@ -1,4 +1,4 @@
-import { createTheme, alpha } from '@mui/material/styles';
+import { createTheme } from '@mui/material/styles';
 
 const FONT_FAMILY = 'var(--font-geist-sans), "Inter", "Segoe UI", sans-serif';
 
@@ -6,46 +6,46 @@ export const theme = createTheme({
   palette: {
     mode: 'dark',
     primary: {
-      main: '#818CF8', // Indigo 400
-      light: '#A5B4FC',
-      dark: '#6366F1',
-      contrastText: '#000',
+      main: '#f9fafb', // White text for primary actions
+      light: '#ffffff',
+      dark: '#d1d5db',
+      contrastText: '#030712',
     },
     secondary: {
-      main: '#34D399', // Emerald 400
-      light: '#6EE7B7',
-      dark: '#10B981',
-      contrastText: '#000',
+      main: '#3b82f6', // Blue 500 for accents
+      light: '#60a5fa',
+      dark: '#2563eb',
+      contrastText: '#ffffff',
     },
     background: {
-      default: 'transparent',
-      paper: '#0B1121', // Slightly lighter than body bg
+      default: '#030712', // Gray 950
+      paper: '#111827',   // Gray 900
     },
     text: {
-      primary: '#F1F5F9', // Slate 50
-      secondary: '#94A3B8', // Slate 400
+      primary: '#f9fafb', // Gray 50
+      secondary: '#9ca3af', // Gray 400
     },
-    divider: 'rgba(255,255,255,0.08)',
+    divider: '#1f2937', // Gray 800
   },
   typography: {
     fontFamily: FONT_FAMILY,
-    h1: { fontWeight: 800, letterSpacing: '-0.03em', lineHeight: 1.1 },
-    h2: { fontWeight: 700, letterSpacing: '-0.025em', lineHeight: 1.2 },
-    h3: { fontWeight: 700, letterSpacing: '-0.025em' },
-    h4: { fontWeight: 600, letterSpacing: '-0.02em' },
-    h5: { fontWeight: 600, letterSpacing: '-0.01em' },
-    h6: { fontWeight: 600 },
-    subtitle1: { letterSpacing: '-0.01em', lineHeight: 1.6 },
-    button: { fontWeight: 600, textTransform: 'none', letterSpacing: '0.01em' },
+    h1: { fontWeight: 800, letterSpacing: '-0.03em', lineHeight: 1.1, color: '#f9fafb' },
+    h2: { fontWeight: 700, letterSpacing: '-0.025em', lineHeight: 1.2, color: '#f9fafb' },
+    h3: { fontWeight: 700, letterSpacing: '-0.025em', color: '#f9fafb' },
+    h4: { fontWeight: 600, letterSpacing: '-0.02em', color: '#f9fafb' },
+    h5: { fontWeight: 600, letterSpacing: '-0.01em', color: '#f9fafb' },
+    h6: { fontWeight: 600, color: '#f9fafb' },
+    subtitle1: { letterSpacing: '-0.01em', lineHeight: 1.6, color: '#9ca3af' },
+    button: { fontWeight: 500, textTransform: 'none', letterSpacing: '0.01em' },
   },
   shape: {
-    borderRadius: 12,
+    borderRadius: 8,
   },
   components: {
     MuiCssBaseline: {
       styleOverrides: {
         body: {
-          backgroundColor: '#020617',
+          backgroundColor: '#030712',
         },
       },
     },
@@ -53,24 +53,26 @@ export const theme = createTheme({
       styleOverrides: {
         root: {
           borderRadius: 8,
-          fontSize: '0.925rem',
-          padding: '8px 16px',
+          fontSize: '0.9rem',
+          padding: '10px 20px',
           boxShadow: 'none',
+          textTransform: 'none',
+          fontWeight: 600,
           '&:hover': { boxShadow: 'none' },
         },
         containedPrimary: {
-          backgroundColor: '#F8FAFC',
-          color: '#0F172A',
+          backgroundColor: '#f9fafb',
+          color: '#030712',
           '&:hover': {
-            backgroundColor: '#E2E8F0',
+            backgroundColor: '#d1d5db',
           },
         },
         outlined: {
-          borderColor: 'rgba(255,255,255,0.15)',
-          color: '#E2E8F0',
+          borderColor: '#374151', // Gray 700
+          color: '#e5e7eb', // Gray 200
           '&:hover': {
-            borderColor: '#F8FAFC',
-            backgroundColor: 'rgba(255,255,255,0.05)',
+            borderColor: '#e5e7eb',
+            backgroundColor: 'rgba(255,255,255,0.03)',
           },
         },
       },
@@ -79,25 +81,24 @@ export const theme = createTheme({
       styleOverrides: {
         root: {
           backgroundImage: 'none',
-          backgroundColor: alpha('#0F172A', 0.6),
+          backgroundColor: 'rgba(17, 24, 39, 0.6)', // Gray 900 with opacity
           backdropFilter: 'blur(12px)',
           border: '1px solid rgba(255, 255, 255, 0.08)',
           boxShadow: 'none',
-        },
-        elevation1: {
-          boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.5)',
         },
       },
     },
     MuiCard: {
       styleOverrides: {
         root: {
-          backgroundColor: alpha('#1e293b', 0.2),
-          border: '1px solid rgba(255, 255, 255, 0.06)',
+          backgroundColor: 'rgba(17, 24, 39, 0.4)',
+          border: '1px solid rgba(255, 255, 255, 0.08)',
+          borderRadius: 12,
           transition: 'all 0.2s ease-in-out',
           '&:hover': {
-            borderColor: 'rgba(255, 255, 255, 0.15)',
-            backgroundColor: alpha('#1e293b', 0.4),
+            borderColor: 'rgba(255, 255, 255, 0.2)',
+            transform: 'translateY(-2px)',
+            backgroundColor: 'rgba(17, 24, 39, 0.8)',
           },
         },
       },
@@ -106,14 +107,15 @@ export const theme = createTheme({
       styleOverrides: {
         root: {
           borderRadius: 6,
-          height: 28,
+          height: 24,
           fontSize: '0.75rem',
-          fontWeight: 600,
-          border: '1px solid rgba(255,255,255,0.1)',
-          backgroundColor: 'transparent',
+          fontWeight: 500,
+          border: '1px solid rgba(255, 255, 255, 0.1)',
+          backgroundColor: 'rgba(255, 255, 255, 0.03)',
+          color: '#d1d5db',
         },
         filled: {
-          backgroundColor: 'rgba(255,255,255,0.05)',
+          backgroundColor: 'rgba(255, 255, 255, 0.05)',
         },
       },
     },
@@ -121,24 +123,43 @@ export const theme = createTheme({
       styleOverrides: {
         root: {
           '& .MuiOutlinedInput-root': {
-            borderRadius: 10,
-            backgroundColor: alpha('#000', 0.2),
+            borderRadius: 8,
+            backgroundColor: 'rgba(17, 24, 39, 0.6)',
             '& fieldset': {
               borderColor: 'rgba(255, 255, 255, 0.1)',
               transition: 'border-color 0.2s',
             },
             '&:hover fieldset': {
-              borderColor: 'rgba(255, 255, 255, 0.2)',
+              borderColor: 'rgba(255, 255, 255, 0.25)',
             },
             '&.Mui-focused fieldset': {
-              borderColor: '#818CF8', // Indigo
+              borderColor: '#f9fafb',
               borderWidth: 1,
-              boxShadow: '0 0 0 3px rgba(129, 140, 248, 0.15)',
+            },
+            '& input': {
+              color: '#f9fafb',
             },
           },
         },
       },
     },
+    MuiAppBar: {
+      styleOverrides: {
+        root: {
+          backgroundColor: 'rgba(3, 7, 18, 0.8)',
+          backdropFilter: 'blur(16px)',
+          borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+          boxShadow: 'none',
+        },
+      },
+    },
+    MuiSelect: {
+        styleOverrides: {
+            icon: {
+                color: '#9ca3af',
+            }
+        }
+    }
   },
 });
 
