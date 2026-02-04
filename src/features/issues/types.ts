@@ -10,6 +10,7 @@ export interface GitHubIssue {
   body?: string;
   state: string;
   comments: number;
+  repository_stars?: number;
   labels?: GitHubLabel[];
   user?: {
     login: string;

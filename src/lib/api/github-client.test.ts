@@ -68,4 +68,33 @@ describe('github-client', () => {
       })
     );
   });
+
+  it('should include stars filter by pre-fetching repositories', async () => {
+    // Mock for repository search
+    mockRequest.mockResolvedValueOnce({
+      data: {
+        items: [{ full_name: 'owner/repo' }]
+      }
+    });
+    // Mock for issue search
+    mockRequest.mockResolvedValueOnce({ data: { items: [], total_count: 0 } });
+
+    await getGoodFirstIssues({ minStars: 1000 });
+    
+    // Check repository search
+    expect(mockRequest).toHaveBeenCalledWith(
+      'GET /search/repositories',
+      expect.objectContaining({
+        q: 'stars:>=1000',
+      })
+    );
+
+    // Check issue search with repo filter
+    expect(mockRequest).toHaveBeenCalledWith(
+      'GET /search/issues',
+      expect.objectContaining({
+        q: expect.stringContaining('repo:owner/repo'),
+      })
+    );
+  });
 });

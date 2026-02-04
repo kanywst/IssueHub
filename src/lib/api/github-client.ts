@@ -8,16 +8,17 @@ export async function getGoodFirstIssues({
   language,
   keyword,
   days,
+  minStars,
   page = 1,
   perPage = 30,
 }: {
   language?: string;
   keyword?: string;
   days?: number;
+  minStars?: number;
   page?: number;
   perPage?: number;
 }) {
-  // Use a slightly more flexible label search that hits common variations
   let query = 'is:issue is:open label:"good first issue"';
 
   if (language) {
@@ -30,14 +31,35 @@ export async function getGoodFirstIssues({
 
   if (days && days > 0) {
     const date = new Date();
-    // Use ISO 8601 format for precise filtering (issues created BEFORE this exact moment)
     date.setDate(date.getDate() - days);
     const dateString = date.toISOString();
-    // Change to <= to find issues that are OLDER than the specified days
     query += ` created:<=${dateString}`;
   }
 
-  // search/issues is available without authentication
+  // If minStars is provided, we first find repositories that match the criteria
+  // Then we restrict our issue search to those repositories
+  if (minStars && minStars > 0) {
+    try {
+      const repoQuery = `stars:>=${minStars}${language ? ` language:${language}` : ''}`;
+      const reposResponse = await githubClient.request('GET /search/repositories', {
+        q: repoQuery,
+        sort: 'stars',
+        order: 'desc',
+        per_page: 20, // Limit to top 20 repositories to keep query string manageable
+      });
+
+      if (reposResponse.data.items.length > 0) {
+        const repoList = reposResponse.data.items.map(repo => `repo:${repo.full_name}`).join(' ');
+        query += ` ${repoList}`;
+      } else {
+        // If no repos found, the search should return no results
+        query += ' repo:non/existent';
+      }
+    } catch (error) {
+      console.error('Failed to pre-fetch repositories for star filtering', error);
+    }
+  }
+
   const response = await githubClient.request('GET /search/issues', {
     q: query,
     sort: 'created',
