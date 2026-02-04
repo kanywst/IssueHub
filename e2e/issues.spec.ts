@@ -50,14 +50,33 @@ test('date filter visibility and interaction', async ({ page }) => {
   
   // Open the select and check options
   await dateSelect.click();
-  await expect(page.getByRole('option', { name: 'Last 24 hours' })).toBeVisible();
-  await expect(page.getByRole('option', { name: 'Last 7 days' })).toBeVisible();
-  await expect(page.getByRole('option', { name: 'Last 30 days' })).toBeVisible();
+  await expect(page.getByRole('option', { name: '1 day ago or older' })).toBeVisible();
+  await expect(page.getByRole('option', { name: '1 week ago or older' })).toBeVisible();
+  await expect(page.getByRole('option', { name: '1 month ago or older' })).toBeVisible();
   
   // Select an option
-  await page.getByRole('option', { name: 'Last 7 days' }).click();
+  await page.getByRole('option', { name: '1 week ago or older' }).click();
   
-  // The value should be updated (Material UI Select might be tricky to check value directly, 
-  // but we can check if it closes and shows the selected text)
-  await expect(page.getByRole('option', { name: 'Last 7 days' })).not.toBeVisible();
+  // The value should be updated
+  await expect(page.getByRole('option', { name: '1 week ago or older' })).not.toBeVisible();
+});
+
+test('stars filter visibility and interaction', async ({ page }) => {
+  await page.goto('/issues');
+  
+  // Check if stars filter exists
+  const starsSelect = page.getByTestId('stars-select');
+  await expect(starsSelect).toBeVisible();
+  
+  // Open the select and check options
+  await starsSelect.click();
+  await expect(page.getByRole('option', { name: '100+ stars' })).toBeVisible();
+  await expect(page.getByRole('option', { name: '1k+ stars' })).toBeVisible();
+  await expect(page.getByRole('option', { name: '10k+ stars' })).toBeVisible();
+  
+  // Select an option
+  await page.getByRole('option', { name: '1k+ stars' }).click();
+  
+  // The value should be updated
+  await expect(page.getByRole('option', { name: '1k+ stars' })).not.toBeVisible();
 });

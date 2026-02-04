@@ -73,6 +73,8 @@ const STAR_FILTERS = [
   { value: 10000, label: '10k+ stars' },
 ];
 
+const MAX_GITHUB_SEARCH_RESULTS = 1000;
+
 export default function IssuesPage() {
   const [language, setLanguage] = useState('');
   const [days, setDays] = useState<number>(0);
@@ -402,7 +404,7 @@ export default function IssuesPage() {
 
         <Box sx={{ display: 'flex', justifyContent: 'center', mt: 8 }}>
           <Pagination
-            count={Math.ceil(Math.min(issuesData?.total_count || 0, 1000) / perPage)}
+            count={Math.ceil(Math.min(issuesData?.total_count || 0, MAX_GITHUB_SEARCH_RESULTS) / perPage)}
             page={page}
             onChange={(_, v) => setPage(v)}
             shape="rounded"
