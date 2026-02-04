@@ -30,6 +30,7 @@ import {
   ChatBubbleOutline as ChatIcon,
   Circle as CircleIcon,
   AccessTime as TimeIcon,
+  StarBorder as StarIcon,
 } from '@mui/icons-material';
 import Link from 'next/link';
 import { timeAgo } from '@/lib/utils';
@@ -42,12 +43,42 @@ const POPULAR_LANGUAGES = [
   { value: 'javascript', label: 'JavaScript' },
   { value: 'typescript', label: 'TypeScript' },
   { value: 'python', label: 'Python' },
+  { value: 'mojo', label: 'Mojo' },
   { value: 'go', label: 'Go' },
   { value: 'rust', label: 'Rust' },
+  { value: 'zig', label: 'Zig' },
+  { value: 'gleam', label: 'Gleam' },
+  { value: 'carbon', label: 'Carbon' },
+  { value: 'kotlin', label: 'Kotlin' },
+  { value: 'swift', label: 'Swift' },
+  { value: 'cpp', label: 'C++' },
+  { value: 'ruby', label: 'Ruby' },
 ];
+
+const DATE_FILTERS = [
+  { value: 0, label: 'Any time' },
+  { value: 1, label: '1 day ago or older' },
+  { value: 3, label: '3 days ago or older' },
+  { value: 7, label: '1 week ago or older' },
+  { value: 14, label: '2 weeks ago or older' },
+  { value: 30, label: '1 month ago or older' },
+];
+
+const STAR_FILTERS = [
+  { value: 0, label: 'Any stars' },
+  { value: 100, label: '100+ stars' },
+  { value: 500, label: '500+ stars' },
+  { value: 1000, label: '1k+ stars' },
+  { value: 5000, label: '5k+ stars' },
+  { value: 10000, label: '10k+ stars' },
+];
+
+const MAX_GITHUB_SEARCH_RESULTS = 1000;
 
 export default function IssuesPage() {
   const [language, setLanguage] = useState('');
+  const [days, setDays] = useState<number>(0);
+  const [minStars, setMinStars] = useState<number>(0);
   const [keyword, setKeyword] = useState('');
   const [tempKeyword, setTempKeyword] = useState('');
   const [page, setPage] = useState(1);
@@ -63,14 +94,19 @@ export default function IssuesPage() {
   const { isSaved, saveIssue } = useSavedIssues();
 
   // Fetch issues directly from GitHub API
-  const { data: issuesData, isLoading } = useQuery<GitHubIssuesResponse>({
-    queryKey: ['issues', { language, keyword, page, perPage }],
-    queryFn: () => getGoodFirstIssues({ language, keyword, page, perPage }) as Promise<GitHubIssuesResponse>,
+  const { data: issuesData, isLoading, isFetching } = useQuery<GitHubIssuesResponse>({
+    queryKey: ['issues', { language, keyword, days, minStars, page, perPage }],
+    queryFn: () => getGoodFirstIssues({ language, keyword, days, minStars, page, perPage }) as Promise<GitHubIssuesResponse>,
     staleTime: 1000 * 60 * 5, // 5 minutes
   });
 
   const handleSearch = () => {
     setKeyword(tempKeyword);
+    setPage(1);
+  };
+
+  const handleFilterChange = (setter: React.Dispatch<React.SetStateAction<any>>, value: any) => {
+    setter(value);
     setPage(1);
   };
 
@@ -93,6 +129,15 @@ export default function IssuesPage() {
             Curated opportunities for your next contribution.
           </Typography>
         </Box>
+
+        {/* Total Count Display */}
+        {!isLoading && !isFetching && issuesData && (
+          <Box sx={{ mb: 3, px: 1 }}>
+            <Typography variant="body2" sx={{ color: 'secondary.main', fontWeight: 600 }}>
+              Found {issuesData.total_count.toLocaleString()} issues
+            </Typography>
+          </Box>
+        )}
 
         {/* Filter Bar */}
         <Box 
@@ -129,7 +174,7 @@ export default function IssuesPage() {
           <FormControl sx={{ minWidth: 200 }}>
             <Select
               value={language}
-              onChange={(e) => { setLanguage(e.target.value); setPage(1); }}
+              onChange={(e) => handleFilterChange(setLanguage, e.target.value)}
               displayEmpty
               startAdornment={<FilterIcon sx={{ ml: 1, mr: 1, color: 'text.secondary' }} />}
               data-testid="language-select"
@@ -149,9 +194,54 @@ export default function IssuesPage() {
             </Select>
           </FormControl>
 
+          <FormControl sx={{ minWidth: 160 }}>
+            <Select
+              value={days}
+              onChange={(e) => handleFilterChange(setDays, Number(e.target.value))}
+              displayEmpty
+              startAdornment={<TimeIcon sx={{ ml: 1, mr: 1, color: 'text.secondary' }} />}
+              data-testid="date-select"
+              sx={{
+                borderRadius: '8px',
+                backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                color: 'text.primary',
+                '& fieldset': { border: 'none' },
+                '& .MuiSelect-select': { py: 1.5 },
+                '& .MuiSvgIcon-root': { color: 'text.secondary' },
+              }}
+            >
+              {DATE_FILTERS.map(filter => (
+                <MenuItem key={filter.value} value={filter.value}>{filter.label}</MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+
+          <FormControl sx={{ minWidth: 140 }}>
+            <Select
+              value={minStars}
+              onChange={(e) => handleFilterChange(setMinStars, Number(e.target.value))}
+              displayEmpty
+              startAdornment={<StarIcon sx={{ ml: 1, mr: 1, color: 'text.secondary' }} />}
+              data-testid="stars-select"
+              sx={{
+                borderRadius: '8px',
+                backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                color: 'text.primary',
+                '& fieldset': { border: 'none' },
+                '& .MuiSelect-select': { py: 1.5 },
+                '& .MuiSvgIcon-root': { color: 'text.secondary' },
+              }}
+            >
+              {STAR_FILTERS.map(filter => (
+                <MenuItem key={filter.value} value={filter.value}>{filter.label}</MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+
           <Box sx={{ minWidth: 120 }}>
             <IconButton
               onClick={handleSearch}
+              disabled={isLoading || isFetching}
               data-testid="search-button"
               sx={{ 
                 height: '56px', 
@@ -159,15 +249,16 @@ export default function IssuesPage() {
                 borderRadius: '12px',
                 backgroundColor: '#fff', 
                 color: '#000',
-                '&:hover': { backgroundColor: '#e5e7eb' }
+                '&:hover': { backgroundColor: '#e5e7eb' },
+                '&:disabled': { backgroundColor: 'rgba(255, 255, 255, 0.1)', color: 'rgba(255, 255, 255, 0.3)' }
               }}
             >
-              <SearchIcon />
+              {isLoading || isFetching ? <CircularProgress size={24} color="inherit" /> : <SearchIcon />}
             </IconButton>
           </Box>
         </Box>
 
-        {isLoading ? (
+        {isLoading || isFetching ? (
           <Box sx={{ display: 'flex', justifyContent: 'center', py: 10 }}>
             <CircularProgress sx={{ color: 'text.secondary' }} />
           </Box>
@@ -303,7 +394,7 @@ export default function IssuesPage() {
 
         <Box sx={{ display: 'flex', justifyContent: 'center', mt: 8 }}>
           <Pagination
-            count={Math.ceil((issuesData?.total_count || 0) / perPage)}
+            count={Math.ceil(Math.min(issuesData?.total_count || 0, MAX_GITHUB_SEARCH_RESULTS) / perPage)}
             page={page}
             onChange={(_, v) => setPage(v)}
             shape="rounded"
