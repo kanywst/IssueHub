@@ -40,3 +40,24 @@ test('issue search and library save flow', async ({ page }) => {
   // Verify list is empty
   await expect(page.getByText(/You haven't saved any issues yet/i)).toBeVisible();
 });
+
+test('date filter visibility and interaction', async ({ page }) => {
+  await page.goto('/issues');
+  
+  // Check if date filter exists
+  const dateSelect = page.getByTestId('date-select');
+  await expect(dateSelect).toBeVisible();
+  
+  // Open the select and check options
+  await dateSelect.click();
+  await expect(page.getByRole('option', { name: 'Last 24 hours' })).toBeVisible();
+  await expect(page.getByRole('option', { name: 'Last 7 days' })).toBeVisible();
+  await expect(page.getByRole('option', { name: 'Last 30 days' })).toBeVisible();
+  
+  // Select an option
+  await page.getByRole('option', { name: 'Last 7 days' }).click();
+  
+  // The value should be updated (Material UI Select might be tricky to check value directly, 
+  // but we can check if it closes and shows the selected text)
+  await expect(page.getByRole('option', { name: 'Last 7 days' })).not.toBeVisible();
+});

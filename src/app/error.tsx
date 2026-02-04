@@ -6,10 +6,10 @@ import { Refresh as RefreshIcon, Home as HomeIcon } from '@mui/icons-material';
 import Link from 'next/link';
 
 export default function ErrorPage({
-  error,
+  _error,
   reset,
 }: {
-  error: Error & { digest?: string };
+  _error: Error & { digest?: string };
   reset: () => void;
 }) {
   return (

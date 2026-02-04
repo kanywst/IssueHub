@@ -42,12 +42,30 @@ const POPULAR_LANGUAGES = [
   { value: 'javascript', label: 'JavaScript' },
   { value: 'typescript', label: 'TypeScript' },
   { value: 'python', label: 'Python' },
+  { value: 'mojo', label: 'Mojo' },
   { value: 'go', label: 'Go' },
   { value: 'rust', label: 'Rust' },
+  { value: 'zig', label: 'Zig' },
+  { value: 'gleam', label: 'Gleam' },
+  { value: 'carbon', label: 'Carbon' },
+  { value: 'kotlin', label: 'Kotlin' },
+  { value: 'swift', label: 'Swift' },
+  { value: 'cpp', label: 'C++' },
+  { value: 'ruby', label: 'Ruby' },
+];
+
+const DATE_FILTERS = [
+  { value: 0, label: 'Any time' },
+  { value: 1, label: '1 day ago or older' },
+  { value: 3, label: '3 days ago or older' },
+  { value: 7, label: '1 week ago or older' },
+  { value: 14, label: '2 weeks ago or older' },
+  { value: 30, label: '1 month ago or older' },
 ];
 
 export default function IssuesPage() {
   const [language, setLanguage] = useState('');
+  const [days, setDays] = useState<number>(0);
   const [keyword, setKeyword] = useState('');
   const [tempKeyword, setTempKeyword] = useState('');
   const [page, setPage] = useState(1);
@@ -63,14 +81,24 @@ export default function IssuesPage() {
   const { isSaved, saveIssue } = useSavedIssues();
 
   // Fetch issues directly from GitHub API
-  const { data: issuesData, isLoading } = useQuery<GitHubIssuesResponse>({
-    queryKey: ['issues', { language, keyword, page, perPage }],
-    queryFn: () => getGoodFirstIssues({ language, keyword, page, perPage }) as Promise<GitHubIssuesResponse>,
+  const { data: issuesData, isLoading, isFetching } = useQuery<GitHubIssuesResponse>({
+    queryKey: ['issues', { language, keyword, days, page, perPage }],
+    queryFn: () => getGoodFirstIssues({ language, keyword, days, page, perPage }) as Promise<GitHubIssuesResponse>,
     staleTime: 1000 * 60 * 5, // 5 minutes
   });
 
   const handleSearch = () => {
     setKeyword(tempKeyword);
+    setPage(1);
+  };
+
+  const handleLanguageChange = (val: string) => {
+    setLanguage(val);
+    setPage(1);
+  };
+
+  const handleDaysChange = (val: number) => {
+    setDays(val);
     setPage(1);
   };
 
@@ -93,6 +121,15 @@ export default function IssuesPage() {
             Curated opportunities for your next contribution.
           </Typography>
         </Box>
+
+        {/* Total Count Display */}
+        {!isLoading && !isFetching && issuesData && (
+          <Box sx={{ mb: 3, px: 1 }}>
+            <Typography variant="body2" sx={{ color: 'secondary.main', fontWeight: 600 }}>
+              Found {issuesData.total_count.toLocaleString()} issues
+            </Typography>
+          </Box>
+        )}
 
         {/* Filter Bar */}
         <Box 
@@ -129,7 +166,7 @@ export default function IssuesPage() {
           <FormControl sx={{ minWidth: 200 }}>
             <Select
               value={language}
-              onChange={(e) => { setLanguage(e.target.value); setPage(1); }}
+              onChange={(e) => handleLanguageChange(e.target.value)}
               displayEmpty
               startAdornment={<FilterIcon sx={{ ml: 1, mr: 1, color: 'text.secondary' }} />}
               data-testid="language-select"
@@ -149,9 +186,32 @@ export default function IssuesPage() {
             </Select>
           </FormControl>
 
+          <FormControl sx={{ minWidth: 160 }}>
+            <Select
+              value={days}
+              onChange={(e) => handleDaysChange(Number(e.target.value))}
+              displayEmpty
+              startAdornment={<TimeIcon sx={{ ml: 1, mr: 1, color: 'text.secondary' }} />}
+              data-testid="date-select"
+              sx={{
+                borderRadius: '8px',
+                backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                color: 'text.primary',
+                '& fieldset': { border: 'none' },
+                '& .MuiSelect-select': { py: 1.5 },
+                '& .MuiSvgIcon-root': { color: 'text.secondary' },
+              }}
+            >
+              {DATE_FILTERS.map(filter => (
+                <MenuItem key={filter.value} value={filter.value}>{filter.label}</MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+
           <Box sx={{ minWidth: 120 }}>
             <IconButton
               onClick={handleSearch}
+              disabled={isLoading || isFetching}
               data-testid="search-button"
               sx={{ 
                 height: '56px', 
@@ -159,15 +219,16 @@ export default function IssuesPage() {
                 borderRadius: '12px',
                 backgroundColor: '#fff', 
                 color: '#000',
-                '&:hover': { backgroundColor: '#e5e7eb' }
+                '&:hover': { backgroundColor: '#e5e7eb' },
+                '&:disabled': { backgroundColor: 'rgba(255, 255, 255, 0.1)', color: 'rgba(255, 255, 255, 0.3)' }
               }}
             >
-              <SearchIcon />
+              {isLoading || isFetching ? <CircularProgress size={24} color="inherit" /> : <SearchIcon />}
             </IconButton>
           </Box>
         </Box>
 
-        {isLoading ? (
+        {isLoading || isFetching ? (
           <Box sx={{ display: 'flex', justifyContent: 'center', py: 10 }}>
             <CircularProgress sx={{ color: 'text.secondary' }} />
           </Box>
@@ -303,7 +364,7 @@ export default function IssuesPage() {
 
         <Box sx={{ display: 'flex', justifyContent: 'center', mt: 8 }}>
           <Pagination
-            count={Math.ceil((issuesData?.total_count || 0) / perPage)}
+            count={Math.ceil(Math.min(issuesData?.total_count || 0, 1000) / perPage)}
             page={page}
             onChange={(_, v) => setPage(v)}
             shape="rounded"

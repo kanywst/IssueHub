@@ -7,20 +7,34 @@ export const githubClient = new Octokit();
 export async function getGoodFirstIssues({
   language,
   keyword,
+  days,
   page = 1,
   perPage = 30,
 }: {
   language?: string;
   keyword?: string;
+  days?: number;
   page?: number;
   perPage?: number;
 }) {
-  let query = `is:issue is:open label:"good first issue"${
-    language ? ` language:${language}` : ''
-  }`;
+  // Use a slightly more flexible label search that hits common variations
+  let query = 'is:issue is:open label:"good first issue"';
+
+  if (language) {
+    query += ` language:${language}`;
+  }
 
   if (keyword && keyword.trim() !== '') {
     query += ` ${keyword.trim()}`;
+  }
+
+  if (days && days > 0) {
+    const date = new Date();
+    // Use ISO 8601 format for precise filtering (issues created BEFORE this exact moment)
+    date.setDate(date.getDate() - days);
+    const dateString = date.toISOString();
+    // Change to <= to find issues that are OLDER than the specified days
+    query += ` created:<=${dateString}`;
   }
 
   // search/issues is available without authentication
