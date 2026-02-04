@@ -50,8 +50,11 @@ test('date filter visibility and interaction', async ({ page }) => {
   
   // Open the select and check options
   await dateSelect.click();
+  await expect(page.getByRole('option', { name: 'Any time' })).toBeVisible();
   await expect(page.getByRole('option', { name: '1 day ago or older' })).toBeVisible();
+  await expect(page.getByRole('option', { name: '3 days ago or older' })).toBeVisible();
   await expect(page.getByRole('option', { name: '1 week ago or older' })).toBeVisible();
+  await expect(page.getByRole('option', { name: '2 weeks ago or older' })).toBeVisible();
   await expect(page.getByRole('option', { name: '1 month ago or older' })).toBeVisible();
   
   // Select an option

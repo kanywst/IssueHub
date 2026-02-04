@@ -43,18 +43,16 @@ describe('github-client', () => {
 
   it('should include date filter in query when days is provided', async () => {
     const days = 7;
-    // We can't easily predict the exact ISO string due to milliseconds, 
-    // but we can check the format and the date part
     const expectedDate = new Date();
     expectedDate.setDate(expectedDate.getDate() - days);
-    const datePart = expectedDate.toISOString().split('T')[0];
+    const dateString = expectedDate.toISOString().split('T')[0];
 
     await getGoodFirstIssues({ days });
     
     expect(mockRequest).toHaveBeenCalledWith(
       'GET /search/issues',
       expect.objectContaining({
-        q: expect.stringContaining(`created:<=${datePart}`),
+        q: expect.stringContaining(`created:<=${dateString}`),
       })
     );
   });
@@ -69,32 +67,15 @@ describe('github-client', () => {
     );
   });
 
-  it('should include stars filter by pre-fetching repositories', async () => {
-    // Mock for repository search
-    mockRequest.mockResolvedValueOnce({
-      data: {
-        items: [{ full_name: 'owner/repo' }]
-      }
-    });
-    // Mock for issue search
-    mockRequest.mockResolvedValueOnce({ data: { items: [], total_count: 0 } });
-
+  it('should include stars filter in query when minStars is provided', async () => {
     await getGoodFirstIssues({ minStars: 1000 });
-    
-    // Check repository search
-    expect(mockRequest).toHaveBeenCalledWith(
-      'GET /search/repositories',
-      expect.objectContaining({
-        q: 'stars:>=1000',
-      })
-    );
-
-    // Check issue search with repo filter
     expect(mockRequest).toHaveBeenCalledWith(
       'GET /search/issues',
       expect.objectContaining({
-        q: expect.stringContaining('repo:owner/repo'),
+        q: expect.stringContaining('stars:>=1000'),
       })
     );
+    // Ensure we are not making a separate call for repositories
+    expect(mockRequest).toHaveBeenCalledTimes(1);
   });
 });

@@ -32,32 +32,14 @@ export async function getGoodFirstIssues({
   if (days && days > 0) {
     const date = new Date();
     date.setDate(date.getDate() - days);
-    const dateString = date.toISOString();
+    const dateString = date.toISOString().split('T')[0];
     query += ` created:<=${dateString}`;
   }
 
-  // If minStars is provided, we first find repositories that match the criteria
-  // Then we restrict our issue search to those repositories
+  // If minStars is provided, add the stars qualifier directly to the query.
+  // This is more efficient than fetching repositories first and avoids an extra API call.
   if (minStars && minStars > 0) {
-    try {
-      const repoQuery = `stars:>=${minStars}${language ? ` language:${language}` : ''}`;
-      const reposResponse = await githubClient.request('GET /search/repositories', {
-        q: repoQuery,
-        sort: 'stars',
-        order: 'desc',
-        per_page: 20, // Limit to top 20 repositories to keep query string manageable
-      });
-
-      if (reposResponse.data.items.length > 0) {
-        const repoList = reposResponse.data.items.map(repo => `repo:${repo.full_name}`).join(' ');
-        query += ` ${repoList}`;
-      } else {
-        // If no repos found, the search should return no results
-        query += ' repo:non/existent';
-      }
-    } catch (error) {
-      console.error('Failed to pre-fetch repositories for star filtering', error);
-    }
+    query += ` stars:>=${minStars}`;
   }
 
   const response = await githubClient.request('GET /search/issues', {

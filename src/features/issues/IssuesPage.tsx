@@ -105,18 +105,8 @@ export default function IssuesPage() {
     setPage(1);
   };
 
-  const handleLanguageChange = (val: string) => {
-    setLanguage(val);
-    setPage(1);
-  };
-
-  const handleDaysChange = (val: number) => {
-    setDays(val);
-    setPage(1);
-  };
-
-  const handleStarsChange = (val: number) => {
-    setMinStars(val);
+  const handleFilterChange = (setter: React.Dispatch<React.SetStateAction<any>>, value: any) => {
+    setter(value);
     setPage(1);
   };
 
@@ -184,7 +174,7 @@ export default function IssuesPage() {
           <FormControl sx={{ minWidth: 200 }}>
             <Select
               value={language}
-              onChange={(e) => handleLanguageChange(e.target.value)}
+              onChange={(e) => handleFilterChange(setLanguage, e.target.value)}
               displayEmpty
               startAdornment={<FilterIcon sx={{ ml: 1, mr: 1, color: 'text.secondary' }} />}
               data-testid="language-select"
@@ -207,7 +197,7 @@ export default function IssuesPage() {
           <FormControl sx={{ minWidth: 160 }}>
             <Select
               value={days}
-              onChange={(e) => handleDaysChange(Number(e.target.value))}
+              onChange={(e) => handleFilterChange(setDays, Number(e.target.value))}
               displayEmpty
               startAdornment={<TimeIcon sx={{ ml: 1, mr: 1, color: 'text.secondary' }} />}
               data-testid="date-select"
@@ -229,7 +219,7 @@ export default function IssuesPage() {
           <FormControl sx={{ minWidth: 140 }}>
             <Select
               value={minStars}
-              onChange={(e) => handleStarsChange(Number(e.target.value))}
+              onChange={(e) => handleFilterChange(setMinStars, Number(e.target.value))}
               displayEmpty
               startAdornment={<StarIcon sx={{ ml: 1, mr: 1, color: 'text.secondary' }} />}
               data-testid="stars-select"
