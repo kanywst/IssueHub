@@ -160,7 +160,7 @@ export default function IssuesPage() {
               placeholder="Search issues, repos, or tags... (Press Enter to search)"
               value={tempKeyword}
               onChange={e => setTempKeyword(e.target.value)}
-              onKeyPress={e => e.key === 'Enter' && handleSearch()}
+              onKeyDown={e => e.key === 'Enter' && handleSearch()}
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">

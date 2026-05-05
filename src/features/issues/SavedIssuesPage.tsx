@@ -1,12 +1,22 @@
 'use client';
 
 import MainLayout from '@/components/layout/MainLayout';
-import { Typography, Box, Stack, Alert } from '@mui/material';
+import { Typography, Box, Stack, Alert, CircularProgress } from '@mui/material';
 import { useSavedIssues } from '@/hooks/useSavedIssues';
 import { IssueRow } from '@/components/ui/IssueRow';
 
 export default function SavedIssuesPage() {
-  const { savedIssues, removeIssue } = useSavedIssues();
+  const { savedIssues, removeIssue, isLoaded } = useSavedIssues();
+
+  if (!isLoaded) {
+    return (
+      <MainLayout>
+        <Box sx={{ display: 'flex', justifyContent: 'center', py: 10 }}>
+          <CircularProgress size={32} sx={{ color: 'text.disabled' }} />
+        </Box>
+      </MainLayout>
+    );
+  }
 
   return (
     <MainLayout>
