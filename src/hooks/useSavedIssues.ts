@@ -67,8 +67,43 @@ function write(next: SavedIssue[]) {
   subscribers.forEach(cb => cb());
 }
 
+// Tracks whether the app has finished hydrating. Module-level so once
+// the first consumer mounts, every later consumer sees true immediately
+// and avoids a flash of empty state. Driven through useSyncExternalStore
+// to keep this hook free of setState-in-effect.
+let hydrated = false;
+const hydrationListeners = new Set<() => void>();
+
+function subscribeHydration(cb: () => void): () => void {
+  hydrationListeners.add(cb);
+  if (!hydrated) {
+    queueMicrotask(() => {
+      if (!hydrated) {
+        hydrated = true;
+        hydrationListeners.forEach(l => l());
+      }
+    });
+  }
+  return () => {
+    hydrationListeners.delete(cb);
+  };
+}
+
+function getHydrationSnapshot() {
+  return hydrated;
+}
+
+function getHydrationServerSnapshot() {
+  return false;
+}
+
 export function useSavedIssues() {
   const savedIssues = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
+  const isLoaded = useSyncExternalStore(
+    subscribeHydration,
+    getHydrationSnapshot,
+    getHydrationServerSnapshot
+  );
 
   const saveIssue = useCallback((issue: GitHubIssue) => {
     const repoUrl = issue.repository_url.replace(
@@ -107,5 +142,6 @@ export function useSavedIssues() {
     saveIssue,
     removeIssue,
     isSaved,
+    isLoaded,
   };
 }
