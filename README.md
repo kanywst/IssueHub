@@ -28,8 +28,8 @@ IssueHub aims to lower the barrier to open source contribution. By stripping awa
 
 ### Prerequisites
 
-- Node.js 18+
-- Yarn
+- Node.js 22+
+- npm
 
 ### Installation
 
@@ -43,7 +43,7 @@ IssueHub aims to lower the barrier to open source contribution. By stripping awa
 2. Install dependencies:
 
    ```bash
-   yarn install
+   npm install
    ```
 
 3. Configure environment (Optional):
@@ -57,7 +57,7 @@ IssueHub aims to lower the barrier to open source contribution. By stripping awa
 Start the local development server:
 
 ```bash
-yarn dev
+npm run dev
 ```
 
 The application will be available at `http://localhost:3000`.
@@ -67,7 +67,7 @@ The application will be available at `http://localhost:3000`.
 Generate optimized static files for production:
 
 ```bash
-yarn build
+npm run build
 ```
 
 The output will be generated in the `out/` directory.
