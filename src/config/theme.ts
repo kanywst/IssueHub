@@ -19,7 +19,7 @@ export const theme = createTheme({
     },
     background: {
       default: '#0a0a0b', // Deep zinc/black
-      paper: '#121214',   // Slightly lighter for cards
+      paper: '#121214', // Slightly lighter for cards
     },
     text: {
       primary: '#fafafa', // Zinc 50
@@ -31,7 +31,7 @@ export const theme = createTheme({
     grey: {
       900: '#18181b', // Zinc 900
     },
-    divider: '#27272a',    // Zinc 800
+    divider: '#27272a', // Zinc 800
   },
   typography: {
     fontFamily: FONT_FAMILY,
@@ -164,12 +164,12 @@ export const theme = createTheme({
       },
     },
     MuiSelect: {
-        styleOverrides: {
-            icon: {
-                color: '#a1a1aa',
-            }
-        }
-    }
+      styleOverrides: {
+        icon: {
+          color: '#a1a1aa',
+        },
+      },
+    },
   },
 });
 

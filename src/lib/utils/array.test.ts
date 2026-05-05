@@ -10,7 +10,7 @@ describe('array utils', () => {
         { category: 'A', value: 3 },
       ];
       const result = groupBy(data, 'category');
-      
+
       expect(result['A']).toHaveLength(2);
       expect(result['A'][0].value).toBe(1);
       expect(result['A'][1].value).toBe(3);
@@ -31,9 +31,9 @@ describe('array utils', () => {
     it('works with strings', () => {
       expect(unique(['a', 'b', 'a'])).toEqual(['a', 'b']);
     });
-    
+
     it('handles empty array', () => {
-        expect(unique([])).toEqual([]);
+      expect(unique([])).toEqual([]);
     });
   });
 
@@ -41,7 +41,7 @@ describe('array utils', () => {
     it('chunks array into smaller arrays', () => {
       const data = [1, 2, 3, 4, 5];
       const result = chunk(data, 2);
-      
+
       expect(result).toHaveLength(3);
       expect(result[0]).toEqual([1, 2]);
       expect(result[1]).toEqual([3, 4]);

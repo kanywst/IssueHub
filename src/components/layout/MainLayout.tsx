@@ -29,9 +29,7 @@ export default function MainLayout({ children }: MainLayoutProps) {
           position: 'relative',
         }}
       >
-        <Box sx={{ flex: 1, px: { xs: 2, md: 4 }, py: { xs: 4, md: 6 } }}>
-          {children}
-        </Box>
+        <Box sx={{ flex: 1, px: { xs: 2, md: 4 }, py: { xs: 4, md: 6 } }}>{children}</Box>
       </Box>
     </Box>
   );

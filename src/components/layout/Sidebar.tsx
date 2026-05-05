@@ -1,7 +1,20 @@
 'use client';
 
-import { Box, Typography, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
-import { Search as SearchIcon, BookmarkBorder as BookmarkIcon, GitHub as GitHubIcon, Home as HomeIcon } from '@mui/icons-material';
+import {
+  Box,
+  Typography,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+} from '@mui/material';
+import {
+  Search as SearchIcon,
+  BookmarkBorder as BookmarkIcon,
+  GitHub as GitHubIcon,
+  Home as HomeIcon,
+} from '@mui/icons-material';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
@@ -42,18 +55,33 @@ export default function Sidebar() {
         >
           <GitHubIcon sx={{ fontSize: 18 }} />
         </Box>
-        <Typography variant="subtitle1" sx={{ fontWeight: 700, letterSpacing: '-0.02em', fontSize: '1.1rem' }}>
+        <Typography
+          variant="subtitle1"
+          sx={{ fontWeight: 700, letterSpacing: '-0.02em', fontSize: '1.1rem' }}
+        >
           IssueHub
         </Typography>
       </Box>
 
       <Box sx={{ flex: 1, px: 2 }}>
-        <Typography variant="caption" sx={{ color: 'text.disabled', fontWeight: 600, display: 'block', mb: 1, px: 1, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+        <Typography
+          variant="caption"
+          sx={{
+            color: 'text.disabled',
+            fontWeight: 600,
+            display: 'block',
+            mb: 1,
+            px: 1,
+            textTransform: 'uppercase',
+            letterSpacing: '0.05em',
+          }}
+        >
           Menu
         </Typography>
         <List disablePadding>
-          {navItems.map((item) => {
-            const active = pathname === item.path || (item.path !== '/' && pathname.startsWith(item.path));
+          {navItems.map(item => {
+            const active =
+              pathname === item.path || (item.path !== '/' && pathname.startsWith(item.path));
             return (
               <ListItem key={item.path} disablePadding sx={{ mb: 0.5 }}>
                 <ListItemButton
@@ -72,11 +100,14 @@ export default function Sidebar() {
                   <ListItemIcon sx={{ minWidth: 32, color: active ? '#fafafa' : 'text.secondary' }}>
                     {item.icon}
                   </ListItemIcon>
-                  <ListItemText 
-                    primary={item.label} 
-                    primaryTypographyProps={{ 
-                      variant: 'body2', 
-                      sx: { fontWeight: active ? 600 : 500, color: active ? '#fafafa' : 'text.secondary' } 
+                  <ListItemText
+                    primary={item.label}
+                    primaryTypographyProps={{
+                      variant: 'body2',
+                      sx: {
+                        fontWeight: active ? 600 : 500,
+                        color: active ? '#fafafa' : 'text.secondary',
+                      },
                     }}
                   />
                 </ListItemButton>

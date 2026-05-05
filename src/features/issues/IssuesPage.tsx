@@ -16,10 +16,7 @@ import {
   TextField,
   InputAdornment,
 } from '@mui/material';
-import {
-  Search as SearchIcon,
-  FilterList as FilterIcon,
-} from '@mui/icons-material';
+import { Search as SearchIcon, FilterList as FilterIcon } from '@mui/icons-material';
 import { timeAgo } from '@/lib/utils';
 import { useQuery } from '@tanstack/react-query';
 import { getGoodFirstIssues } from '@/lib/api/github-client';
@@ -91,9 +88,21 @@ export default function IssuesPage() {
 
   const { isSaved, saveIssue } = useSavedIssues();
 
-  const { data: issuesData, isLoading, isFetching } = useQuery<GitHubIssuesResponse>({
+  const {
+    data: issuesData,
+    isLoading,
+    isFetching,
+  } = useQuery<GitHubIssuesResponse>({
     queryKey: ['issues', { language, keyword, days, minStars, page, perPage }],
-    queryFn: () => getGoodFirstIssues({ language, keyword, days, minStars, page, perPage }) as Promise<GitHubIssuesResponse>,
+    queryFn: () =>
+      getGoodFirstIssues({
+        language,
+        keyword,
+        days,
+        minStars,
+        page,
+        perPage,
+      }) as Promise<GitHubIssuesResponse>,
     staleTime: 1000 * 60 * 5,
   });
 
@@ -102,7 +111,10 @@ export default function IssuesPage() {
     setPage(1);
   };
 
-  const handleFilterChange = <T extends string | number>(setter: React.Dispatch<React.SetStateAction<T>>, value: T) => {
+  const handleFilterChange = <T extends string | number>(
+    setter: React.Dispatch<React.SetStateAction<T>>,
+    value: T
+  ) => {
     setter(value);
     setPage(1);
   };
@@ -117,11 +129,27 @@ export default function IssuesPage() {
 
   return (
     <MainLayout>
-      <Box sx={{ maxWidth: '1200px', mx: 'auto', display: 'flex', flexDirection: 'column', height: '100%' }}>
-        
+      <Box
+        sx={{
+          maxWidth: '1200px',
+          mx: 'auto',
+          display: 'flex',
+          flexDirection: 'column',
+          height: '100%',
+        }}
+      >
         {/* Top Controls Area */}
         <Box sx={{ mb: 4 }}>
-          <Typography variant="h4" sx={{ mb: 3, fontWeight: 700, color: '#fafafa', letterSpacing: '-0.02em', fontSize: '1.5rem' }}>
+          <Typography
+            variant="h4"
+            sx={{
+              mb: 3,
+              fontWeight: 700,
+              color: '#fafafa',
+              letterSpacing: '-0.02em',
+              fontSize: '1.5rem',
+            }}
+          >
             Explore Issues
           </Typography>
 
@@ -131,15 +159,15 @@ export default function IssuesPage() {
               fullWidth
               placeholder="Search issues, repos, or tags... (Press Enter to search)"
               value={tempKeyword}
-              onChange={(e) => setTempKeyword(e.target.value)}
-              onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
+              onChange={e => setTempKeyword(e.target.value)}
+              onKeyPress={e => e.key === 'Enter' && handleSearch()}
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
                     <SearchIcon sx={{ color: 'text.disabled', fontSize: 20 }} />
                   </InputAdornment>
                 ),
-                sx: { 
+                sx: {
                   height: 48,
                   borderRadius: '10px',
                   backgroundColor: 'background.paper',
@@ -149,8 +177,8 @@ export default function IssuesPage() {
                   fontSize: '0.9375rem',
                   '& fieldset': { border: 'none' },
                   '& input': { color: 'text.primary', padding: '12px 14px 12px 0' },
-                  '&:focus-within': { borderColor: 'rgba(255, 255, 255, 0.2)' }
-                }
+                  '&:focus-within': { borderColor: 'rgba(255, 255, 255, 0.2)' },
+                },
               }}
             />
           </Box>
@@ -160,18 +188,25 @@ export default function IssuesPage() {
             <FormControl>
               <Select
                 value={language}
-                onChange={(e) => handleFilterChange(setLanguage, e.target.value)}
+                onChange={e => handleFilterChange(setLanguage, e.target.value)}
                 displayEmpty
                 data-testid="language-select"
                 sx={slimSelectSx}
-                renderValue={(selected) => {
-                  if (!selected) return <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}><FilterIcon sx={{ fontSize: 14 }} /> <span>Language</span></Box>;
+                renderValue={selected => {
+                  if (!selected)
+                    return (
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+                        <FilterIcon sx={{ fontSize: 14 }} /> <span>Language</span>
+                      </Box>
+                    );
                   return POPULAR_LANGUAGES.find(l => l.value === selected)?.label;
                 }}
               >
                 <MenuItem value="">Any Language</MenuItem>
                 {POPULAR_LANGUAGES.map(lang => (
-                  <MenuItem key={lang.value} value={lang.value}>{lang.label}</MenuItem>
+                  <MenuItem key={lang.value} value={lang.value}>
+                    {lang.label}
+                  </MenuItem>
                 ))}
               </Select>
             </FormControl>
@@ -179,14 +214,18 @@ export default function IssuesPage() {
             <FormControl>
               <Select
                 value={days}
-                onChange={(e) => handleFilterChange(setDays, Number(e.target.value))}
+                onChange={e => handleFilterChange(setDays, Number(e.target.value))}
                 displayEmpty
                 data-testid="date-select"
                 sx={slimSelectSx}
-                renderValue={(selected) => DATE_FILTERS.find(f => f.value === selected)?.label || 'Time'}
+                renderValue={selected =>
+                  DATE_FILTERS.find(f => f.value === selected)?.label || 'Time'
+                }
               >
                 {DATE_FILTERS.map(filter => (
-                  <MenuItem key={filter.value} value={filter.value}>{filter.label}</MenuItem>
+                  <MenuItem key={filter.value} value={filter.value}>
+                    {filter.label}
+                  </MenuItem>
                 ))}
               </Select>
             </FormControl>
@@ -194,20 +233,24 @@ export default function IssuesPage() {
             <FormControl>
               <Select
                 value={minStars}
-                onChange={(e) => handleFilterChange(setMinStars, Number(e.target.value))}
+                onChange={e => handleFilterChange(setMinStars, Number(e.target.value))}
                 displayEmpty
                 data-testid="stars-select"
                 sx={slimSelectSx}
-                renderValue={(selected) => STAR_FILTERS.find(f => f.value === selected)?.label || 'Stars'}
+                renderValue={selected =>
+                  STAR_FILTERS.find(f => f.value === selected)?.label || 'Stars'
+                }
               >
                 {STAR_FILTERS.map(filter => (
-                  <MenuItem key={filter.value} value={filter.value}>{filter.label}</MenuItem>
+                  <MenuItem key={filter.value} value={filter.value}>
+                    {filter.label}
+                  </MenuItem>
                 ))}
               </Select>
             </FormControl>
 
             <Box sx={{ flex: 1 }} />
-            
+
             {/* Meta Info */}
             {!isLoading && issuesData && (
               <Typography variant="caption" sx={{ color: 'text.disabled', fontWeight: 500 }}>
@@ -224,12 +267,14 @@ export default function IssuesPage() {
           </Box>
         ) : (
           <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-            <Box sx={{ 
-              border: '1px solid rgba(255,255,255,0.08)', 
-              borderRadius: '10px', 
-              overflow: 'hidden',
-              backgroundColor: '#0a0a0b',
-            }}>
+            <Box
+              sx={{
+                border: '1px solid rgba(255,255,255,0.08)',
+                borderRadius: '10px',
+                overflow: 'hidden',
+                backgroundColor: '#0a0a0b',
+              }}
+            >
               {issuesData?.items?.length === 0 ? (
                 <Box sx={{ p: 4, textAlign: 'center', color: 'text.secondary' }}>
                   No issues found.
@@ -237,7 +282,10 @@ export default function IssuesPage() {
               ) : (
                 <Stack>
                   {issuesData?.items?.map((issue, idx) => {
-                    const repoName = issue.repository_url.replace('https://api.github.com/repos/', '');
+                    const repoName = issue.repository_url.replace(
+                      'https://api.github.com/repos/',
+                      ''
+                    );
                     const saved = isSaved(issue.id.toString());
                     const isOpen = issue.state === 'open';
 
@@ -254,7 +302,7 @@ export default function IssuesPage() {
                         showStatus={true}
                         isSaved={saved}
                         actionType="save"
-                        onAction={(e) => handleSaveIssue(issue, e)}
+                        onAction={e => handleSaveIssue(issue, e)}
                         isLast={idx === (issuesData.items?.length ?? 0) - 1}
                       />
                     );
@@ -265,19 +313,32 @@ export default function IssuesPage() {
 
             {/* Pagination */}
             {issuesData?.items && issuesData.items.length > 0 && (
-              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: 4 }}>
+              <Box
+                sx={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  mt: 4,
+                }}
+              >
                 <Typography variant="body2" sx={{ color: 'text.disabled' }}>
-                  Page {page} of {Math.ceil(Math.min(issuesData.total_count, MAX_GITHUB_SEARCH_RESULTS) / perPage)}
+                  Page {page} of{' '}
+                  {Math.ceil(Math.min(issuesData.total_count, MAX_GITHUB_SEARCH_RESULTS) / perPage)}
                 </Typography>
                 <Pagination
-                  count={Math.ceil(Math.min(issuesData.total_count, MAX_GITHUB_SEARCH_RESULTS) / perPage)}
+                  count={Math.ceil(
+                    Math.min(issuesData.total_count, MAX_GITHUB_SEARCH_RESULTS) / perPage
+                  )}
                   page={page}
                   onChange={(_, v) => setPage(v)}
                   shape="rounded"
                   size="small"
                   sx={{
                     '& .MuiPaginationItem-root': { color: 'text.secondary', fontSize: '0.875rem' },
-                    '& .MuiPaginationItem-root.Mui-selected': { backgroundColor: 'rgba(255,255,255,0.1)', color: '#fafafa' }
+                    '& .MuiPaginationItem-root.Mui-selected': {
+                      backgroundColor: 'rgba(255,255,255,0.1)',
+                      color: '#fafafa',
+                    },
                   }}
                 />
               </Box>
@@ -292,7 +353,16 @@ export default function IssuesPage() {
         onClose={() => setSnackbar({ ...snackbar, open: false })}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
       >
-        <Alert severity={snackbar.severity} variant="filled" sx={{ borderRadius: '8px', backgroundColor: 'primary.main', color: 'primary.contrastText', fontWeight: 500 }}>
+        <Alert
+          severity={snackbar.severity}
+          variant="filled"
+          sx={{
+            borderRadius: '8px',
+            backgroundColor: 'primary.main',
+            color: 'primary.contrastText',
+            fontWeight: 500,
+          }}
+        >
           {snackbar.message}
         </Alert>
       </Snackbar>
