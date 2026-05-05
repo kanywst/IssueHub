@@ -5,24 +5,13 @@ import {
   Typography,
   Box,
   Stack,
-  CircularProgress,
   Alert,
 } from '@mui/material';
 import { useSavedIssues } from '@/hooks/useSavedIssues';
 import { IssueRow } from '@/components/ui/IssueRow';
 
 export default function SavedIssuesPage() {
-  const { savedIssues, isLoaded, removeIssue } = useSavedIssues();
-
-  if (!isLoaded) {
-    return (
-      <MainLayout>
-        <Box sx={{ display: 'flex', justifyContent: 'center', py: 10 }}>
-          <CircularProgress size={32} sx={{ color: 'text.disabled' }} />
-        </Box>
-      </MainLayout>
-    );
-  }
+  const { savedIssues, removeIssue } = useSavedIssues();
 
   return (
     <MainLayout>
