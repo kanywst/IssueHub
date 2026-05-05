@@ -1,12 +1,7 @@
 'use client';
 
 import MainLayout from '@/components/layout/MainLayout';
-import {
-  Typography,
-  Box,
-  Stack,
-  Alert,
-} from '@mui/material';
+import { Typography, Box, Stack, Alert } from '@mui/material';
 import { useSavedIssues } from '@/hooks/useSavedIssues';
 import { IssueRow } from '@/components/ui/IssueRow';
 
@@ -15,7 +10,15 @@ export default function SavedIssuesPage() {
 
   return (
     <MainLayout>
-      <Box sx={{ maxWidth: '1200px', mx: 'auto', display: 'flex', flexDirection: 'column', height: '100%' }}>
+      <Box
+        sx={{
+          maxWidth: '1200px',
+          mx: 'auto',
+          display: 'flex',
+          flexDirection: 'column',
+          height: '100%',
+        }}
+      >
         <Box sx={{ mb: 4 }}>
           <Typography
             variant="h4"
@@ -36,12 +39,14 @@ export default function SavedIssuesPage() {
 
         {savedIssues && savedIssues.length > 0 ? (
           <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-            <Box sx={{ 
-              border: '1px solid rgba(255,255,255,0.08)', 
-              borderRadius: '10px', 
-              overflow: 'hidden',
-              backgroundColor: '#0a0a0b',
-            }}>
+            <Box
+              sx={{
+                border: '1px solid rgba(255,255,255,0.08)',
+                borderRadius: '10px',
+                overflow: 'hidden',
+                backgroundColor: '#0a0a0b',
+              }}
+            >
               <Stack>
                 {savedIssues.map((issue, idx) => (
                   <IssueRow
@@ -50,7 +55,10 @@ export default function SavedIssuesPage() {
                     title={issue.title}
                     repoName={issue.repoName}
                     issueUrl={issue.issueUrl}
-                    dateText={new Date(issue.savedAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
+                    dateText={new Date(issue.savedAt).toLocaleDateString(undefined, {
+                      month: 'short',
+                      day: 'numeric',
+                    })}
                     showStatus={false}
                     isSaved={true}
                     actionType="remove"

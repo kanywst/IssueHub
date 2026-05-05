@@ -1,6 +1,11 @@
 import React from 'react';
 import { Box, Typography, Avatar, IconButton } from '@mui/material';
-import { BookmarkBorder as BookmarkAddIcon, Bookmark as BookmarkAddedIcon, DeleteOutline as DeleteIcon, FiberManualRecord as CircleIcon } from '@mui/icons-material';
+import {
+  BookmarkBorder as BookmarkAddIcon,
+  Bookmark as BookmarkAddedIcon,
+  DeleteOutline as DeleteIcon,
+  FiberManualRecord as CircleIcon,
+} from '@mui/icons-material';
 
 export interface IssueRowProps {
   id: string | number;
@@ -65,7 +70,12 @@ export const IssueRow: React.FC<IssueRowProps> = ({
       {/* Org Avatar */}
       <Avatar
         src={`https://github.com/${owner}.png?size=48`}
-        sx={{ width: 18, height: 18, borderRadius: '4px', border: '1px solid rgba(255,255,255,0.1)' }}
+        sx={{
+          width: 18,
+          height: 18,
+          borderRadius: '4px',
+          border: '1px solid rgba(255,255,255,0.1)',
+        }}
       />
 
       {/* Title & Labels */}
@@ -85,7 +95,7 @@ export const IssueRow: React.FC<IssueRowProps> = ({
 
         {labels && labels.length > 0 && (
           <Box sx={{ display: { xs: 'none', sm: 'flex' }, gap: 0.5, flexShrink: 0 }}>
-            {labels.slice(0, 3).map((label) => (
+            {labels.slice(0, 3).map(label => (
               <Box
                 key={label.id}
                 sx={{
@@ -147,12 +157,17 @@ export const IssueRow: React.FC<IssueRowProps> = ({
             color: actionType === 'save' && isSaved ? 'text.primary' : 'text.disabled',
             '&:hover': {
               color: actionType === 'save' ? 'text.primary' : 'error.main',
-              backgroundColor: actionType === 'save' ? 'rgba(255,255,255,0.1)' : 'rgba(239, 68, 68, 0.1)',
+              backgroundColor:
+                actionType === 'save' ? 'rgba(255,255,255,0.1)' : 'rgba(239, 68, 68, 0.1)',
             },
           }}
         >
           {actionType === 'save' ? (
-            isSaved ? <BookmarkAddedIcon fontSize="small" /> : <BookmarkAddIcon fontSize="small" />
+            isSaved ? (
+              <BookmarkAddedIcon fontSize="small" />
+            ) : (
+              <BookmarkAddIcon fontSize="small" />
+            )
           ) : (
             <DeleteIcon fontSize="small" />
           )}

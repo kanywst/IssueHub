@@ -43,11 +43,11 @@ test('issue search and library save flow', async ({ page }) => {
 
 test('date filter visibility and interaction', async ({ page }) => {
   await page.goto('/issues');
-  
+
   // Check if date filter exists
   const dateSelect = page.getByTestId('date-select');
   await expect(dateSelect).toBeVisible();
-  
+
   // Open the select and check options
   await dateSelect.click();
   await expect(page.getByRole('option', { name: 'Any time' })).toBeVisible();
@@ -56,30 +56,30 @@ test('date filter visibility and interaction', async ({ page }) => {
   await expect(page.getByRole('option', { name: '1 week ago or older' })).toBeVisible();
   await expect(page.getByRole('option', { name: '2 weeks ago or older' })).toBeVisible();
   await expect(page.getByRole('option', { name: '1 month ago or older' })).toBeVisible();
-  
+
   // Select an option
   await page.getByRole('option', { name: '1 week ago or older' }).click();
-  
+
   // The value should be updated
   await expect(page.getByRole('option', { name: '1 week ago or older' })).not.toBeVisible();
 });
 
 test('stars filter visibility and interaction', async ({ page }) => {
   await page.goto('/issues');
-  
+
   // Check if stars filter exists
   const starsSelect = page.getByTestId('stars-select');
   await expect(starsSelect).toBeVisible();
-  
+
   // Open the select and check options
   await starsSelect.click();
   await expect(page.getByRole('option', { name: '100+ stars' })).toBeVisible();
   await expect(page.getByRole('option', { name: '1k+ stars' })).toBeVisible();
   await expect(page.getByRole('option', { name: '10k+ stars' })).toBeVisible();
-  
+
   // Select an option
   await page.getByRole('option', { name: '1k+ stars' }).click();
-  
+
   // The value should be updated
   await expect(page.getByRole('option', { name: '1k+ stars' })).not.toBeVisible();
 });

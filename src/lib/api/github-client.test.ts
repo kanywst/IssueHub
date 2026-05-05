@@ -3,7 +3,7 @@ import { getGoodFirstIssues, githubClient } from './github-client';
 
 vi.mock('@octokit/core', () => {
   return {
-    Octokit: vi.fn().mockImplementation(function() {
+    Octokit: vi.fn().mockImplementation(function () {
       return {
         request: vi.fn(),
       };
@@ -48,7 +48,7 @@ describe('github-client', () => {
     const dateString = expectedDate.toISOString().split('T')[0];
 
     await getGoodFirstIssues({ days });
-    
+
     expect(mockRequest).toHaveBeenCalledWith(
       'GET /search/issues',
       expect.objectContaining({

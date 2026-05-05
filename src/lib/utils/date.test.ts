@@ -11,7 +11,7 @@ describe('date utils', () => {
       // Better yet, for basic smoke test, checking the structure or specific parts.
       // Given the implementation uses Intl.DateTimeFormat, exact output depends on browser/node locale support.
       // We will assume "ja-JP" default and check for typical format or parts.
-      
+
       const formatted = formatDate(date);
       expect(formatted).toMatch(/2023/);
       expect(formatted).toMatch(/01/);
@@ -49,23 +49,23 @@ describe('date utils', () => {
       const past = new Date(now.getTime() - 1000 * 60 * 60 * 2); // 2 hours ago
       expect(timeAgo(past)).toBe('2 hours ago');
     });
-    
+
     it('returns "days ago"', () => {
-        const now = new Date();
-        const past = new Date(now.getTime() - 1000 * 60 * 60 * 24 * 5); // 5 days ago
-        expect(timeAgo(past)).toBe('5 days ago');
+      const now = new Date();
+      const past = new Date(now.getTime() - 1000 * 60 * 60 * 24 * 5); // 5 days ago
+      expect(timeAgo(past)).toBe('5 days ago');
     });
 
     it('returns "months ago"', () => {
-        const now = new Date();
-        const past = new Date(now.getTime() - 1000 * 60 * 60 * 24 * 60); // 60 days ~ 2 months
-        expect(timeAgo(past)).toBe('2 months ago');
+      const now = new Date();
+      const past = new Date(now.getTime() - 1000 * 60 * 60 * 24 * 60); // 60 days ~ 2 months
+      expect(timeAgo(past)).toBe('2 months ago');
     });
 
     it('returns "years ago"', () => {
-        const now = new Date();
-        const past = new Date(now.getTime() - 1000 * 60 * 60 * 24 * 400); // 400 days ~ 1 year
-        expect(timeAgo(past)).toBe('1 years ago');
+      const now = new Date();
+      const past = new Date(now.getTime() - 1000 * 60 * 60 * 24 * 400); // 400 days ~ 1 year
+      expect(timeAgo(past)).toBe('1 years ago');
     });
   });
 
@@ -75,15 +75,15 @@ describe('date utils', () => {
       const end = new Date('2023-01-10');
       expect(daysBetween(start, end)).toBe(9);
     });
-    
+
     it('returns 0 for same day', () => {
-        const start = new Date('2023-01-01T10:00:00');
-        const end = new Date('2023-01-01T20:00:00');
-        expect(daysBetween(start, end)).toBe(0);
+      const start = new Date('2023-01-01T10:00:00');
+      const end = new Date('2023-01-01T20:00:00');
+      expect(daysBetween(start, end)).toBe(0);
     });
 
     it('works with string inputs', () => {
-        expect(daysBetween('2023-01-01', '2023-01-02')).toBe(1);
+      expect(daysBetween('2023-01-01', '2023-01-02')).toBe(1);
     });
   });
 });
