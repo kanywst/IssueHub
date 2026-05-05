@@ -26,7 +26,7 @@ const quickLinks = [
     title: 'Contribute',
     desc: 'Help us improve IssueHub on GitHub',
     icon: <GitHubIcon />,
-    href: 'https://github.com/takumaniwa/IssueHub',
+    href: 'https://github.com/kanywst/IssueHub',
   },
 ];
 
