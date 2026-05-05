@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useCallback, useSyncExternalStore } from 'react';
 import { GitHubIssue } from '@/features/issues/types';
 
 export interface SavedIssue {
@@ -12,23 +12,65 @@ export interface SavedIssue {
   savedAt: string;
 }
 
-export function useSavedIssues() {
-  const [savedIssues, setSavedIssues] = useState<SavedIssue[]>([]);
-  const [isLoaded, setIsLoaded] = useState(false);
+const STORAGE_KEY = 'issuehub_saved_issues';
+const EMPTY: SavedIssue[] = [];
 
-  useEffect(() => {
-    const stored = localStorage.getItem('issuehub_saved_issues');
-    if (stored) {
-      try {
-        setSavedIssues(JSON.parse(stored));
-      } catch (e) {
-        console.error('Failed to parse saved issues', e);
-      }
+const subscribers = new Set<() => void>();
+let cachedRaw: string | null = null;
+let cachedValue: SavedIssue[] = EMPTY;
+
+function parse(raw: string | null): SavedIssue[] {
+  if (!raw) return EMPTY;
+  try {
+    return JSON.parse(raw) as SavedIssue[];
+  } catch (e) {
+    console.error('Failed to parse saved issues', e);
+    return EMPTY;
+  }
+}
+
+function getSnapshot(): SavedIssue[] {
+  if (typeof window === 'undefined') return EMPTY;
+  const raw = window.localStorage.getItem(STORAGE_KEY);
+  // Return the same reference when raw hasn't changed so React's
+  // useSyncExternalStore doesn't think the store mutated every read.
+  if (raw === cachedRaw) return cachedValue;
+  cachedRaw = raw;
+  cachedValue = parse(raw);
+  return cachedValue;
+}
+
+function getServerSnapshot(): SavedIssue[] {
+  return EMPTY;
+}
+
+function subscribe(cb: () => void): () => void {
+  subscribers.add(cb);
+  const onStorage = (e: StorageEvent) => {
+    if (e.key === STORAGE_KEY) {
+      cachedRaw = null; // force re-read on next getSnapshot
+      cb();
     }
-    setIsLoaded(true);
-  }, []);
+  };
+  window.addEventListener('storage', onStorage);
+  return () => {
+    subscribers.delete(cb);
+    window.removeEventListener('storage', onStorage);
+  };
+}
 
-  const saveIssue = (issue: GitHubIssue) => {
+function write(next: SavedIssue[]) {
+  const raw = JSON.stringify(next);
+  window.localStorage.setItem(STORAGE_KEY, raw);
+  cachedRaw = raw;
+  cachedValue = next;
+  subscribers.forEach(cb => cb());
+}
+
+export function useSavedIssues() {
+  const savedIssues = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
+
+  const saveIssue = useCallback((issue: GitHubIssue) => {
     const repoUrl = issue.repository_url.replace(
       'https://api.github.com/repos/',
       'https://github.com/'
@@ -45,34 +87,25 @@ export function useSavedIssues() {
       savedAt: new Date().toISOString(),
     };
 
-    setSavedIssues(prev => {
-      const exists = prev.some(i => i.issueId === newSavedIssue.issueId);
-      if (exists) return prev;
-      const next = [...prev, newSavedIssue];
-      localStorage.setItem('issuehub_saved_issues', JSON.stringify(next));
-      return next;
-    });
-
+    const current = getSnapshot();
+    if (current.some(i => i.issueId === newSavedIssue.issueId)) return true;
+    write([...current, newSavedIssue]);
     return true;
-  };
+  }, []);
 
-  const removeIssue = (issueId: string) => {
-    setSavedIssues(prev => {
-      const next = prev.filter(i => i.issueId !== issueId);
-      localStorage.setItem('issuehub_saved_issues', JSON.stringify(next));
-      return next;
-    });
-  };
+  const removeIssue = useCallback((issueId: string) => {
+    write(getSnapshot().filter(i => i.issueId !== issueId));
+  }, []);
 
-  const isSaved = (issueId: string) => {
-    return savedIssues.some(i => i.issueId === issueId);
-  };
+  const isSaved = useCallback(
+    (issueId: string) => savedIssues.some(i => i.issueId === issueId),
+    [savedIssues]
+  );
 
   return {
     savedIssues,
     saveIssue,
     removeIssue,
     isSaved,
-    isLoaded,
   };
 }
