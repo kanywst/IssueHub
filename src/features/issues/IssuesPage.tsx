@@ -161,23 +161,25 @@ export default function IssuesPage() {
               value={tempKeyword}
               onChange={e => setTempKeyword(e.target.value)}
               onKeyDown={e => e.key === 'Enter' && handleSearch()}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <SearchIcon sx={{ color: 'text.disabled', fontSize: 20 }} />
-                  </InputAdornment>
-                ),
-                sx: {
-                  height: 48,
-                  borderRadius: '10px',
-                  backgroundColor: 'background.paper',
-                  boxShadow: '0 2px 8px rgba(0,0,0,0.5)',
-                  border: '1px solid rgba(255, 255, 255, 0.12)',
-                  fontFamily: 'var(--font-geist-sans), sans-serif',
-                  fontSize: '0.9375rem',
-                  '& fieldset': { border: 'none' },
-                  '& input': { color: 'text.primary', padding: '12px 14px 12px 0' },
-                  '&:focus-within': { borderColor: 'rgba(255, 255, 255, 0.2)' },
+              slotProps={{
+                input: {
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <SearchIcon sx={{ color: 'text.disabled', fontSize: 20 }} />
+                    </InputAdornment>
+                  ),
+                  sx: {
+                    height: 48,
+                    borderRadius: '10px',
+                    backgroundColor: 'background.paper',
+                    boxShadow: '0 2px 8px rgba(0,0,0,0.5)',
+                    border: '1px solid rgba(255, 255, 255, 0.12)',
+                    fontFamily: 'var(--font-geist-sans), sans-serif',
+                    fontSize: '0.9375rem',
+                    '& fieldset': { border: 'none' },
+                    '& input': { color: 'text.primary', padding: '12px 14px 12px 0' },
+                    '&:focus-within': { borderColor: 'rgba(255, 255, 255, 0.2)' },
+                  },
                 },
               }}
             />

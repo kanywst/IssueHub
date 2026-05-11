@@ -35,22 +35,22 @@ export default function PrivacyPage() {
           >
             1. Information We Collect
           </Typography>
-          <Typography variant="body1" paragraph>
+          <Typography variant="body1" sx={{ mb: 2 }}>
             The &quot;IssueHub&quot; service collects the following information:
           </Typography>
           <ul>
             <li>
-              <Typography variant="body1" paragraph>
+              <Typography variant="body1" sx={{ mb: 2 }}>
                 GitHub account information (name, email address, profile image, etc.)
               </Typography>
             </li>
             <li>
-              <Typography variant="body1" paragraph>
+              <Typography variant="body1" sx={{ mb: 2 }}>
                 Information related to saved issues
               </Typography>
             </li>
             <li>
-              <Typography variant="body1" paragraph>
+              <Typography variant="body1" sx={{ mb: 2 }}>
                 Website usage data (access logs, etc.)
               </Typography>
             </li>
@@ -65,22 +65,22 @@ export default function PrivacyPage() {
           >
             2. How We Use Your Information
           </Typography>
-          <Typography variant="body1" paragraph>
+          <Typography variant="body1" sx={{ mb: 2 }}>
             We use the collected information for the following purposes:
           </Typography>
           <ul>
             <li>
-              <Typography variant="body1" paragraph>
+              <Typography variant="body1" sx={{ mb: 2 }}>
                 Providing, maintaining, and improving our services
               </Typography>
             </li>
             <li>
-              <Typography variant="body1" paragraph>
+              <Typography variant="body1" sx={{ mb: 2 }}>
                 Providing personalized experiences to users
               </Typography>
             </li>
             <li>
-              <Typography variant="body1" paragraph>
+              <Typography variant="body1" sx={{ mb: 2 }}>
                 Ensuring security
               </Typography>
             </li>
@@ -95,7 +95,7 @@ export default function PrivacyPage() {
           >
             3. Information Sharing
           </Typography>
-          <Typography variant="body1" paragraph>
+          <Typography variant="body1" sx={{ mb: 2 }}>
             Our service does not share users&apos; personal information with third parties, except
             when required by law.
           </Typography>
@@ -109,7 +109,7 @@ export default function PrivacyPage() {
           >
             4. Data Protection
           </Typography>
-          <Typography variant="body1" paragraph>
+          <Typography variant="body1" sx={{ mb: 2 }}>
             Our service implements appropriate security measures to protect the information we
             collect. However, we cannot guarantee complete security over the internet.
           </Typography>
@@ -123,7 +123,7 @@ export default function PrivacyPage() {
           >
             5. Policy Changes
           </Typography>
-          <Typography variant="body1" paragraph>
+          <Typography variant="body1" sx={{ mb: 2 }}>
             Our service may update this privacy policy from time to time. If there are any changes,
             we will notify you on this page.
           </Typography>
@@ -137,7 +137,7 @@ export default function PrivacyPage() {
           >
             6. Contact Us
           </Typography>
-          <Typography variant="body1" paragraph>
+          <Typography variant="body1" sx={{ mb: 2 }}>
             If you have any questions or concerns about our privacy policy, please contact us
             through our contact form.
           </Typography>

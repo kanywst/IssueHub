@@ -3,7 +3,7 @@ import { Box, Typography, Avatar, IconButton } from '@mui/material';
 import {
   BookmarkBorder as BookmarkAddIcon,
   Bookmark as BookmarkAddedIcon,
-  DeleteOutline as DeleteIcon,
+  DeleteOutlined as DeleteIcon,
   FiberManualRecord as CircleIcon,
 } from '@mui/icons-material';
 

@@ -38,19 +38,19 @@ export default function AboutPage() {
           >
             Our Mission
           </Typography>
-          <Typography variant="body1" paragraph>
+          <Typography variant="body1" sx={{ mb: 2 }}>
             IssueHub is a platform designed for beginners who want to contribute to the open-source
             software (OSS) ecosystem. By making it easy to find issues labeled as &quot;good first
             issue,&quot; we help newcomers take their first steps into OSS contribution.
           </Typography>
 
-          <Typography variant="body1" paragraph>
+          <Typography variant="body1" sx={{ mb: 2 }}>
             Many people want to contribute to open source, but taking that first step can be
             challenging. Common concerns include &quot;I don&apos;t know where to begin&quot; or
             &quot;I can&apos;t find issues that match my skill level.&quot;
           </Typography>
 
-          <Typography variant="body1" paragraph>
+          <Typography variant="body1" sx={{ mb: 2 }}>
             IssueHub addresses these challenges by aggregating GitHub issues labeled as &quot;good
             first issue&quot; in one place, making them easy to search and filter. This allows
             beginners to find suitable issues and take their first steps into the OSS community.
@@ -142,7 +142,7 @@ export default function AboutPage() {
           >
             Open Source Project
           </Typography>
-          <Typography variant="body1" paragraph>
+          <Typography variant="body1" sx={{ mb: 2 }}>
             IssueHub itself is an open-source project. We welcome contributions including feature
             additions and bug fixes.
           </Typography>

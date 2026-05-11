@@ -67,22 +67,30 @@ export const theme = createTheme({
           transition: 'all 0.15s ease-in-out',
           '&:hover': { boxShadow: 'none' },
         },
-        containedPrimary: {
-          backgroundColor: '#fafafa',
-          color: '#0a0a0b',
-          '&:hover': {
-            backgroundColor: '#e4e4e7',
-          },
-        },
-        outlined: {
-          borderColor: 'rgba(255,255,255,0.1)',
-          color: '#fafafa',
-          '&:hover': {
-            borderColor: 'rgba(255,255,255,0.2)',
-            backgroundColor: 'rgba(255,255,255,0.02)',
-          },
-        },
       },
+      variants: [
+        {
+          props: { variant: 'contained', color: 'primary' },
+          style: {
+            backgroundColor: '#fafafa',
+            color: '#0a0a0b',
+            '&:hover': {
+              backgroundColor: '#e4e4e7',
+            },
+          },
+        },
+        {
+          props: { variant: 'outlined' },
+          style: {
+            borderColor: 'rgba(255,255,255,0.1)',
+            color: '#fafafa',
+            '&:hover': {
+              borderColor: 'rgba(255,255,255,0.2)',
+              backgroundColor: 'rgba(255,255,255,0.02)',
+            },
+          },
+        },
+      ],
     },
     MuiPaper: {
       styleOverrides: {
