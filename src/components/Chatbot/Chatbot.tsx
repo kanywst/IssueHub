@@ -91,10 +91,10 @@ export default function Chatbot() {
     try {
       const emailjs = await import('@emailjs/browser');
       await emailjs.send(
-        'service_2fc5v5k',
-        'template_d3d70zp',
+        'YOUR_SERVICE',
+        'YOUR_TEMPLATE',
         { user_email: email, user: 'IssueHub' },
-        { publicKey: 'De3J97q5iJ8M72LB0' }
+        { publicKey: 'YOUR_APIKEY' }
       );
       removeLastMessage();
       addMessage('Email sent successfully! ✅');
