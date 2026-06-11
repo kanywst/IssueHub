@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
 import MuiProvider from '@/components/layout/MuiProvider';
 import QueryProvider from '@/components/layout/QueryProvider';
+import Chatbot from '@/components/Chatbot/Chatbot';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -31,6 +32,7 @@ export default function RootLayout({
         <MuiProvider>
           <QueryProvider>{children}</QueryProvider>
         </MuiProvider>
+        <Chatbot />
       </body>
     </html>
   );
