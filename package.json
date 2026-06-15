@@ -28,7 +28,7 @@
     "@mui/material-nextjs": "9.0.1",
     "@octokit/core": "^7.0.6",
     "@tanstack/react-query": "^5.101.0",
-    "next": "16.2.7",
+    "next": "16.2.9",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
     "zod": "^4.4.3"
@@ -36,7 +36,7 @@
   "devDependencies": {
     "@eslint/eslintrc": "3.3.5",
     "@eslint/js": "^9.39.4",
-    "@next/eslint-plugin-next": "16.2.7",
+    "@next/eslint-plugin-next": "16.2.9",
     "@playwright/test": "^1.60.0",
     "@tailwindcss/postcss": "^4",
     "@testing-library/dom": "10.4.1",
@@ -47,7 +47,7 @@
     "@vitejs/plugin-react": "6.0.2",
     "depcheck": "^1.4.7",
     "eslint": "^9",
-    "eslint-config-next": "16.2.7",
+    "eslint-config-next": "16.2.9",
     "eslint-plugin-react": "7.37.5",
     "eslint-plugin-react-hooks": "7.1.1",
     "jsdom": "29.1.1",
