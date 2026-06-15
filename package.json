@@ -51,10 +51,10 @@
     "eslint-plugin-react": "7.37.5",
     "eslint-plugin-react-hooks": "7.1.1",
     "jsdom": "29.1.1",
-    "prettier": "^3.8.3",
+    "prettier": "^3.8.4",
     "tailwindcss": "^4",
     "typescript": "^6",
-    "typescript-eslint": "8.60.1",
+    "typescript-eslint": "8.61.0",
     "vitest": "4.1.8"
   }
 }
