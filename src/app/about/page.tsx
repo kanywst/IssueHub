@@ -91,36 +91,10 @@ export default function AboutPage() {
                     Frontend
                   </Typography>
                   <ul>
-                    <li>Next.js 14 + TypeScript</li>
-                    <li>Material-UI (MUI) v5 + Emotion</li>
-                    <li>SWR / React Query</li>
-                    <li>NextAuth.js</li>
-                  </ul>
-                </CardContent>
-              </Card>
-            </Grid>
-            <Grid size={{ xs: 12, md: 6 }}>
-              <Card
-                sx={{
-                  height: '100%',
-                  borderRadius: 2,
-                  boxShadow: '0 4px 12px rgba(0, 0, 0, 0.05)',
-                }}
-              >
-                <CardContent>
-                  <Typography
-                    variant="h6"
-                    component="h3"
-                    gutterBottom
-                    sx={{ color: 'primary.main', fontWeight: 600 }}
-                  >
-                    Backend
-                  </Typography>
-                  <ul>
-                    <li>NestJS 10 + TypeScript</li>
-                    <li>tRPC</li>
-                    <li>Prisma ORM</li>
-                    <li>GitHub API (Octokit)</li>
+                    <li>Next.js 16 + TypeScript</li>
+                    <li>Material-UI (MUI) v9 + Emotion</li>
+                    <li>TanStack Query v5</li>
+                    <li>Tailwind CSS</li>
                   </ul>
                 </CardContent>
               </Card>
